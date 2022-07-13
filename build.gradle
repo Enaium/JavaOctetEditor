@@ -1,0 +1,57 @@
+import java.text.SimpleDateFormat
+
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+group 'cn.enaium'
+version '0.1.0'
+
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+
+jar {
+    manifest.attributes(
+            'Manifest-Version': 1.0,
+            'Main-Class': 'cn.enaium.joe.Main',
+            "Implementation-Title": "${project.name}",
+            "Implementation-Version": "${project.version}",
+            "Implementation-Vendor": "${project.group}",
+            "Implementation-Timestamp": new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())
+    )
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+
+    implementation 'com.formdev:flatlaf:2.3'
+    implementation 'com.formdev:flatlaf-extras:2.3'
+    implementation 'com.github.bobbylight:RSyntaxTextArea:3.2.0'
+    implementation 'org.ow2.asm:asm-tree:9.3'
+    implementation 'org.ow2.asm:asm-util:9.3'
+    implementation 'org.benf:cfr:0.152'
+    implementation 'org.javassist:javassist:3.29.0-GA'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+shadowJar {
+    dependencies {
+        include(dependency('com.formdev:.*'))
+        include(dependency('com.github.bobbylight:RSyntaxTextArea'))
+        include(dependency('org.ow2.asm:.*'))
+        include(dependency('org.benf:cfr'))
+        include(dependency('org.javassist:javassist'))
+    }
+    archiveClassifier.set('')
+}
+
+build.dependsOn shadowJar
