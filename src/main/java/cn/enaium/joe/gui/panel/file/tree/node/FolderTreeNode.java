@@ -19,8 +19,8 @@ package cn.enaium.joe.gui.panel.file.tree.node;
 /**
  * @author Enaium
  */
-public class PackageTreeNode extends DefaultTreeNode {
-    public PackageTreeNode(Object userObject) {
+public class FolderTreeNode extends DefaultTreeNode {
+    public FolderTreeNode(Object userObject) {
         super(userObject);
     }
 }

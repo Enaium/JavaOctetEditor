@@ -16,11 +16,20 @@
 
 package cn.enaium.joe.gui.panel.file.tree.node;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
+import java.util.Vector;
+
 /**
  * @author Enaium
  */
-public class PackageTreeNode extends DefaultTreeNode {
-    public PackageTreeNode(Object userObject) {
+public class DefaultTreeNode extends DefaultMutableTreeNode {
+    public DefaultTreeNode(Object userObject) {
         super(userObject);
+    }
+
+
+    public Vector<TreeNode> getChildren() {
+        return children;
     }
 }

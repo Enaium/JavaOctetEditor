@@ -24,13 +24,11 @@
   -
   -->
 
-
-<svg big="true" width="16px" height="16px" xmlns="http://www.w3.org/2000/svg" viewBox="0 2 24 24">
-    <g>
-        <path id="svg_1"
-              d="m20,8l-8,0l-2,-2l-6,0c-1.11,0 -2,0.89 -2,2l0,12a2,2 0 0 0 2,2l16,0a2,2 0 0 0 2,-2l0,-10c0,-1.11 -0.9,-2 -2,-2z"
-              fill="#FFC107"/>
-        <ellipse stroke="#0f0f00" ry="2.4" rx="2.4" id="svg_5" cy="13.08624" cx="7.687954" stroke-width="0"
-                 fill="#80CBC4"/>
-    </g>
+<svg big="true" clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.4142" version="1.1"
+     viewBox="0 0 24 24" width="16px" height="16px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+    <path d="m10 4h-6c-1.11 0-2 .89-2 2v12c0 1.097.903 2 2 2h16c1.097 0 2-.903 2-2v-10c0-1.11-.9-2-2-2h-8l-2-2z"
+          fill="#00796B" fill-rule="nonzero"/>
+    <path
+            d="m13.814 8.7103a1.3544 1.2753 0 0 0 -1.355 1.2758v10.201a1.3544 1.2753 0 0 0 1.355 1.2777h8.1259a1.3544 1.2753 0 0 0 1.355 -1.2777v-10.201a1.3544 1.2753 0 0 0 -1.355 -1.2758zm0 4.4644h8.1259v3.1887h-8.1259zm0 4.4626h8.126v2.5498h-8.1259v-2.5497z"
+            fill="#80CBC4" stroke-width=".65714"/>
 </svg>

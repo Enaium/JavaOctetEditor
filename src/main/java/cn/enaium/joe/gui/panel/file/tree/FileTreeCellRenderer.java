@@ -16,20 +16,14 @@
 
 package cn.enaium.joe.gui.panel.file.tree;
 
-import cn.enaium.joe.gui.panel.file.tree.node.ClassTreeNode;
-import cn.enaium.joe.gui.panel.file.tree.node.FieldTreeNode;
-import cn.enaium.joe.gui.panel.file.tree.node.MethodTreeNode;
-import cn.enaium.joe.gui.panel.file.tree.node.PackageTreeNode;
+import cn.enaium.joe.gui.panel.file.tree.node.*;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
-import com.formdev.flatlaf.extras.FlatSVGUtils;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.Objects;
 
 /**
  * @author Enaium
@@ -38,31 +32,42 @@ public class FileTreeCellRenderer extends DefaultTreeCellRenderer {
     @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
         super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-        final PackageTreeNode packageTreeNode = (PackageTreeNode) value;
+        final DefaultTreeNode defaultTreeNode = (DefaultTreeNode) value;
 
-        if (packageTreeNode.getChildCount() > 0) {
+        if (defaultTreeNode.toString().equals("classes")) {
+            setIcon(new FlatSVGIcon("icons/classesRoot.svg"));
+        } else if (defaultTreeNode.toString().equals("resources")) {
+            setIcon(new FlatSVGIcon("icons/resourceRoot.svg"));
+        } else if (defaultTreeNode instanceof PackageTreeNode) {
             setIcon(new FlatSVGIcon("icons/package.svg"));
-        }
-
-        if (packageTreeNode instanceof ClassTreeNode) {
-            ClassNode classNode = ((ClassTreeNode) packageTreeNode).classNode;
-            if (classNode.access == (Opcodes.ACC_PUBLIC | Opcodes.ACC_ANNOTATION | Opcodes.ACC_ABSTRACT | Opcodes.ACC_INTERFACE)) {
-                setIcon(new FlatSVGIcon("icons/annotation.svg"));
-            } else if (classNode.access == (Opcodes.ACC_PUBLIC | Opcodes.ACC_ABSTRACT | Opcodes.ACC_INTERFACE)) {
-                setIcon(new FlatSVGIcon("icons/interface.svg"));
-            } else if (classNode.access == (Opcodes.ACC_PUBLIC | Opcodes.ACC_SUPER | Opcodes.ACC_ABSTRACT)) {
-                setIcon(new FlatSVGIcon("icons/abstractClass.svg"));
-            } else if (classNode.access == (Opcodes.ACC_PUBLIC | Opcodes.ACC_FINAL | Opcodes.ACC_SUPER | Opcodes.ACC_ENUM)) {
-                setIcon(new FlatSVGIcon("icons/enum.svg"));
-            } else if (classNode.access == (Opcodes.ACC_PUBLIC | Opcodes.ACC_FINAL | Opcodes.ACC_SUPER)) {
-                setIcon(new FlatSVGIcon("icons/finalClass.svg"));
-            } else {
-                setIcon(new FlatSVGIcon("icons/class.svg"));
+            PackageTreeNode packageTreeNode = (PackageTreeNode) defaultTreeNode;
+            if (packageTreeNode instanceof ClassTreeNode) {
+                ClassNode classNode = ((ClassTreeNode) packageTreeNode).classNode;
+                if (classNode.access == (Opcodes.ACC_PUBLIC | Opcodes.ACC_ANNOTATION | Opcodes.ACC_ABSTRACT | Opcodes.ACC_INTERFACE)) {
+                    setIcon(new FlatSVGIcon("icons/annotation.svg"));
+                } else if (classNode.access == (Opcodes.ACC_PUBLIC | Opcodes.ACC_ABSTRACT | Opcodes.ACC_INTERFACE)) {
+                    setIcon(new FlatSVGIcon("icons/interface.svg"));
+                } else if (classNode.access == (Opcodes.ACC_PUBLIC | Opcodes.ACC_SUPER | Opcodes.ACC_ABSTRACT)) {
+                    setIcon(new FlatSVGIcon("icons/abstractClass.svg"));
+                } else if (classNode.access == (Opcodes.ACC_PUBLIC | Opcodes.ACC_FINAL | Opcodes.ACC_SUPER | Opcodes.ACC_ENUM)) {
+                    setIcon(new FlatSVGIcon("icons/enum.svg"));
+                } else if (classNode.access == (Opcodes.ACC_PUBLIC | Opcodes.ACC_FINAL | Opcodes.ACC_SUPER)) {
+                    setIcon(new FlatSVGIcon("icons/finalClass.svg"));
+                } else {
+                    setIcon(new FlatSVGIcon("icons/class.svg"));
+                }
+            } else if (packageTreeNode instanceof MethodTreeNode) {
+                setIcon(new FlatSVGIcon("icons/method.svg"));
+            } else if (packageTreeNode instanceof FieldTreeNode) {
+                setIcon(new FlatSVGIcon("icons/field.svg"));
             }
-        } else if (packageTreeNode instanceof MethodTreeNode) {
-            setIcon(new FlatSVGIcon("icons/method.svg"));
-        } else if (packageTreeNode instanceof FieldTreeNode) {
-            setIcon(new FlatSVGIcon("icons/field.svg"));
+        } else if (defaultTreeNode instanceof FolderTreeNode) {
+            setIcon(new FlatSVGIcon("icons/folder.svg"));
+
+            FolderTreeNode folderTreeNode = (FolderTreeNode) defaultTreeNode;
+            if (folderTreeNode instanceof FileTreeNode) {
+                setIcon(new FlatSVGIcon("icons/file.svg"));
+            }
         }
         return this;
     }
