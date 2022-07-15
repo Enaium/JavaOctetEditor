@@ -18,8 +18,12 @@ package cn.enaium.joe.gui;
 
 import cn.enaium.joe.BytecodeTokenMaker;
 import cn.enaium.joe.gui.panel.BottomPanel;
+import cn.enaium.joe.gui.panel.LeftPanel;
 import cn.enaium.joe.gui.panel.file.tabbed.FileTabbedPanel;
 import cn.enaium.joe.gui.panel.file.tree.FileTreePanel;
+import cn.enaium.joe.gui.panel.menu.FileMenu;
+import cn.enaium.joe.gui.panel.menu.file.LoadMenuItem;
+import cn.enaium.joe.gui.panel.menu.file.SaveMenuItem;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.util.ASyncUtil;
 import cn.enaium.joe.util.JFileChooserUtil;
@@ -63,63 +67,14 @@ public class JavaOctetEditor {
         abstractTokenMakerFactory.putMapping("text/custom", BytecodeTokenMaker.class.getName());
 
         window.setJMenuBar(new JMenuBar() {{
-            add(new JMenu("File") {
-                {
-                    add(new JMenuItem("Load...") {{
-                        addActionListener(e -> {
-                            File show = JFileChooserUtil.show(JFileChooserUtil.Type.OPEN);
-                            if (show != null) {
-                                ASyncUtil.execute(() -> fileTreePanel.refresh(new Jar(show)));
-                            }
-                        });
-                    }});
-
-                    add(new JMenuItem("Save...") {{
-                        addActionListener(e -> {
-                            File show = JFileChooserUtil.show(JFileChooserUtil.Type.SAVE);
-                            if (show != null) {
-                                ASyncUtil.execute(() -> {
-                                    if (jar == null) {
-                                        return;
-                                    }
-
-                                    float loaded = 0;
-                                    float files = jar.classes.size() + jar.resources.size();
-
-                                    try {
-                                        ZipOutputStream zipOutputStream = new ZipOutputStream(Files.newOutputStream(show.toPath()));
-                                        for (Map.Entry<String, ClassNode> stringClassNodeEntry : jar.classes.entrySet()) {
-                                            zipOutputStream.putNextEntry(new JarEntry(stringClassNodeEntry.getKey()));
-                                            ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-                                            stringClassNodeEntry.getValue().accept(classWriter);
-                                            zipOutputStream.write(classWriter.toByteArray());
-                                            JavaOctetEditor.getInstance().bottomPanel.setProcess((int) ((loaded++ / files) * 100f));
-                                        }
-
-                                        for (Map.Entry<String, byte[]> stringEntry : jar.resources.entrySet()) {
-                                            zipOutputStream.putNextEntry(new JarEntry(stringEntry.getKey()));
-                                            zipOutputStream.write(stringEntry.getValue());
-                                            JavaOctetEditor.getInstance().bottomPanel.setProcess((int) ((loaded++ / files) * 100f));
-                                        }
-                                        zipOutputStream.closeEntry();
-                                        zipOutputStream.close();
-                                        JavaOctetEditor.getInstance().bottomPanel.setProcess(0);
-                                    } catch (IOException ex) {
-                                        throw new RuntimeException(ex);
-                                    }
-                                });
-                            }
-                        });
-                    }});
-                }
-            });
+            add(new FileMenu());
         }});
 
         window.setContentPane(new JPanel(new BorderLayout()) {
             {
                 add(new JSplitPane() {{
                     setDividerLocation(150);
-                    setLeftComponent(new JScrollPane(fileTreePanel));
+                    setLeftComponent(new LeftPanel());
                     setRightComponent(fileTabbedPanel);
                 }}, BorderLayout.CENTER);
                 add(bottomPanel, BorderLayout.SOUTH);
