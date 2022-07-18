@@ -2,6 +2,7 @@ package cn.enaium.joe.gui.panel.file.tabbed.tab;
 
 import cn.enaium.joe.gui.panel.CodeArea;
 import cn.enaium.joe.util.ASyncUtil;
+import cn.enaium.joe.util.CfrUtil;
 import org.benf.cfr.reader.PluginRunner;
 import org.benf.cfr.reader.api.ClassFileSource;
 import org.benf.cfr.reader.bytecode.analysis.parse.utils.Pair;
@@ -24,34 +25,7 @@ public class DecompileTabPanel extends ClassNodeTabPanel {
         CodeArea codeArea = new CodeArea();
         codeArea.setSyntaxEditingStyle("text/java");
         ASyncUtil.execute(() -> {
-            ClassFileSource cfs = new ClassFileSource() {
-                @Override
-                public void informAnalysisRelativePathDetail(String a, String b) {
-                }
-
-                @Override
-                public String getPossiblyRenamedPath(String path) {
-                    return path;
-                }
-
-                @Override
-                public Pair<byte[], String> getClassFileContent(String path) throws IOException {
-                    String name = path.substring(0, path.length() - 6);
-                    if (name.equals(classNode.name)) {
-                        ClassWriter classWriter = new ClassWriter(0);
-                        classNode.accept(classWriter);
-                        return Pair.make(classWriter.toByteArray(), name);
-                    }
-                    return null;
-                }
-
-                @Override
-                public Collection<String> addJar(String arg0) {
-                    throw new RuntimeException();
-                }
-            };
-
-            codeArea.setText(new PluginRunner(new HashMap<>(), cfs).getDecompilationFor(classNode.name));
+            codeArea.setText(CfrUtil.getSource(classNode));
         });
         codeArea.setCaretPosition(0);
         add(new RTextScrollPane(codeArea));
