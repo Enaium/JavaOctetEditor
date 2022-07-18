@@ -14,31 +14,20 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.menu.file;
+package cn.enaium.joe.gui.panel.menu.help;
 
-import cn.enaium.joe.JavaOctetEditor;
-import cn.enaium.joe.jar.Jar;
-import cn.enaium.joe.util.ASyncUtil;
-import cn.enaium.joe.util.JFileChooserUtil;
+import cn.enaium.joe.dialog.ContactDialog;
 
 import javax.swing.*;
-import java.io.File;
 
 /**
  * @author Enaium
  */
-public class LoadMenuItem extends JMenuItem {
-    public LoadMenuItem() {
-        super("Load...");
+public class ContactMenuItem extends JMenuItem {
+    public ContactMenuItem() {
+        super("Contact");
         addActionListener(e -> {
-            File show = JFileChooserUtil.show(JFileChooserUtil.Type.OPEN);
-            if (show != null) {
-                ASyncUtil.execute(() -> {
-                    Jar jar = new Jar();
-                    jar.load(show);
-                    JavaOctetEditor.getInstance().fileTreePanel.refresh(jar);
-                });
-            }
+            new ContactDialog().setVisible(true);
         });
     }
 }

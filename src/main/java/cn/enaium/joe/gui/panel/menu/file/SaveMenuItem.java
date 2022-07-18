@@ -16,7 +16,7 @@
 
 package cn.enaium.joe.gui.panel.menu.file;
 
-import cn.enaium.joe.gui.JavaOctetEditor;
+import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.util.ASyncUtil;
 import cn.enaium.joe.util.JFileChooserUtil;
@@ -38,14 +38,13 @@ public class SaveMenuItem extends JMenuItem {
     public SaveMenuItem() {
         super("Save...");
         addActionListener(e -> {
+            Jar jar = JavaOctetEditor.getInstance().jar;
+            if (jar == null) {
+                return;
+            }
             File show = JFileChooserUtil.show(JFileChooserUtil.Type.SAVE);
             if (show != null) {
                 ASyncUtil.execute(() -> {
-                    Jar jar = JavaOctetEditor.getInstance().jar;
-                    if (jar == null) {
-                        return;
-                    }
-
                     float loaded = 0;
                     float files = jar.classes.size() + jar.resources.size();
 
