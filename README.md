@@ -1,3 +1,3 @@
 # JavaOctetEditor
 
-![](https://user-images.githubusercontent.com/32991121/178648265-31690639-73cf-40cd-9010-4e07cf96aaf3.png)
+![](https://user-images.githubusercontent.com/32991121/179437944-92726f48-5fe9-44c1-a65d-38b4091e8a84.png)
