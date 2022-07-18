@@ -16,7 +16,7 @@
 
 package cn.enaium.joe.util;
 
-import cn.enaium.joe.gui.JavaOctetEditor;
+import cn.enaium.joe.JavaOctetEditor;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;

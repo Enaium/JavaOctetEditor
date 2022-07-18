@@ -16,10 +16,7 @@
 
 package cn.enaium.joe;
 
-import cn.enaium.joe.gui.JavaOctetEditor;
 import com.formdev.flatlaf.FlatDarkLaf;
-import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
-import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
 
 /**
  * @author Enaium

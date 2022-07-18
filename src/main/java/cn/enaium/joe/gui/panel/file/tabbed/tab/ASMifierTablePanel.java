@@ -16,7 +16,7 @@
 
 package cn.enaium.joe.gui.panel.file.tabbed.tab;
 
-import cn.enaium.joe.gui.JavaOctetEditor;
+import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.gui.panel.CodeArea;
 import cn.enaium.joe.util.ASyncUtil;
 import javassist.ClassPool;
@@ -26,7 +26,6 @@ import javassist.Loader;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.util.ASMifier;
 import org.objectweb.asm.util.TraceClassVisitor;
@@ -35,10 +34,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.nio.file.Files;
 
 /**
  * @author Enaium
