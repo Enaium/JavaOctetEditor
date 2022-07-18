@@ -17,6 +17,7 @@
 package cn.enaium.joe.gui.panel.menu;
 
 import cn.enaium.joe.gui.panel.menu.file.LoadMenuItem;
+import cn.enaium.joe.gui.panel.menu.file.SaveAllSourceMenuItem;
 import cn.enaium.joe.gui.panel.menu.file.SaveMenuItem;
 
 import javax.swing.*;
@@ -29,5 +30,7 @@ public class FileMenu extends JMenu {
         super("File");
         add(new LoadMenuItem());
         add(new SaveMenuItem());
+        add(new JSeparator());
+        add(new SaveAllSourceMenuItem());
     }
 }
