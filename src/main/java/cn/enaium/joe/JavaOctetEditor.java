@@ -14,31 +14,20 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui;
+package cn.enaium.joe;
 
-import cn.enaium.joe.BytecodeTokenMaker;
 import cn.enaium.joe.gui.panel.BottomPanel;
 import cn.enaium.joe.gui.panel.LeftPanel;
 import cn.enaium.joe.gui.panel.file.tabbed.FileTabbedPanel;
 import cn.enaium.joe.gui.panel.file.tree.FileTreePanel;
 import cn.enaium.joe.gui.panel.menu.FileMenu;
-import cn.enaium.joe.gui.panel.menu.file.LoadMenuItem;
-import cn.enaium.joe.gui.panel.menu.file.SaveMenuItem;
+import cn.enaium.joe.gui.panel.menu.HelpMenu;
 import cn.enaium.joe.jar.Jar;
-import cn.enaium.joe.util.ASyncUtil;
-import cn.enaium.joe.util.JFileChooserUtil;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.tree.ClassNode;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
-import java.nio.file.Files;
-import java.util.Map;
-import java.util.jar.JarEntry;
-import java.util.zip.ZipOutputStream;
 
 /**
  * @author Enaium
@@ -68,6 +57,7 @@ public class JavaOctetEditor {
 
         window.setJMenuBar(new JMenuBar() {{
             add(new FileMenu());
+            add(new HelpMenu());
         }});
 
         window.setContentPane(new JPanel(new BorderLayout()) {
@@ -81,7 +71,7 @@ public class JavaOctetEditor {
             }
         });
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setSize(700, 500);
+        window.setSize(800, 500);
         window.setLocationRelativeTo(null);
         window.setVisible(true);
     }
