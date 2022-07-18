@@ -16,32 +16,23 @@
 
 package cn.enaium.joe.gui.panel.file.tree;
 
-import cn.enaium.joe.gui.JavaOctetEditor;
+import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.gui.panel.file.FileDropTarget;
 import cn.enaium.joe.gui.panel.file.tabbed.tab.FileTabPanel;
 import cn.enaium.joe.gui.panel.file.tree.node.*;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.util.ASyncUtil;
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtMethod;
-import javassist.Loader;
-import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.util.ASMifier;
-import org.objectweb.asm.util.TraceClassVisitor;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.*;
 
 /**
@@ -49,8 +40,8 @@ import java.util.*;
  */
 public class FileTreePanel extends JTree {
 
-    private static final DefaultTreeNode classesRoot = new DefaultTreeNode("classes");
-    private static final DefaultTreeNode resourceRoot = new DefaultTreeNode("resources");
+    public static final DefaultTreeNode classesRoot = new DefaultTreeNode("classes");
+    public static final DefaultTreeNode resourceRoot = new DefaultTreeNode("resources");
 
     public FileTreePanel() {
         super(new DefaultTreeNode("") {{
@@ -61,6 +52,7 @@ public class FileTreePanel extends JTree {
         setRootVisible(false);
         setShowsRootHandles(true);
         setCellRenderer(new FileTreeCellRenderer());
+
         addTreeSelectionListener(e -> {
             DefaultTreeNode lastPathComponent = (DefaultTreeNode) e.getPath().getLastPathComponent();
             if (lastPathComponent instanceof ClassTreeNode) {
@@ -72,7 +64,11 @@ public class FileTreePanel extends JTree {
         new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, new FileDropTarget(".jar", files -> {
             if (!files.isEmpty()) {
                 File file = files.get(0);
-                ASyncUtil.execute(() -> refresh(new Jar(file)));
+                ASyncUtil.execute(() -> {
+                    Jar jar = new Jar();
+                    jar.load(file);
+                    refresh(jar);
+                });
             }
         }), true);
     }
