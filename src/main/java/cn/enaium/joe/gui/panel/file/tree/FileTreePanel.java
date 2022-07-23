@@ -123,6 +123,8 @@ public class FileTreePanel extends JTree {
         }
         sort(model, classesRoot);
 
+        hasMap.clear();
+
         for (Map.Entry<String, byte[]> stringEntry : jar.resources.entrySet()) {
             String[] split = stringEntry.getKey().split("/");
             DefaultTreeNode prev = null;
