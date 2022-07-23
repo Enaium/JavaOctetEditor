@@ -1,6 +1,6 @@
 package cn.enaium.joe.gui.panel.file.tabbed.tab;
 
-import cn.enaium.joe.gui.panel.CodeArea;
+import cn.enaium.joe.gui.panel.CodeAreaPanel;
 import cn.enaium.joe.util.ASyncUtil;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import org.objectweb.asm.tree.ClassNode;
@@ -18,15 +18,15 @@ public class TraceBytecodeTabPanel extends ClassNodeTabPanel {
     public TraceBytecodeTabPanel(ClassNode classNode) {
         super(classNode);
         setLayout(new BorderLayout());
-        CodeArea codeArea = new CodeArea();
-        codeArea.setSyntaxEditingStyle("text/custom");
+        CodeAreaPanel codeAreaPanel = new CodeAreaPanel();
+        codeAreaPanel.getTextArea().setSyntaxEditingStyle("text/custom");
         final StringWriter stringWriter = new StringWriter();
         ASyncUtil.execute(() -> {
             classNode.accept(new TraceClassVisitor(new PrintWriter(stringWriter)));
         }, () -> {
-            codeArea.setText(new String(stringWriter.toString().getBytes(StandardCharsets.UTF_8)));
-            codeArea.setCaretPosition(0);
+            codeAreaPanel.getTextArea().setText(new String(stringWriter.toString().getBytes(StandardCharsets.UTF_8)));
+            codeAreaPanel.getTextArea().setCaretPosition(0);
         });
-        add(new RTextScrollPane(codeArea));
+        add(codeAreaPanel);
     }
 }

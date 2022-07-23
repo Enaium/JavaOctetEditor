@@ -14,23 +14,32 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.menu;
+package cn.enaium.joe.gui.panel.search;
 
-import cn.enaium.joe.gui.panel.menu.file.LoadMenuItem;
-import cn.enaium.joe.gui.panel.menu.file.SaveAllSourceMenuItem;
-import cn.enaium.joe.gui.panel.menu.file.SaveMenuItem;
-
-import javax.swing.*;
+import org.objectweb.asm.tree.ClassNode;
 
 /**
  * @author Enaium
  */
-public class FileMenu extends JMenu {
-    public FileMenu() {
-        super("File");
-        add(new LoadMenuItem());
-        add(new SaveMenuItem());
-        add(new JSeparator());
-        add(new SaveAllSourceMenuItem());
+public class ResultNode {
+    private final ClassNode classNode;
+    private final String result;
+
+    public ResultNode(ClassNode classNode, String result) {
+        this.classNode = classNode;
+        this.result = result;
+    }
+
+    public ClassNode getClassNode() {
+        return classNode;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return result;
     }
 }

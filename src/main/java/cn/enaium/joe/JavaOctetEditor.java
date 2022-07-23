@@ -22,6 +22,7 @@ import cn.enaium.joe.gui.panel.file.tabbed.FileTabbedPanel;
 import cn.enaium.joe.gui.panel.file.tree.FileTreePanel;
 import cn.enaium.joe.gui.panel.menu.FileMenu;
 import cn.enaium.joe.gui.panel.menu.HelpMenu;
+import cn.enaium.joe.gui.panel.menu.SearchMenu;
 import cn.enaium.joe.jar.Jar;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
@@ -58,6 +59,7 @@ public class JavaOctetEditor {
         window.setJMenuBar(new JMenuBar() {{
             add(new FileMenu());
             add(new HelpMenu());
+            add(new SearchMenu());
         }});
 
         window.setContentPane(new JPanel(new BorderLayout()) {

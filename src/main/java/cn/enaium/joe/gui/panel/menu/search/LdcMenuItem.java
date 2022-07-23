@@ -14,26 +14,27 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel;
+package cn.enaium.joe.gui.panel.menu.search;
 
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.fife.ui.rsyntaxtextarea.Theme;
+import cn.enaium.joe.JavaOctetEditor;
+import cn.enaium.joe.dialog.search.SearchLdcDialog;
+import cn.enaium.joe.jar.Jar;
 
-import java.io.IOException;
+import javax.swing.*;
 
 /**
  * @author Enaium
  */
-public class CodeArea extends RSyntaxTextArea {
-    public CodeArea() {
-        setCodeFoldingEnabled(true);
-        setEditable(false);
-        Theme theme = null;
-        try {
-            theme = Theme.load(getClass().getResourceAsStream("/org/fife/ui/rsyntaxtextarea/themes/dark.xml"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        theme.apply(this);
+public class LdcMenuItem extends JMenuItem {
+    public LdcMenuItem() {
+        super("LDC");
+        addActionListener(e -> {
+            Jar jar = JavaOctetEditor.getInstance().jar;
+            if (jar == null) {
+                return;
+            }
+
+            new SearchLdcDialog().setVisible(true);
+        });
     }
 }

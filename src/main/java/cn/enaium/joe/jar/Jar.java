@@ -53,7 +53,11 @@ public class Jar {
                 if (jarEntry.getName().endsWith(".class")) {
                     ClassReader classReader = new ClassReader(jarFile.getInputStream(new JarEntry(jarEntry.getName())));
                     ClassNode classNode = new ClassNode();
-                    classReader.accept(classNode, ClassReader.EXPAND_FRAMES);
+                    try {
+                        classReader.accept(classNode, ClassReader.EXPAND_FRAMES);
+                    } catch (Throwable throwable) {
+                        classReader.accept(classNode, ClassReader.SKIP_FRAMES | ClassReader.SKIP_DEBUG);
+                    }
                     classes.put(jarEntry.getName(), classNode);
                 } else if (!jarEntry.isDirectory()) {
                     ByteArrayOutputStream output = new ByteArrayOutputStream();

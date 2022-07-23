@@ -19,6 +19,7 @@ package cn.enaium.joe.gui.panel;
 import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.gui.panel.file.tree.FileTreePanel;
 import cn.enaium.joe.jar.Jar;
+import cn.enaium.joe.util.JTreeUtil;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -50,10 +51,25 @@ public class LeftPanel extends JPanel {
                                 if (!jTextField.getText().replace(" ", "").isEmpty()) {
                                     Jar searchedJar = jar.copy();
 
-                                    searchedJar.classes = searchedJar.classes.entrySet().stream().filter(stringClassNodeEntry -> stringClassNodeEntry.getKey().toLowerCase(Locale.ROOT).contains(jTextField.getText().toLowerCase(Locale.ROOT))).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-                                    searchedJar.resources = searchedJar.resources.entrySet().stream().filter(stringEntry -> stringEntry.getKey().toLowerCase(Locale.ROOT).contains(jTextField.getText().toLowerCase(Locale.ROOT))).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                                    searchedJar.classes = searchedJar.classes.entrySet().stream().filter(stringClassNodeEntry -> {
+                                        String key = stringClassNodeEntry.getKey();
+
+                                        if (!key.contains("/")) {
+                                            key = key.substring(key.lastIndexOf("/") + 1);
+                                        }
+
+                                        return key.toLowerCase(Locale.ROOT).contains(jTextField.getText().toLowerCase(Locale.ROOT));
+                                    }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                                    searchedJar.resources = searchedJar.resources.entrySet().stream().filter(stringEntry -> {
+                                        String key = stringEntry.getKey();
+                                        if (!key.contains("/")) {
+                                            key = key.substring(key.lastIndexOf("/") + 1);
+                                        }
+                                        return key.toLowerCase(Locale.ROOT).contains(jTextField.getText().toLowerCase(Locale.ROOT));
+                                    }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
                                     JavaOctetEditor.getInstance().fileTreePanel.refresh(searchedJar);
+                                    JTreeUtil.setTreeExpandedState(JavaOctetEditor.getInstance().fileTreePanel, true);
                                 } else {
                                     JavaOctetEditor.getInstance().fileTreePanel.refresh(jar);
                                 }

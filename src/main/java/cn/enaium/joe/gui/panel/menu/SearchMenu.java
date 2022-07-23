@@ -16,21 +16,16 @@
 
 package cn.enaium.joe.gui.panel.menu;
 
-import cn.enaium.joe.gui.panel.menu.file.LoadMenuItem;
-import cn.enaium.joe.gui.panel.menu.file.SaveAllSourceMenuItem;
-import cn.enaium.joe.gui.panel.menu.file.SaveMenuItem;
+import cn.enaium.joe.gui.panel.menu.search.LdcMenuItem;
 
 import javax.swing.*;
 
 /**
  * @author Enaium
  */
-public class FileMenu extends JMenu {
-    public FileMenu() {
-        super("File");
-        add(new LoadMenuItem());
-        add(new SaveMenuItem());
-        add(new JSeparator());
-        add(new SaveAllSourceMenuItem());
+public class SearchMenu extends JMenu {
+    public SearchMenu() {
+        super("Search");
+        add(new LdcMenuItem());
     }
 }

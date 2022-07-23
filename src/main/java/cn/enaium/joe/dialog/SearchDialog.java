@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.menu;
+package cn.enaium.joe.dialog;
 
-import cn.enaium.joe.gui.panel.menu.file.LoadMenuItem;
-import cn.enaium.joe.gui.panel.menu.file.SaveAllSourceMenuItem;
-import cn.enaium.joe.gui.panel.menu.file.SaveMenuItem;
+import cn.enaium.joe.gui.panel.search.Result;
 
-import javax.swing.*;
+import java.awt.*;
 
 /**
  * @author Enaium
  */
-public class FileMenu extends JMenu {
-    public FileMenu() {
-        super("File");
-        add(new LoadMenuItem());
-        add(new SaveMenuItem());
-        add(new JSeparator());
-        add(new SaveAllSourceMenuItem());
+public class SearchDialog extends Dialog {
+    public Result result = new Result();
+
+    public SearchDialog() {
+        super("Search");
+        setLayout(new BorderLayout());
+        setSize(400, 300);
+        add(result, BorderLayout.CENTER);
     }
 }

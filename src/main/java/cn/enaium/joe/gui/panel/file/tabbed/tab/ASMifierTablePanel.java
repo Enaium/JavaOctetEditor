@@ -17,7 +17,7 @@
 package cn.enaium.joe.gui.panel.file.tabbed.tab;
 
 import cn.enaium.joe.JavaOctetEditor;
-import cn.enaium.joe.gui.panel.CodeArea;
+import cn.enaium.joe.gui.panel.CodeAreaPanel;
 import cn.enaium.joe.util.ASyncUtil;
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -44,18 +44,7 @@ public class ASMifierTablePanel extends ClassNodeTabPanel {
     public ASMifierTablePanel(ClassNode classNode) {
         super(classNode);
         setLayout(new BorderLayout());
-        CodeArea codeArea = new CodeArea();
-        codeArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
-        codeArea.setEditable(true);
-        StringWriter stringWriter = new StringWriter();
-        ASyncUtil.execute(() -> {
-            classNode.accept(new TraceClassVisitor(null, new ASMifier(), new PrintWriter(stringWriter)));
-        }, () -> {
-            String trim = getMiddle(getMiddle(stringWriter.toString())).trim();
-            codeArea.setText(trim.substring(0, trim.lastIndexOf("\n")));
-            codeArea.setCaretPosition(0);
-        });
-        add(new RTextScrollPane(codeArea) {{
+        CodeAreaPanel codeAreaPanel = new CodeAreaPanel(){{
             getTextArea().addKeyListener(new KeyAdapter() {
 
                 boolean control = false;
@@ -87,7 +76,7 @@ public class ASMifierTablePanel extends ClassNodeTabPanel {
                                 classPool.importPackage("org.objectweb.asm.TypePath");
                                 CtClass ctClass = classPool.makeClass(ASMifier.class.getSimpleName());
                                 ctClass.addInterface(classPool.get("org.objectweb.asm.Opcodes"));
-                                ctClass.addMethod(CtMethod.make("public static byte[] dump() throws Exception {" + codeArea.getText() + "return classWriter.toByteArray();}", ctClass));
+                                ctClass.addMethod(CtMethod.make("public static byte[] dump() throws Exception {" + getTextArea().getText() + "return classWriter.toByteArray();}", ctClass));
                                 byte[] dumps = (byte[]) new Loader(classPool).loadClass(ASMifier.class.getSimpleName()).getMethod("dump").invoke(null);
                                 ClassNode newClassNode = new ClassNode();
                                 new ClassReader(dumps).accept(newClassNode, ClassReader.EXPAND_FRAMES);
@@ -107,7 +96,18 @@ public class ASMifierTablePanel extends ClassNodeTabPanel {
                     }
                 }
             });
-        }});
+        }};
+        codeAreaPanel.getTextArea().setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+        codeAreaPanel.getTextArea().setEditable(true);
+        StringWriter stringWriter = new StringWriter();
+        ASyncUtil.execute(() -> {
+            classNode.accept(new TraceClassVisitor(null, new ASMifier(), new PrintWriter(stringWriter)));
+        }, () -> {
+            String trim = getMiddle(getMiddle(stringWriter.toString())).trim();
+            codeAreaPanel.getTextArea().setText(trim.substring(0, trim.lastIndexOf("\n")));
+            codeAreaPanel.getTextArea().setCaretPosition(0);
+        });
+        add(codeAreaPanel);
     }
 
     public String getMiddle(String s) {
