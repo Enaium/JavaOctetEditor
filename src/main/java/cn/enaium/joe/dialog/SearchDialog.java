@@ -16,7 +16,7 @@
 
 package cn.enaium.joe.dialog;
 
-import cn.enaium.joe.gui.panel.search.Result;
+import cn.enaium.joe.gui.panel.search.ResultPanel;
 
 import java.awt.*;
 
@@ -24,12 +24,12 @@ import java.awt.*;
  * @author Enaium
  */
 public class SearchDialog extends Dialog {
-    public Result result = new Result();
+    public ResultPanel resultPanel = new ResultPanel();
 
     public SearchDialog() {
         super("Search");
         setLayout(new BorderLayout());
         setSize(400, 300);
-        add(result, BorderLayout.CENTER);
+        add(resultPanel, BorderLayout.CENTER);
     }
 }
