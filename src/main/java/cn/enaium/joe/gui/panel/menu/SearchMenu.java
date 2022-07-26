@@ -16,6 +16,7 @@
 
 package cn.enaium.joe.gui.panel.menu;
 
+import cn.enaium.joe.gui.panel.menu.search.FieldMenuItem;
 import cn.enaium.joe.gui.panel.menu.search.LdcMenuItem;
 
 import javax.swing.*;
@@ -27,5 +28,6 @@ public class SearchMenu extends JMenu {
     public SearchMenu() {
         super("Search");
         add(new LdcMenuItem());
+        add(new FieldMenuItem());
     }
 }
