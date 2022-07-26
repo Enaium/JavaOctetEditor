@@ -54,12 +54,11 @@ public class SearchLdcDialog extends SearchDialog {
 
                             for (Map.Entry<String, ClassNode> stringClassNodeEntry : jar.classes.entrySet()) {
                                 for (MethodNode method : stringClassNodeEntry.getValue().methods) {
-
                                     for (AbstractInsnNode instruction : method.instructions) {
                                         if (instruction instanceof LdcInsnNode) {
                                             String ldc = ((LdcInsnNode) instruction).cst.toString();
                                             if (ldc.contains(text.getText())) {
-                                                ((DefaultListModel<ResultNode>) result.getList().getModel()).addElement(new ResultNode(stringClassNodeEntry.getValue(), ldc));
+                                                ((DefaultListModel<ResultNode>) resultPanel.getList().getModel()).addElement(new ResultNode(stringClassNodeEntry.getValue(), ldc));
                                             }
                                         }
                                         JavaOctetEditor.getInstance().bottomPanel.setProcess((int) ((loaded++ / total) * 100f));

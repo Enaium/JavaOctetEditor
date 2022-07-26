@@ -58,8 +58,8 @@ public class JavaOctetEditor {
 
         window.setJMenuBar(new JMenuBar() {{
             add(new FileMenu());
-            add(new HelpMenu());
             add(new SearchMenu());
+            add(new HelpMenu());
         }});
 
         window.setContentPane(new JPanel(new BorderLayout()) {

@@ -14,22 +14,14 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.dialog;
-
-import cn.enaium.joe.gui.panel.search.ResultPanel;
-
-import java.awt.*;
+package cn.enaium.joe.util;
 
 /**
  * @author Enaium
+ * @since 0.5.0
  */
-public class SearchDialog extends Dialog {
-    public ResultPanel resultPanel = new ResultPanel();
-
-    public SearchDialog() {
-        super("Search");
-        setLayout(new BorderLayout());
-        setSize(700, 400);
-        add(resultPanel, BorderLayout.CENTER);
+public class StringUtil {
+    public static boolean isBlank(String string) {
+        return string.replace(" ", "").isEmpty();
     }
 }

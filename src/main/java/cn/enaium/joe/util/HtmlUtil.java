@@ -14,22 +14,20 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.dialog;
-
-import cn.enaium.joe.gui.panel.search.ResultPanel;
+package cn.enaium.joe.util;
 
 import java.awt.*;
 
 /**
  * @author Enaium
+ * @since 0.5.0
  */
-public class SearchDialog extends Dialog {
-    public ResultPanel resultPanel = new ResultPanel();
+public class HtmlUtil {
+    public static String toHtml(String text) {
+        return String.format("<html>%s</html>", text);
+    }
 
-    public SearchDialog() {
-        super("Search");
-        setLayout(new BorderLayout());
-        setSize(700, 400);
-        add(resultPanel, BorderLayout.CENTER);
+    public static String setColor(String text, Color color) {
+        return String.format("<font color=rgb(%d,%d,%d)>%s</font>", color.getRed(), color.getGreen(), color.getBlue(), text);
     }
 }

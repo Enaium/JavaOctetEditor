@@ -21,26 +21,22 @@ import cn.enaium.joe.gui.panel.file.tree.FileTreePanel;
 import cn.enaium.joe.gui.panel.file.tree.node.*;
 import cn.enaium.joe.util.ASyncUtil;
 import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.MethodNode;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.nio.charset.StandardCharsets;
 
 /**
  * @author Enaium
  */
-public class Result extends JPanel {
+public class ResultPanel extends JPanel {
 
     private final JList<ResultNode> list;
 
-    public Result() {
+    public ResultPanel() {
         super(new BorderLayout());
         list = new JList<>(new DefaultListModel<>());
         add(new JScrollPane(list), BorderLayout.CENTER);
@@ -53,7 +49,7 @@ public class Result extends JPanel {
                     SwingUtilities.invokeLater(() -> {
                         FileTreePanel fileTreePanel = JavaOctetEditor.getInstance().fileTreePanel;
                         DefaultTreeModel model = (DefaultTreeModel) fileTreePanel.getModel();
-                        if (selectEntry(fileTreePanel, list.getSelectedValue().getClassNode(), model, (DefaultTreeNode) model.getRoot())) {
+                        if (selectEntry(fileTreePanel, list.getSelectedValue().getClassNode(), model, FileTreePanel.classesRoot)) {
                             fileTreePanel.repaint();
                         }
                     });

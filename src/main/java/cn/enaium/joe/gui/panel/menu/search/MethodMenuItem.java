@@ -14,22 +14,28 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.dialog;
+package cn.enaium.joe.gui.panel.menu.search;
 
-import cn.enaium.joe.gui.panel.search.ResultPanel;
+import cn.enaium.joe.JavaOctetEditor;
+import cn.enaium.joe.dialog.search.SearchFieldDialog;
+import cn.enaium.joe.dialog.search.SearchMethodDialog;
+import cn.enaium.joe.jar.Jar;
 
-import java.awt.*;
+import javax.swing.*;
 
 /**
  * @author Enaium
+ * @since 0.5.0
  */
-public class SearchDialog extends Dialog {
-    public ResultPanel resultPanel = new ResultPanel();
-
-    public SearchDialog() {
-        super("Search");
-        setLayout(new BorderLayout());
-        setSize(700, 400);
-        add(resultPanel, BorderLayout.CENTER);
+public class MethodMenuItem extends JMenuItem {
+    public MethodMenuItem() {
+        super("Method");
+        addActionListener(e -> {
+            Jar jar = JavaOctetEditor.getInstance().jar;
+            if (jar == null) {
+                return;
+            }
+            new SearchMethodDialog().setVisible(true);
+        });
     }
 }

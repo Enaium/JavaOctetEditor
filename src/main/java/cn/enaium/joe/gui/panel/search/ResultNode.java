@@ -16,7 +16,10 @@
 
 package cn.enaium.joe.gui.panel.search;
 
+import cn.enaium.joe.util.HtmlUtil;
 import org.objectweb.asm.tree.ClassNode;
+
+import java.awt.*;
 
 /**
  * @author Enaium
@@ -40,6 +43,6 @@ public class ResultNode {
 
     @Override
     public String toString() {
-        return result;
+        return HtmlUtil.toHtml(HtmlUtil.setColor(classNode.name, new Color(255, 255, 255)) + "#" + HtmlUtil.setColor(result, new Color(151, 194, 120)));
     }
 }
