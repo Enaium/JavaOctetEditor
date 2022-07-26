@@ -14,22 +14,28 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.menu;
+package cn.enaium.joe.gui.panel.menu.search;
 
-import cn.enaium.joe.gui.panel.menu.search.FieldMenuItem;
-import cn.enaium.joe.gui.panel.menu.search.LdcMenuItem;
-import cn.enaium.joe.gui.panel.menu.search.MethodMenuItem;
+import cn.enaium.joe.JavaOctetEditor;
+import cn.enaium.joe.dialog.search.SearchFieldDialog;
+import cn.enaium.joe.dialog.search.SearchMethodDialog;
+import cn.enaium.joe.jar.Jar;
 
 import javax.swing.*;
 
 /**
  * @author Enaium
+ * @since 0.5.0
  */
-public class SearchMenu extends JMenu {
-    public SearchMenu() {
-        super("Search");
-        add(new LdcMenuItem());
-        add(new FieldMenuItem());
-        add(new MethodMenuItem());
+public class MethodMenuItem extends JMenuItem {
+    public MethodMenuItem() {
+        super("Method");
+        addActionListener(e -> {
+            Jar jar = JavaOctetEditor.getInstance().jar;
+            if (jar == null) {
+                return;
+            }
+            new SearchMethodDialog().setVisible(true);
+        });
     }
 }
