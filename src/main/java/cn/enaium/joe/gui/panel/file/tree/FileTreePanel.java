@@ -22,16 +22,20 @@ import cn.enaium.joe.gui.panel.file.tabbed.tab.FileTabPanel;
 import cn.enaium.joe.gui.panel.file.tree.node.*;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.util.ASyncUtil;
+import cn.enaium.joe.util.JTreeUtil;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.*;
 
@@ -71,6 +75,25 @@ public class FileTreePanel extends JTree {
                 });
             }
         }), true);
+
+        JPopupMenu jPopupMenu = new JPopupMenu();
+
+
+        jPopupMenu.add(new JMenuItem("Expand all") {{
+            addActionListener(e -> {
+                JTreeUtil.setNodeExpandedState(FileTreePanel.this, ((DefaultMutableTreeNode) Objects.requireNonNull(getSelectionPath()).getLastPathComponent()), true);
+            });
+        }});
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (SwingUtilities.isRightMouseButton(e) && getSelectionPath() != null) {
+                    jPopupMenu.show(FileTreePanel.this, e.getX(), e.getY());
+                }
+            }
+        });
+
     }
 
     public void refresh(Jar jar) {
