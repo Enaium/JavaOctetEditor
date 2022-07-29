@@ -42,30 +42,15 @@ public class SearchLdcDialog extends SearchDialog {
             add(new JButton("Search") {{
                 addActionListener(e -> {
                     if (!text.getText().replace(" ", "").isEmpty()) {
-                        Jar jar = JavaOctetEditor.getInstance().jar;
                         ASyncUtil.execute(() -> {
-                            float loaded = 0;
-                            float total = 0;
-                            for (Map.Entry<String, ClassNode> stringClassNodeEntry : jar.classes.entrySet()) {
-                                for (MethodNode method : stringClassNodeEntry.getValue().methods) {
-                                    total += method.instructions.size();
-                                }
-                            }
-
-                            for (Map.Entry<String, ClassNode> stringClassNodeEntry : jar.classes.entrySet()) {
-                                for (MethodNode method : stringClassNodeEntry.getValue().methods) {
-                                    for (AbstractInsnNode instruction : method.instructions) {
-                                        if (instruction instanceof LdcInsnNode) {
-                                            String ldc = ((LdcInsnNode) instruction).cst.toString();
-                                            if (ldc.contains(text.getText())) {
-                                                ((DefaultListModel<ResultNode>) resultPanel.getList().getModel()).addElement(new ResultNode(stringClassNodeEntry.getValue(), ldc));
-                                            }
-                                        }
-                                        JavaOctetEditor.getInstance().bottomPanel.setProcess((int) ((loaded++ / total) * 100f));
+                            searchInstruction((classNode, instruction) -> {
+                                if (instruction instanceof LdcInsnNode) {
+                                    String ldc = ((LdcInsnNode) instruction).cst.toString();
+                                    if (ldc.contains(text.getText())) {
+                                        ((DefaultListModel<ResultNode>) resultPanel.getList().getModel()).addElement(new ResultNode(classNode, ldc));
                                     }
                                 }
-                            }
-                            JavaOctetEditor.getInstance().bottomPanel.setProcess(0);
+                            });
                         });
                     }
                 });
