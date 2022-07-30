@@ -51,7 +51,7 @@ public class SaveMenuItem extends JMenuItem {
                     try {
                         ZipOutputStream zipOutputStream = new ZipOutputStream(Files.newOutputStream(show.toPath()));
                         for (Map.Entry<String, ClassNode> stringClassNodeEntry : jar.classes.entrySet()) {
-                            zipOutputStream.putNextEntry(new JarEntry(stringClassNodeEntry.getKey()));
+                            zipOutputStream.putNextEntry(new JarEntry(stringClassNodeEntry.getValue().name + ".class"));
                             ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS);
                             stringClassNodeEntry.getValue().accept(classWriter);
                             zipOutputStream.write(classWriter.toByteArray());
