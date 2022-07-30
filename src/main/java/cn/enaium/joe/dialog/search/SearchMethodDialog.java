@@ -50,33 +50,18 @@ public class SearchMethodDialog extends SearchDialog {
             add(new JButton("Search") {{
                 addActionListener(e -> {
                     ASyncUtil.execute(() -> {
-                        float loaded = 0;
-                        float total = 0;
-                        Jar jar = JavaOctetEditor.getInstance().jar;
-                        for (Map.Entry<String, ClassNode> stringClassNodeEntry : jar.classes.entrySet()) {
-                            for (MethodNode method : stringClassNodeEntry.getValue().methods) {
-                                total += method.instructions.size();
-                            }
-                        }
-
-                        for (Map.Entry<String, ClassNode> stringClassNodeEntry : jar.classes.entrySet()) {
-                            for (MethodNode method : stringClassNodeEntry.getValue().methods) {
-                                for (AbstractInsnNode instruction : method.instructions) {
-                                    if (instruction instanceof MethodInsnNode) {
-                                        MethodInsnNode methodInsnNode = (MethodInsnNode) instruction;
-                                        if ((methodInsnNode.owner.contains(owner.getText()) || StringUtil.isBlank(owner.getText())) &&
-                                                (methodInsnNode.name.contains(name.getText()) || StringUtil.isBlank(name.getText())) &&
-                                                (methodInsnNode.desc.contains(description.getText()) || StringUtil.isBlank(description.getText())) &&
-                                                (methodInsnNode.itf && anInterface.isSelected() || !anInterface.isSelected())
-                                        ) {
-                                            ((DefaultListModel<ResultNode>) resultPanel.getList().getModel()).addElement(new ResultNode(stringClassNodeEntry.getValue(), methodInsnNode.name + "#" + methodInsnNode.desc));
-                                        }
-                                    }
-                                    JavaOctetEditor.getInstance().bottomPanel.setProcess((int) ((loaded++ / total) * 100f));
+                        searchInstruction((classNode, instruction) -> {
+                            if (instruction instanceof MethodInsnNode) {
+                                MethodInsnNode methodInsnNode = (MethodInsnNode) instruction;
+                                if ((methodInsnNode.owner.contains(owner.getText()) || StringUtil.isBlank(owner.getText())) &&
+                                        (methodInsnNode.name.contains(name.getText()) || StringUtil.isBlank(name.getText())) &&
+                                        (methodInsnNode.desc.contains(description.getText()) || StringUtil.isBlank(description.getText())) &&
+                                        (methodInsnNode.itf && anInterface.isSelected() || !anInterface.isSelected())
+                                ) {
+                                    ((DefaultListModel<ResultNode>) resultPanel.getList().getModel()).addElement(new ResultNode(classNode, methodInsnNode.name + "#" + methodInsnNode.desc));
                                 }
                             }
-                        }
-                        JavaOctetEditor.getInstance().bottomPanel.setProcess(0);
+                        });
                     });
                 });
             }});

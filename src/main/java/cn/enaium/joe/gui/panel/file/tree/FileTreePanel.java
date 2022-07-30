@@ -18,20 +18,24 @@ package cn.enaium.joe.gui.panel.file.tree;
 
 import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.gui.panel.file.FileDropTarget;
-import cn.enaium.joe.gui.panel.file.tabbed.tab.FileTabPanel;
+import cn.enaium.joe.gui.panel.file.tabbed.tab.ClassTabPanel;
+import cn.enaium.joe.gui.panel.file.tabbed.tab.FieldInfoPanel;
+import cn.enaium.joe.gui.panel.file.tabbed.tab.MethodInfoTabPanel;
 import cn.enaium.joe.gui.panel.file.tree.node.*;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.util.ASyncUtil;
+import cn.enaium.joe.util.JTreeUtil;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.*;
 
@@ -55,10 +59,21 @@ public class FileTreePanel extends JTree {
 
         addTreeSelectionListener(e -> {
             DefaultTreeNode lastPathComponent = (DefaultTreeNode) e.getPath().getLastPathComponent();
-            if (lastPathComponent instanceof ClassTreeNode) {
-                JavaOctetEditor.getInstance().fileTabbedPanel.addTab(lastPathComponent.toString(), new FileTabPanel(((ClassTreeNode) lastPathComponent).classNode));
+            SwingUtilities.invokeLater(() -> {
+                if (lastPathComponent instanceof ClassTreeNode) {
+                    ClassNode classNode = ((ClassTreeNode) lastPathComponent).classNode;
+                    JavaOctetEditor.getInstance().fileTabbedPanel.addTab(classNode.name.substring(classNode.name.lastIndexOf("/") + 1), new ClassTabPanel(classNode));
+                } else if (lastPathComponent instanceof MethodTreeNode) {
+                    MethodTreeNode methodTreeNode = (MethodTreeNode) lastPathComponent;
+                    MethodNode methodNode = methodTreeNode.methodNode;
+                    JavaOctetEditor.getInstance().fileTabbedPanel.addTab(methodTreeNode.classNode.name.substring(methodTreeNode.classNode.name.lastIndexOf("/") + 1) + "#" + methodNode.name, new MethodInfoTabPanel(methodNode));
+                } else if (lastPathComponent instanceof FieldTreeNode) {
+                    FieldTreeNode fieldTreeNode = (FieldTreeNode) lastPathComponent;
+                    FieldNode fieldNode = fieldTreeNode.fieldNode;
+                    JavaOctetEditor.getInstance().fileTabbedPanel.addTab(fieldTreeNode.classNode.name.substring(fieldTreeNode.classNode.name.lastIndexOf("/") + 1) + "#" + fieldNode.name, new FieldInfoPanel(fieldNode));
+                }
                 JavaOctetEditor.getInstance().fileTabbedPanel.setSelectedIndex(JavaOctetEditor.getInstance().fileTabbedPanel.getTabCount() - 1);
-            }
+            });
         });
 
         new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, new FileDropTarget(".jar", files -> {
@@ -71,6 +86,25 @@ public class FileTreePanel extends JTree {
                 });
             }
         }), true);
+
+        JPopupMenu jPopupMenu = new JPopupMenu();
+
+
+        jPopupMenu.add(new JMenuItem("Expand all") {{
+            addActionListener(e -> {
+                JTreeUtil.setNodeExpandedState(FileTreePanel.this, ((DefaultMutableTreeNode) Objects.requireNonNull(getSelectionPath()).getLastPathComponent()), true);
+            });
+        }});
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (SwingUtilities.isRightMouseButton(e) && getSelectionPath() != null) {
+                    jPopupMenu.show(FileTreePanel.this, e.getX(), e.getY());
+                }
+            }
+        });
+
     }
 
     public void refresh(Jar jar) {
@@ -78,6 +112,8 @@ public class FileTreePanel extends JTree {
         model.reload();
         classesRoot.removeAllChildren();
         resourceRoot.removeAllChildren();
+
+        JavaOctetEditor.getInstance().fileTabbedPanel.removeAll();
 
         Map<String, DefaultTreeNode> hasMap = new HashMap<>();
 

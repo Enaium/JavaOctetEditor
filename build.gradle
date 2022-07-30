@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'cn.enaium'
-version '0.5.0'
+version '0.6.0'
 
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 

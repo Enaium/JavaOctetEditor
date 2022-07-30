@@ -51,32 +51,17 @@ public class SearchFieldDialog extends SearchDialog {
             add(new JButton("Search") {{
                 addActionListener(e -> {
                     ASyncUtil.execute(() -> {
-                        float loaded = 0;
-                        float total = 0;
-                        Jar jar = JavaOctetEditor.getInstance().jar;
-                        for (Map.Entry<String, ClassNode> stringClassNodeEntry : jar.classes.entrySet()) {
-                            for (MethodNode method : stringClassNodeEntry.getValue().methods) {
-                                total += method.instructions.size();
-                            }
-                        }
-
-                        for (Map.Entry<String, ClassNode> stringClassNodeEntry : jar.classes.entrySet()) {
-                            for (MethodNode method : stringClassNodeEntry.getValue().methods) {
-                                for (AbstractInsnNode instruction : method.instructions) {
-                                    if (instruction instanceof FieldInsnNode) {
-                                        FieldInsnNode fieldInsnNode = (FieldInsnNode) instruction;
-                                        if ((fieldInsnNode.owner.contains(owner.getText()) || StringUtil.isBlank(owner.getText())) &&
-                                                (fieldInsnNode.name.contains(name.getText()) || StringUtil.isBlank(name.getText())) &&
-                                                (fieldInsnNode.desc.contains(description.getText()) || StringUtil.isBlank(description.getText()))
-                                        ) {
-                                            ((DefaultListModel<ResultNode>) resultPanel.getList().getModel()).addElement(new ResultNode(stringClassNodeEntry.getValue(), fieldInsnNode.name + ":" + fieldInsnNode.desc));
-                                        }
-                                    }
-                                    JavaOctetEditor.getInstance().bottomPanel.setProcess((int) ((loaded++ / total) * 100f));
+                        searchInstruction((classNode, instruction) -> {
+                            if (instruction instanceof FieldInsnNode) {
+                                FieldInsnNode fieldInsnNode = (FieldInsnNode) instruction;
+                                if ((fieldInsnNode.owner.contains(owner.getText()) || StringUtil.isBlank(owner.getText())) &&
+                                        (fieldInsnNode.name.contains(name.getText()) || StringUtil.isBlank(name.getText())) &&
+                                        (fieldInsnNode.desc.contains(description.getText()) || StringUtil.isBlank(description.getText()))
+                                ) {
+                                    ((DefaultListModel<ResultNode>) resultPanel.getList().getModel()).addElement(new ResultNode(classNode, fieldInsnNode.name + ":" + fieldInsnNode.desc));
                                 }
                             }
-                        }
-                        JavaOctetEditor.getInstance().bottomPanel.setProcess(0);
+                        });
                     });
                 });
             }});

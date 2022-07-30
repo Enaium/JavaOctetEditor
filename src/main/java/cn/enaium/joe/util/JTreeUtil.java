@@ -34,7 +34,7 @@ public class JTreeUtil {
         setNodeExpandedState(tree, node, expanded);
     }
 
-    private static void setNodeExpandedState(JTree tree, DefaultMutableTreeNode node, boolean expanded) {
+    public static void setNodeExpandedState(JTree tree, DefaultMutableTreeNode node, boolean expanded) {
         Enumeration<TreeNode> children = node.children();
         while (children.hasMoreElements()) {
             setNodeExpandedState(tree, (DefaultMutableTreeNode) children.nextElement(), expanded);
