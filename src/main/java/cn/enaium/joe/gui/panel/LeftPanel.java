@@ -27,6 +27,8 @@ import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -39,9 +41,17 @@ public class LeftPanel extends JPanel {
         super(new BorderLayout());
         add(new JPanel(new BorderLayout()) {{
             setBorder(new EmptyBorder(5, 0, 5, 0));
-            add(new JLabel("Search:"), BorderLayout.WEST);
             add(new JTextField() {{
                 JTextField jTextField = this;
+                jTextField.setText("Search...");
+                jTextField.setForeground(Color.GRAY);
+                addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        jTextField.setText("");
+                        jTextField.setForeground(Color.WHITE);
+                    }
+                });
                 addKeyListener(new KeyAdapter() {
                     @Override
                     public void keyPressed(KeyEvent e) {
