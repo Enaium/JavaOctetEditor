@@ -18,9 +18,9 @@ package cn.enaium.joe.gui.panel.file.tree;
 
 import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.gui.panel.file.FileDropTarget;
-import cn.enaium.joe.gui.panel.file.tabbed.tab.ClassTabPanel;
-import cn.enaium.joe.gui.panel.file.tabbed.tab.FieldInfoPanel;
-import cn.enaium.joe.gui.panel.file.tabbed.tab.MethodInfoTabPanel;
+import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassTabPanel;
+import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.FieldInfoPanel;
+import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.MethodInfoTabPanel;
 import cn.enaium.joe.gui.panel.file.tree.node.*;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.util.ASyncUtil;
