@@ -21,6 +21,7 @@ import cn.enaium.joe.gui.panel.file.FileDropTarget;
 import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassTabPanel;
 import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.FieldInfoPanel;
 import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.MethodInfoTabPanel;
+import cn.enaium.joe.gui.panel.file.tabbed.tab.resources.HexTablePanel;
 import cn.enaium.joe.gui.panel.file.tree.node.*;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.util.ASyncUtil;
@@ -60,17 +61,26 @@ public class FileTreePanel extends JTree {
         addTreeSelectionListener(e -> {
             DefaultTreeNode lastPathComponent = (DefaultTreeNode) e.getPath().getLastPathComponent();
             SwingUtilities.invokeLater(() -> {
-                if (lastPathComponent instanceof ClassTreeNode) {
-                    ClassNode classNode = ((ClassTreeNode) lastPathComponent).classNode;
-                    JavaOctetEditor.getInstance().fileTabbedPanel.addTab(classNode.name.substring(classNode.name.lastIndexOf("/") + 1), new ClassTabPanel(classNode));
-                } else if (lastPathComponent instanceof MethodTreeNode) {
-                    MethodTreeNode methodTreeNode = (MethodTreeNode) lastPathComponent;
-                    MethodNode methodNode = methodTreeNode.methodNode;
-                    JavaOctetEditor.getInstance().fileTabbedPanel.addTab(methodTreeNode.classNode.name.substring(methodTreeNode.classNode.name.lastIndexOf("/") + 1) + "#" + methodNode.name, new MethodInfoTabPanel(methodNode));
-                } else if (lastPathComponent instanceof FieldTreeNode) {
-                    FieldTreeNode fieldTreeNode = (FieldTreeNode) lastPathComponent;
-                    FieldNode fieldNode = fieldTreeNode.fieldNode;
-                    JavaOctetEditor.getInstance().fileTabbedPanel.addTab(fieldTreeNode.classNode.name.substring(fieldTreeNode.classNode.name.lastIndexOf("/") + 1) + "#" + fieldNode.name, new FieldInfoPanel(fieldNode));
+                if (lastPathComponent instanceof PackageTreeNode) {
+                    PackageTreeNode packageTreeNode = (PackageTreeNode) lastPathComponent;
+                    if (packageTreeNode instanceof ClassTreeNode) {
+                        ClassNode classNode = ((ClassTreeNode) packageTreeNode).classNode;
+                        JavaOctetEditor.getInstance().fileTabbedPanel.addTab(classNode.name.substring(classNode.name.lastIndexOf("/") + 1), new ClassTabPanel(classNode));
+                    } else if (packageTreeNode instanceof MethodTreeNode) {
+                        MethodTreeNode methodTreeNode = (MethodTreeNode) packageTreeNode;
+                        MethodNode methodNode = methodTreeNode.methodNode;
+                        JavaOctetEditor.getInstance().fileTabbedPanel.addTab(methodTreeNode.classNode.name.substring(methodTreeNode.classNode.name.lastIndexOf("/") + 1) + "#" + methodNode.name, new MethodInfoTabPanel(methodNode));
+                    } else if (packageTreeNode instanceof FieldTreeNode) {
+                        FieldTreeNode fieldTreeNode = (FieldTreeNode) packageTreeNode;
+                        FieldNode fieldNode = fieldTreeNode.fieldNode;
+                        JavaOctetEditor.getInstance().fileTabbedPanel.addTab(fieldTreeNode.classNode.name.substring(fieldTreeNode.classNode.name.lastIndexOf("/") + 1) + "#" + fieldNode.name, new FieldInfoPanel(fieldNode));
+                    }
+                } else if (lastPathComponent instanceof FolderTreeNode) {
+                    FolderTreeNode folderTreeNode = (FolderTreeNode) lastPathComponent;
+                    if (folderTreeNode instanceof FileTreeNode) {
+                        FileTreeNode fileTreeNode = (FileTreeNode) folderTreeNode;
+                        JavaOctetEditor.getInstance().fileTabbedPanel.addTab(fileTreeNode.toString().substring(fileTreeNode.toString().lastIndexOf("/") + 1), new HexTablePanel(fileTreeNode));
+                    }
                 }
                 JavaOctetEditor.getInstance().fileTabbedPanel.setSelectedIndex(JavaOctetEditor.getInstance().fileTabbedPanel.getTabCount() - 1);
             });
