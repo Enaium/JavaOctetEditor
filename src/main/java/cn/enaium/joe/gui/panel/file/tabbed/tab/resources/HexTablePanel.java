@@ -32,7 +32,12 @@ public class HexTablePanel extends Panel {
     public HexTablePanel(FileTreeNode fileTreeNode) {
         super(new BorderLayout());
         DefaultTableModel defaultTableModel = new DefaultTableModel(new Object[][]{}, new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"});
-        JTable jTable = new JTable(defaultTableModel);
+        JTable jTable = new JTable(defaultTableModel) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         jTable.getTableHeader().setReorderingAllowed(false);
         add(new JScrollPane(jTable), BorderLayout.CENTER);
 
