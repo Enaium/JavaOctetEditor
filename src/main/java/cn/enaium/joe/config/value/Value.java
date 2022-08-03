@@ -14,14 +14,35 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.decompiler;
+package cn.enaium.joe.config.value;
 
-import org.objectweb.asm.tree.ClassNode;
+
+import com.google.gson.annotations.Expose;
 
 /**
  * @author Enaium
  * @since 0.7.0
  */
-public interface IDecompiler {
-    String decompile(ClassNode classNode);
+public class Value<T> {
+    private final String name;
+
+    @Expose
+    private T value;
+
+    public Value(String name, T value) {
+        this.value = value;
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public T getValue() {
+        return value;
+    }
+
+    public void setValue(T value) {
+        this.value = value;
+    }
 }

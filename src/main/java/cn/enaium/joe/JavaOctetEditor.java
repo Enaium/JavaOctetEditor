@@ -16,10 +16,12 @@
 
 package cn.enaium.joe;
 
+import cn.enaium.joe.config.ConfigManager;
 import cn.enaium.joe.gui.panel.BottomPanel;
 import cn.enaium.joe.gui.panel.LeftPanel;
 import cn.enaium.joe.gui.panel.file.tabbed.FileTabbedPanel;
 import cn.enaium.joe.gui.panel.file.tree.FileTreePanel;
+import cn.enaium.joe.gui.panel.menu.ConfigMenu;
 import cn.enaium.joe.gui.panel.menu.FileMenu;
 import cn.enaium.joe.gui.panel.menu.HelpMenu;
 import cn.enaium.joe.gui.panel.menu.SearchMenu;
@@ -48,17 +50,23 @@ public class JavaOctetEditor {
 
     public BottomPanel bottomPanel = new BottomPanel();
 
+    public ConfigManager configManager = new ConfigManager();
+
     public JavaOctetEditor() {
         instance = this;
     }
 
     public void run() {
+        configManager.load();
+        Runtime.getRuntime().addShutdownHook(new Thread(configManager::save));
+
         AbstractTokenMakerFactory abstractTokenMakerFactory = (AbstractTokenMakerFactory) TokenMakerFactory.getDefaultInstance();
         abstractTokenMakerFactory.putMapping("text/custom", BytecodeTokenMaker.class.getName());
 
         window.setJMenuBar(new JMenuBar() {{
             add(new FileMenu());
             add(new SearchMenu());
+            add(new ConfigMenu());
             add(new HelpMenu());
         }});
 

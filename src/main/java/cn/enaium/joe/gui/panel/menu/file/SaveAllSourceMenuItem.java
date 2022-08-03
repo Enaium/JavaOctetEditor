@@ -17,7 +17,7 @@
 package cn.enaium.joe.gui.panel.menu.file;
 
 import cn.enaium.joe.JavaOctetEditor;
-import cn.enaium.joe.decompiler.ProcyonDecompiler;
+import cn.enaium.joe.service.decompiler.ProcyonDecompiler;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.util.ASyncUtil;
 import cn.enaium.joe.util.JFileChooserUtil;

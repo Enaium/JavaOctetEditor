@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.decompiler;
+package cn.enaium.joe.service.decompiler;
 
 import org.benf.cfr.reader.PluginRunner;
 import org.benf.cfr.reader.api.ClassFileSource;

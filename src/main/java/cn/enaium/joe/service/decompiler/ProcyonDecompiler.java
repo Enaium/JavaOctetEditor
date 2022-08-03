@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.decompiler;
+package cn.enaium.joe.service.decompiler;
 
 import com.strobel.assembler.InputTypeLoader;
 import com.strobel.assembler.metadata.Buffer;

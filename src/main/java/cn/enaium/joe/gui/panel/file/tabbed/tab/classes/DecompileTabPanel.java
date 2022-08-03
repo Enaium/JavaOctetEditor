@@ -16,8 +16,7 @@
 
 package cn.enaium.joe.gui.panel.file.tabbed.tab.classes;
 
-import cn.enaium.joe.decompiler.JDCoreDecompiler;
-import cn.enaium.joe.decompiler.ProcyonDecompiler;
+import cn.enaium.joe.service.DecompileService;
 import cn.enaium.joe.gui.panel.CodeAreaPanel;
 import cn.enaium.joe.util.ASyncUtil;
 import org.objectweb.asm.tree.ClassNode;
@@ -34,7 +33,7 @@ public class DecompileTabPanel extends ClassNodeTabPanel {
         CodeAreaPanel codeAreaPanel = new CodeAreaPanel();
         codeAreaPanel.getTextArea().setSyntaxEditingStyle("text/java");
         ASyncUtil.execute(() -> {
-            codeAreaPanel.getTextArea().setText(new JDCoreDecompiler().decompile(classNode));
+            codeAreaPanel.getTextArea().setText(DecompileService.getService().decompile(classNode));
         });
         codeAreaPanel.getTextArea().setCaretPosition(0);
         add(codeAreaPanel);
