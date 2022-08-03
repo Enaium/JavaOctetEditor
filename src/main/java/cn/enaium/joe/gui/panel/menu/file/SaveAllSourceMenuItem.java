@@ -17,16 +17,14 @@
 package cn.enaium.joe.gui.panel.menu.file;
 
 import cn.enaium.joe.JavaOctetEditor;
+import cn.enaium.joe.decompiler.ProcyonDecompiler;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.util.ASyncUtil;
-import cn.enaium.joe.util.CfrUtil;
 import cn.enaium.joe.util.JFileChooserUtil;
 import org.objectweb.asm.tree.ClassNode;
 
 import javax.swing.*;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -59,7 +57,7 @@ public class SaveAllSourceMenuItem extends JMenuItem {
                             String name = stringClassNodeEntry.getKey().substring(0, stringClassNodeEntry.getKey().lastIndexOf(".")) + ".java";
                             name = "src/main/java/" + name;
                             zipOutputStream.putNextEntry(new ZipEntry(name));
-                            zipOutputStream.write(CfrUtil.getSource(stringClassNodeEntry.getValue()).getBytes(StandardCharsets.UTF_8));
+                            zipOutputStream.write(new ProcyonDecompiler().decompile(stringClassNodeEntry.getValue()).getBytes(StandardCharsets.UTF_8));
                             JavaOctetEditor.getInstance().bottomPanel.setProcess((int) ((loaded++ / files) * 100f));
                         }
 

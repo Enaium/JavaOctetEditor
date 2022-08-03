@@ -36,6 +36,8 @@ dependencies {
     implementation 'org.ow2.asm:asm-tree:9.3'
     implementation 'org.ow2.asm:asm-util:9.3'
     implementation 'org.benf:cfr:0.152'
+    implementation 'com.github.mstrobel.procyon:procyon-decompiler:v0.6.0'
+    implementation 'com.github.java-decompiler:jd-core:v1.1.3'
     implementation 'org.javassist:javassist:3.29.0-GA'
 }
 
@@ -49,6 +51,8 @@ shadowJar {
         include(dependency('com.github.bobbylight:RSyntaxTextArea'))
         include(dependency('org.ow2.asm:.*'))
         include(dependency('org.benf:cfr'))
+        include(dependency('com.github.mstrobel.procyon:procyon-decompiler'))
+        include(dependency('com.github.java-decompiler:jd-core'))
         include(dependency('org.javassist:javassist'))
     }
     archiveClassifier.set('')
