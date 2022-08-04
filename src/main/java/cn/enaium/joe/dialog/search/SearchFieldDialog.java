@@ -21,6 +21,7 @@ import cn.enaium.joe.dialog.SearchDialog;
 import cn.enaium.joe.gui.panel.search.ResultNode;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.util.ASyncUtil;
+import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.StringUtil;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.AbstractInsnNode;
@@ -37,18 +38,18 @@ import java.util.Map;
  */
 public class SearchFieldDialog extends SearchDialog {
     public SearchFieldDialog() {
-        setTitle("Search Field");
+        setTitle(LangUtil.i18n("search.field.title"));
         add(new JPanel(new FlowLayout()) {{
-            add(new JLabel("Owner:"));
+            add(new JLabel(LangUtil.i18n("search.owner")));
             JTextField owner = new JTextField();
             add(owner);
-            add(new JLabel("Name:"));
+            add(new JLabel(LangUtil.i18n("search.name")));
             JTextField name = new JTextField();
             add(name);
-            add(new JLabel("Description:"));
+            add(new JLabel(LangUtil.i18n("search.description")));
             JTextField description = new JTextField();
             add(description);
-            add(new JButton("Search") {{
+            add(new JButton(LangUtil.i18n("search")) {{
                 addActionListener(e -> {
                     ASyncUtil.execute(() -> {
                         searchInstruction((classNode, instruction) -> {

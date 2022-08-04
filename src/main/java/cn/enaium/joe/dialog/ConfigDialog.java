@@ -19,6 +19,7 @@ package cn.enaium.joe.dialog;
 import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.config.Config;
 import cn.enaium.joe.config.value.*;
+import cn.enaium.joe.util.LangUtil;
 import org.tinylog.Logger;
 
 import javax.swing.*;
@@ -35,7 +36,7 @@ import java.lang.reflect.Field;
  */
 public class ConfigDialog extends Dialog {
     public ConfigDialog(Config config) {
-        super("Config");
+        super(LangUtil.i18n("config"));
         setSize(new Dimension(400, getHeight()));
         JPanel names = new JPanel(new GridLayout(0, 1));
         JPanel components = new JPanel(new GridLayout(0, 1));

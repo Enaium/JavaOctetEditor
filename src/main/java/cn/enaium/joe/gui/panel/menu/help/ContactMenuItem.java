@@ -17,6 +17,7 @@
 package cn.enaium.joe.gui.panel.menu.help;
 
 import cn.enaium.joe.dialog.ContactDialog;
+import cn.enaium.joe.util.LangUtil;
 
 import javax.swing.*;
 
@@ -25,7 +26,7 @@ import javax.swing.*;
  */
 public class ContactMenuItem extends JMenuItem {
     public ContactMenuItem() {
-        super("Contact");
+        super(LangUtil.i18n("menu.help.contact"));
         addActionListener(e -> {
             new ContactDialog().setVisible(true);
         });

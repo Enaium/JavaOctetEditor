@@ -16,6 +16,8 @@
 
 package cn.enaium.joe.dialog;
 
+import cn.enaium.joe.util.LangUtil;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -25,39 +27,39 @@ import java.awt.*;
  */
 public class AboutDialog extends Dialog {
     public AboutDialog() {
-        super("About");
+        super(LangUtil.i18n("menu.help.about"));
         setContentPane(new JPanel(new GridLayout(2, 0)) {{
             setBorder(new EmptyBorder(10, 10, 10, 10));
             add(new JPanel(new GridLayout(5, 0)) {{
-                add(new JLabel("System"));
-                add(new JLabel("Information about the OS"));
+                add(new JLabel(LangUtil.i18n("about.system")));
+                add(new JLabel(LangUtil.i18n("about.system.description")));
                 add(new JPanel(new BorderLayout()) {{
-                    add(new JLabel("Name"), BorderLayout.WEST);
+                    add(new JLabel(LangUtil.i18n("about.system.name")), BorderLayout.WEST);
                     add(new JLabel(System.getProperty("os.name")), BorderLayout.EAST);
                 }});
                 add(new JPanel(new BorderLayout()) {{
-                    add(new JLabel("Architecture"), BorderLayout.WEST);
+                    add(new JLabel(LangUtil.i18n("about.system.architecture")), BorderLayout.WEST);
                     add(new JLabel(System.getProperty("os.arch")), BorderLayout.EAST);
                 }});
                 add(new JSeparator());
             }});
             add(new JPanel(new GridLayout(6, 0)) {{
-                add(new JLabel("Java"));
-                add(new JLabel("Information about the JVM"));
+                add(new JLabel(LangUtil.i18n("about.java")));
+                add(new JLabel(LangUtil.i18n("about.java.description")));
                 add(new JPanel(new BorderLayout()) {{
-                    add(new JLabel("Version"), BorderLayout.WEST);
+                    add(new JLabel(LangUtil.i18n("about.java.version")), BorderLayout.WEST);
                     add(new JLabel(System.getProperty("java.version")), BorderLayout.EAST);
                 }});
                 add(new JPanel(new BorderLayout()) {{
-                    add(new JLabel("VM Name"), BorderLayout.WEST);
+                    add(new JLabel(LangUtil.i18n("about.java.vm.name")), BorderLayout.WEST);
                     add(new JLabel(System.getProperty("java.vm.name")), BorderLayout.EAST);
                 }});
                 add(new JPanel(new BorderLayout()) {{
-                    add(new JLabel("VM Vendor"), BorderLayout.WEST);
+                    add(new JLabel(LangUtil.i18n("about.java.vm.vendor")), BorderLayout.WEST);
                     add(new JLabel(System.getProperty("java.vm.vendor")), BorderLayout.EAST);
                 }});
                 add(new JPanel(new BorderLayout()) {{
-                    add(new JLabel("Home"), BorderLayout.WEST);
+                    add(new JLabel(LangUtil.i18n("about.java.home")), BorderLayout.WEST);
                     add(new JLabel(System.getProperty("java.home")), BorderLayout.EAST);
                 }});
             }});

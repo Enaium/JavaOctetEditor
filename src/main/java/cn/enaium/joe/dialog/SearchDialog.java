@@ -20,6 +20,7 @@ import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.gui.panel.search.ResultNode;
 import cn.enaium.joe.gui.panel.search.ResultPanel;
 import cn.enaium.joe.jar.Jar;
+import cn.enaium.joe.util.LangUtil;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.LdcInsnNode;
@@ -38,7 +39,7 @@ public class SearchDialog extends Dialog {
     public ResultPanel resultPanel = new ResultPanel();
 
     public SearchDialog() {
-        super("Search");
+        super(LangUtil.i18n("menu.search"));
         setLayout(new BorderLayout());
         setSize(700, 400);
         add(resultPanel, BorderLayout.CENTER);

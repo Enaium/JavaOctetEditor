@@ -18,6 +18,7 @@ package cn.enaium.joe.gui.panel.menu;
 
 import cn.enaium.joe.gui.panel.menu.help.AboutMenuItem;
 import cn.enaium.joe.gui.panel.menu.help.ContactMenuItem;
+import cn.enaium.joe.util.LangUtil;
 
 import javax.swing.*;
 
@@ -26,7 +27,7 @@ import javax.swing.*;
  */
 public class HelpMenu extends JMenu {
     public HelpMenu() {
-        super("Help");
+        super(LangUtil.i18n("menu.help"));
         add(new AboutMenuItem());
         add(new ContactMenuItem());
     }

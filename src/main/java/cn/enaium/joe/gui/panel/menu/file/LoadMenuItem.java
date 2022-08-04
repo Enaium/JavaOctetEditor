@@ -20,6 +20,7 @@ import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.util.ASyncUtil;
 import cn.enaium.joe.util.JFileChooserUtil;
+import cn.enaium.joe.util.LangUtil;
 
 import javax.swing.*;
 import java.io.File;
@@ -29,7 +30,7 @@ import java.io.File;
  */
 public class LoadMenuItem extends JMenuItem {
     public LoadMenuItem() {
-        super("Load...");
+        super(LangUtil.i18n("menu.file.load"));
         addActionListener(e -> {
             File show = JFileChooserUtil.show(JFileChooserUtil.Type.OPEN);
             if (show != null) {

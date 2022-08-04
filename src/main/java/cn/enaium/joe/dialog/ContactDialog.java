@@ -16,6 +16,7 @@
 
 package cn.enaium.joe.dialog;
 
+import cn.enaium.joe.util.LangUtil;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 
 import javax.swing.*;
@@ -31,14 +32,14 @@ import java.net.URISyntaxException;
  */
 public class ContactDialog extends Dialog {
     public ContactDialog() {
-        super("Contact");
+        super(LangUtil.i18n("menu.help.contact"));
         setSize(290, 150);
         setContentPane(new JPanel(new GridLayout(1, 0)) {{
             add(new JPanel(new BorderLayout()) {{
                 add(new JLabel() {{
                     setIcon(new FlatSVGIcon("icons/github.svg"));
                 }}, BorderLayout.WEST);
-                add(new JLabel("<html><a>https://github.com/Enaium/JavaOctetEditor</a></html>"){{
+                add(new JLabel("<html><a>https://github.com/Enaium/JavaOctetEditor</a></html>") {{
                     addMouseListener(new MouseAdapter() {
                         @Override
                         public void mouseClicked(MouseEvent e) {
