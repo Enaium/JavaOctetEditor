@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.menu.config;
-
-import cn.enaium.joe.dialog.ConfigDialog;
-
-import javax.swing.*;
+package cn.enaium.joe.config.value;
 
 /**
  * @author Enaium
  * @since 0.7.0
  */
-public class ApplicationMenuItem extends JMenuItem {
-    public ApplicationMenuItem() {
-        super("Application");
-        addActionListener(e -> {
-            new ConfigDialog().setVisible(true);
-        });
+public class IntegerValue extends Value<Integer> {
+    public IntegerValue(String name, Integer value, String description) {
+        super(name, value, description);
     }
 }

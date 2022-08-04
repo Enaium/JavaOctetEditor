@@ -17,11 +17,8 @@
 package cn.enaium.joe.dialog;
 
 import cn.enaium.joe.JavaOctetEditor;
-import cn.enaium.joe.config.extend.ApplicationConfig;
-import cn.enaium.joe.config.value.EnableValue;
-import cn.enaium.joe.config.value.ModeValue;
-import cn.enaium.joe.config.value.StringValue;
-import cn.enaium.joe.config.value.Value;
+import cn.enaium.joe.config.Config;
+import cn.enaium.joe.config.value.*;
 import org.tinylog.Logger;
 
 import javax.swing.*;
@@ -37,17 +34,26 @@ import java.lang.reflect.Field;
  * @since 0.7.0
  */
 public class ConfigDialog extends Dialog {
-    public ConfigDialog() {
+    public ConfigDialog(Config config) {
         super("Config");
+        setSize(new Dimension(400, getHeight()));
         JPanel names = new JPanel(new GridLayout(0, 1));
         JPanel components = new JPanel(new GridLayout(0, 1));
         try {
-            ApplicationConfig applicationConfig = JavaOctetEditor.getInstance().configManager.getByClass(ApplicationConfig.class);
-            for (Field declaredField : ApplicationConfig.class.getDeclaredFields()) {
-                Object o = declaredField.get(applicationConfig);
+            for (Field declaredField : config.getClass().getDeclaredFields()) {
+                declaredField.setAccessible(true);
+                Object o = declaredField.get(config);
 
                 if (o instanceof Value) {
-                    names.add(new JLabel(((Value<?>) o).getName()), BorderLayout.WEST);
+                    Value<?> value = (Value<?>) o;
+
+                    if (value.getName().isEmpty()) {
+                        System.out.println(declaredField.getName());
+                    }
+
+                    names.add(new JLabel(value.getName()) {{
+                        setToolTipText(value.getDescription());
+                    }}, BorderLayout.WEST);
                 }
 
                 if (o instanceof StringValue) {
@@ -68,14 +74,19 @@ public class ConfigDialog extends Dialog {
                             @Override
                             public void changedUpdate(DocumentEvent e) {
                                 stringValue.setValue(jTextField.getText());
-
                             }
                         });
+                    }});
+                } else if (o instanceof IntegerValue) {
+                    IntegerValue integerValue = (IntegerValue) o;
+                    components.add(new JSpinner() {{
+                        addChangeListener(e -> integerValue.setValue(Integer.parseInt(getValue().toString())));
                     }});
                 } else if (o instanceof EnableValue) {
                     EnableValue enableValue = (EnableValue) o;
                     components.add(new JCheckBox() {{
                         JCheckBox jCheckBox = this;
+                        setHorizontalAlignment(JCheckBox.RIGHT);
                         setSelected(enableValue.getValue());
                         addActionListener(e -> {
                             enableValue.setValue(jCheckBox.isSelected());
@@ -99,8 +110,10 @@ public class ConfigDialog extends Dialog {
         } catch (IllegalAccessException e) {
             Logger.error(e);
         }
-        add(names, BorderLayout.WEST);
-        add(components, BorderLayout.CENTER);
+        add(new JScrollPane(new JPanel(new BorderLayout()) {{
+            add(names, BorderLayout.WEST);
+            add(components, BorderLayout.CENTER);
+        }}));
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {

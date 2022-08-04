@@ -26,8 +26,8 @@ import java.util.Arrays;
  * @since 0.7.0
  */
 public class ApplicationConfig extends Config {
-    public final ModeValue decompilerMode = new ModeValue("Decompiler", "CFR", Arrays.asList("CFR", "Procyon", "JD-Core"));
-    public final ModeValue language = new ModeValue("Language", "System", Arrays.asList("System", "zh_CN", "en_US"));
+    public final ModeValue decompilerMode = new ModeValue("Decompiler", "CFR", "Java Decompiler", Arrays.asList("CFR", "Procyon", "JD-Core"));
+    public final ModeValue language = new ModeValue("Language", "System", "UI language", Arrays.asList("System", "zh_CN", "en_US"));
 
     public ApplicationConfig() {
         super("Application");

@@ -24,10 +24,10 @@ import java.util.List;
  */
 public class ModeValue extends Value<String> {
 
-    private List<String> mode;
+    private final List<String> mode;
 
-    public ModeValue(String name, String value, List<String> mode) {
-        super(name, value);
+    public ModeValue(String name, String value, String description, List<String> mode) {
+        super(name, value, description);
         this.mode = mode;
     }
 

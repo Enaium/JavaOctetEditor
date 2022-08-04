@@ -16,8 +16,9 @@
 
 package cn.enaium.joe.gui.panel.menu;
 
+import cn.enaium.joe.JavaOctetEditor;
+import cn.enaium.joe.config.Config;
 import cn.enaium.joe.dialog.ConfigDialog;
-import cn.enaium.joe.gui.panel.menu.config.ApplicationMenuItem;
 
 import javax.swing.*;
 
@@ -28,6 +29,12 @@ import javax.swing.*;
 public class ConfigMenu extends JMenu {
     public ConfigMenu() {
         super("Config");
-        add(new ApplicationMenuItem());
+        for (Config value : JavaOctetEditor.getInstance().configManager.getConfig().values()) {
+            add(new JMenuItem(value.getName()) {{
+                addActionListener(e -> {
+                    new ConfigDialog(value).setVisible(true);
+                });
+            }});
+        }
     }
 }

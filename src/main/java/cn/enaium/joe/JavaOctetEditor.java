@@ -17,6 +17,7 @@
 package cn.enaium.joe;
 
 import cn.enaium.joe.config.ConfigManager;
+import cn.enaium.joe.config.extend.CFRConfig;
 import cn.enaium.joe.gui.panel.BottomPanel;
 import cn.enaium.joe.gui.panel.LeftPanel;
 import cn.enaium.joe.gui.panel.file.tabbed.FileTabbedPanel;
@@ -59,6 +60,8 @@ public class JavaOctetEditor {
     public void run() {
         configManager.load();
         Runtime.getRuntime().addShutdownHook(new Thread(configManager::save));
+
+        ToolTipManager.sharedInstance().setInitialDelay(0);
 
         AbstractTokenMakerFactory abstractTokenMakerFactory = (AbstractTokenMakerFactory) TokenMakerFactory.getDefaultInstance();
         abstractTokenMakerFactory.putMapping("text/custom", BytecodeTokenMaker.class.getName());

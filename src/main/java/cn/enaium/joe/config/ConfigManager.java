@@ -17,12 +17,16 @@
 package cn.enaium.joe.config;
 
 import cn.enaium.joe.config.extend.ApplicationConfig;
+import cn.enaium.joe.config.extend.CFRConfig;
+import cn.enaium.joe.config.value.EnableValue;
+import cn.enaium.joe.config.value.Value;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.tinylog.Logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.HashMap;
@@ -36,7 +40,8 @@ public class ConfigManager {
     private final Map<Class<? extends Config>, Config> configMap = new HashMap<>();
 
     public ConfigManager() {
-        configMap.put(ApplicationConfig.class, new ApplicationConfig());
+        setByClass(new ApplicationConfig());
+        setByClass(new CFRConfig());
     }
 
     public <T> T getByClass(Class<T> klass) {
@@ -50,6 +55,29 @@ public class ConfigManager {
 
     public void setByClass(Config config) {
         configMap.put(config.getClass(), config);
+    }
+
+    public Map<Class<? extends Config>, Config> getConfig() {
+        return configMap;
+    }
+
+    public Map<String, String> getConfigMap(Class<? extends Config> config) {
+        Map<String, String> map = new HashMap<>();
+        for (Field declaredField : config.getDeclaredFields()) {
+            declaredField.setAccessible(true);
+            try {
+                Object o = declaredField.get(getByClass(config));
+                if (o instanceof Value<?>) {
+                    Object value = ((Value<?>) o).getValue();
+                    if (value != null) {
+                        map.put(((Value<?>) o).getName(), value.toString());
+                    }
+                }
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return map;
     }
 
     public void load() {

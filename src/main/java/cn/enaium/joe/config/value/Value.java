@@ -25,17 +25,22 @@ import com.google.gson.annotations.Expose;
  */
 public class Value<T> {
     private final String name;
-
     @Expose
     private T value;
+    private final String description;
 
-    public Value(String name, T value) {
-        this.value = value;
+    public Value(String name, T value, String description) {
         this.name = name;
+        this.value = value;
+        this.description = description;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public T getValue() {
