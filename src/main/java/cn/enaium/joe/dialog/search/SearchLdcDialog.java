@@ -36,11 +36,11 @@ import java.util.Map;
  */
 public class SearchLdcDialog extends SearchDialog {
     public SearchLdcDialog() {
-        setTitle("Search LDC");
+        setTitle(LangUtil.i18n("search.ldc.title"));
         add(new JPanel(new FlowLayout()) {{
             JTextField text = new JTextField(15);
             add(text);
-            add(new JButton(LangUtil.i18n("search")) {{
+            add(new JButton(LangUtil.i18n("menu.search")) {{
                 addActionListener(e -> {
                     if (!text.getText().replace(" ", "").isEmpty()) {
                         ASyncUtil.execute(() -> {

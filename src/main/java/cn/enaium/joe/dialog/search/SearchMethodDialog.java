@@ -35,7 +35,7 @@ import java.util.Map;
  */
 public class SearchMethodDialog extends SearchDialog {
     public SearchMethodDialog() {
-        setTitle("Search Method");
+        setTitle(LangUtil.i18n("search.method.title"));
         add(new JPanel(new FlowLayout()) {{
             add(new JLabel(LangUtil.i18n("search.owner")));
             JTextField owner = new JTextField();
@@ -48,7 +48,7 @@ public class SearchMethodDialog extends SearchDialog {
             add(description);
             JCheckBox anInterface = new JCheckBox("Interface");
             add(anInterface);
-            add(new JButton(LangUtil.i18n("search")) {{
+            add(new JButton(LangUtil.i18n("menu.search")) {{
                 addActionListener(e -> {
                     ASyncUtil.execute(() -> {
                         searchInstruction((classNode, instruction) -> {

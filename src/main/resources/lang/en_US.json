@@ -1,6 +1,7 @@
 {
-  "search.field.title": "Search Field",
   "search.ldc.title": "Search LDC",
+  "search.field.title": "Search Field",
+  "search.method.title": "Search Method",
   "search.owner": "Owner:",
   "search.name": "Name:",
   "search.description": "Description:",
