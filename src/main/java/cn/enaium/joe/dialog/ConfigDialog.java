@@ -36,7 +36,7 @@ import java.lang.reflect.Field;
  */
 public class ConfigDialog extends Dialog {
     public ConfigDialog(Config config) {
-        super(LangUtil.i18n("config"));
+        super(LangUtil.i18n("menu.config"));
         setSize(new Dimension(400, getHeight()));
         JPanel names = new JPanel(new GridLayout(0, 1));
         JPanel components = new JPanel(new GridLayout(0, 1));
@@ -47,10 +47,6 @@ public class ConfigDialog extends Dialog {
 
                 if (o instanceof Value) {
                     Value<?> value = (Value<?>) o;
-
-                    if (value.getName().isEmpty()) {
-                        System.out.println(declaredField.getName());
-                    }
 
                     names.add(new JLabel(value.getName()) {{
                         setToolTipText(value.getDescription());
