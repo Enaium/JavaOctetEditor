@@ -17,12 +17,14 @@
 package cn.enaium.joe;
 
 import com.formdev.flatlaf.FlatDarkLaf;
+import org.tinylog.Logger;
 
 /**
  * @author Enaium
  */
 public final class Main {
     public static void main(String[] args) {
+        Logger.info("DIR:{}", System.getProperty("user.dir"));
         FlatDarkLaf.setup();
         new JavaOctetEditor().run();
     }
