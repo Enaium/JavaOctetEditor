@@ -26,6 +26,7 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Locale;
 
 /**
  * @author Enaium
@@ -34,23 +35,31 @@ public class ContactDialog extends Dialog {
     public ContactDialog() {
         super(LangUtil.i18n("menu.help.contact"));
         setSize(290, 150);
-        setContentPane(new JPanel(new GridLayout(1, 0)) {{
-            add(new JPanel(new BorderLayout()) {{
-                add(new JLabel() {{
-                    setIcon(new FlatSVGIcon("icons/github.svg"));
-                }}, BorderLayout.WEST);
-                add(new JLabel("<html><a>https://github.com/Enaium/JavaOctetEditor</a></html>") {{
-                    addMouseListener(new MouseAdapter() {
-                        @Override
-                        public void mouseClicked(MouseEvent e) {
-                            try {
-                                Desktop.getDesktop().browse(new URI("https://github.com/Enaium/JavaOctetEditor"));
-                            } catch (IOException | URISyntaxException ex) {
-                                throw new RuntimeException(ex);
-                            }
+        setContentPane(new JPanel(new GridLayout(0, 1)) {{
+            addLink(this, new FlatSVGIcon("icons/github.svg"), "https://github.com/Enaium/JavaOctetEditor");
+            if (Locale.getDefault().getLanguage().equals("zh")) {
+                addLink(this, new FlatSVGIcon("icons/bilibili.svg"), "https://space.bilibili.com/44537204");
+                addLink(this, null, "https://kook.top/YaP12f");
+            }
+        }});
+    }
+
+    public void addLink(JComponent jComponent, Icon icon, String link) {
+        jComponent.add(new JPanel(new BorderLayout()) {{
+            add(new JLabel() {{
+                setIcon(icon);
+            }}, BorderLayout.WEST);
+            add(new JLabel("<html><a>" + link + "</a></html>") {{
+                addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        try {
+                            Desktop.getDesktop().browse(new URI(link));
+                        } catch (IOException | URISyntaxException ex) {
+                            throw new RuntimeException(ex);
                         }
-                    });
-                }});
+                    }
+                });
             }});
         }});
     }
