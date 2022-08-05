@@ -27,11 +27,15 @@ import cn.enaium.joe.gui.panel.menu.FileMenu;
 import cn.enaium.joe.gui.panel.menu.HelpMenu;
 import cn.enaium.joe.gui.panel.menu.SearchMenu;
 import cn.enaium.joe.jar.Jar;
+import cn.enaium.joe.util.LangUtil;
+import cn.enaium.joe.util.MessageUtil;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  * @author Enaium
@@ -83,7 +87,17 @@ public class JavaOctetEditor {
                 add(bottomPanel, BorderLayout.SOUTH);
             }
         });
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        window.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                MessageUtil.confirm(LangUtil.i18n("dialog.wantCloseWindow"), "WARNING", () -> {
+                    window.dispose();
+                    System.exit(0);
+                }, () -> {
+                });
+            }
+        });
         window.setSize(800, 500);
         window.setLocationRelativeTo(null);
         window.setVisible(true);
