@@ -14,23 +14,14 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.file.tabbed.tab;
-
-import org.objectweb.asm.tree.ClassNode;
-
-import javax.swing.*;
+package cn.enaium.joe.config.value;
 
 /**
  * @author Enaium
+ * @since 0.7.0
  */
-public class ClassNodeTabPanel extends JPanel {
-    private final ClassNode classNode;
-
-    public ClassNodeTabPanel(ClassNode classNode) {
-        this.classNode = classNode;
-    }
-
-    public ClassNode getClassNode() {
-        return classNode;
+public class EnableValue extends Value<Boolean> {
+    public EnableValue(String name, Boolean value, String description) {
+        super(name, value, description);
     }
 }

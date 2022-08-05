@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.file.tabbed.tab;
+package cn.enaium.joe.gui.panel.file.tabbed.tab.classes;
 
 
+import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.StringUtil;
 import org.benf.cfr.reader.util.StringUtils;
 import org.objectweb.asm.tree.ClassNode;
@@ -38,40 +39,40 @@ public class ClassInfoTabPanel extends ClassNodeTabPanel {
         JPanel rights = new JPanel(new GridLayout(0, 1));
         add(labels, BorderLayout.WEST);
         add(rights, BorderLayout.CENTER);
-        labels.add(new JLabel("Name:"));
+        labels.add(new JLabel(LangUtil.i18n("class.info.name")));
         JTextField name = new JTextField(classNode.name);
         rights.add(name);
-        labels.add(new JLabel("SourceFile:"));
+        labels.add(new JLabel(LangUtil.i18n("class.info.sourceFile")));
         JTextField sourceFile = new JTextField(classNode.sourceFile);
         rights.add(sourceFile);
-        labels.add(new JLabel("DebugFile:"));
+        labels.add(new JLabel(LangUtil.i18n("class.info.debugFile")));
         JTextField sourceDebug = new JTextField(classNode.sourceDebug);
         rights.add(sourceDebug);
-        labels.add(new JLabel("Access:"));
+        labels.add(new JLabel(LangUtil.i18n("class.info.access")));
         JTextField access = new JTextField(String.valueOf(classNode.access));
         rights.add(access);
-        labels.add(new JLabel("Version:"));
+        labels.add(new JLabel(LangUtil.i18n("class.info.version")));
         JTextField version = new JTextField(String.valueOf(classNode.version));
         rights.add(version);
-        labels.add(new JLabel("Signature:"));
+        labels.add(new JLabel(LangUtil.i18n("class.info.signature")));
         JTextField signature = new JTextField(classNode.signature);
         rights.add(signature);
-        labels.add(new JLabel("Super Name:"));
+        labels.add(new JLabel(LangUtil.i18n("class.info.superName")));
         JTextField superName = new JTextField(classNode.superName);
         rights.add(superName);
-        labels.add(new JLabel("Interfaces:"));
+        labels.add(new JLabel(LangUtil.i18n("class.info.interfaces")));
         JTextField interfaces = new JTextField(StringUtils.join(classNode.interfaces, ";"));
         rights.add(interfaces);
-        labels.add(new JLabel("Outer Class:"));
+        labels.add(new JLabel(LangUtil.i18n("class.info.outerClass")));
         JTextField outerClass = new JTextField(classNode.outerClass);
         rights.add(outerClass);
-        labels.add(new JLabel("Outer Method:"));
+        labels.add(new JLabel(LangUtil.i18n("class.info.outerMethod")));
         JTextField outerMethod = new JTextField(classNode.outerMethod);
         rights.add(outerMethod);
-        labels.add(new JLabel("Outer Method Description:"));
+        labels.add(new JLabel(LangUtil.i18n("class.info.outerMethodDescription")));
         JTextField outerMethodDesc = new JTextField(classNode.outerMethodDesc);
         rights.add(outerMethodDesc);
-        add(new JButton("Save") {{
+        add(new JButton(LangUtil.i18n("button.save")) {{
             addActionListener(e -> {
 
                 if (!StringUtil.isBlank(name.getText())) {

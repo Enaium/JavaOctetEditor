@@ -17,6 +17,7 @@
 package cn.enaium.joe.gui.panel.menu.help;
 
 import cn.enaium.joe.dialog.AboutDialog;
+import cn.enaium.joe.util.LangUtil;
 
 import javax.swing.*;
 
@@ -25,7 +26,7 @@ import javax.swing.*;
  */
 public class AboutMenuItem extends JMenuItem {
     public AboutMenuItem() {
-        super("About");
+        super(LangUtil.i18n("menu.help.about"));
         addActionListener(e -> new AboutDialog().setVisible(true));
     }
 }

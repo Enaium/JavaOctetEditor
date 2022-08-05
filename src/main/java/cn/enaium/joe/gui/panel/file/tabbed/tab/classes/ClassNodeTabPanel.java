@@ -14,18 +14,23 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe;
+package cn.enaium.joe.gui.panel.file.tabbed.tab.classes;
 
-import com.formdev.flatlaf.FlatDarkLaf;
-import org.tinylog.Logger;
+import org.objectweb.asm.tree.ClassNode;
+
+import javax.swing.*;
 
 /**
  * @author Enaium
  */
-public final class Main {
-    public static void main(String[] args) {
-        Logger.info("DIR:{}", System.getProperty("user.dir"));
-        FlatDarkLaf.setup();
-        new JavaOctetEditor().run();
+public class ClassNodeTabPanel extends JPanel {
+    private final ClassNode classNode;
+
+    public ClassNodeTabPanel(ClassNode classNode) {
+        this.classNode = classNode;
+    }
+
+    public ClassNode getClassNode() {
+        return classNode;
     }
 }

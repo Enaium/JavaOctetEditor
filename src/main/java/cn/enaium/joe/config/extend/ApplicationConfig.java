@@ -14,18 +14,22 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe;
+package cn.enaium.joe.config.extend;
 
-import com.formdev.flatlaf.FlatDarkLaf;
-import org.tinylog.Logger;
+import cn.enaium.joe.config.Config;
+import cn.enaium.joe.config.value.ModeValue;
+
+import java.util.Arrays;
 
 /**
  * @author Enaium
+ * @since 0.7.0
  */
-public final class Main {
-    public static void main(String[] args) {
-        Logger.info("DIR:{}", System.getProperty("user.dir"));
-        FlatDarkLaf.setup();
-        new JavaOctetEditor().run();
+public class ApplicationConfig extends Config {
+    public final ModeValue decompilerMode = new ModeValue("Decompiler", "CFR", "Java Decompiler", Arrays.asList("CFR", "Procyon", "JD-Core"));
+    public final ModeValue language = new ModeValue("Language", "System", "UI language", Arrays.asList("System", "zh_CN", "en_US"));
+
+    public ApplicationConfig() {
+        super("Application");
     }
 }

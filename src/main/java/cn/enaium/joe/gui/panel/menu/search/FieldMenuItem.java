@@ -19,6 +19,7 @@ package cn.enaium.joe.gui.panel.menu.search;
 import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.dialog.search.SearchFieldDialog;
 import cn.enaium.joe.jar.Jar;
+import cn.enaium.joe.util.LangUtil;
 
 import javax.swing.*;
 
@@ -28,7 +29,7 @@ import javax.swing.*;
  */
 public class FieldMenuItem extends JMenuItem {
     public FieldMenuItem() {
-        super("Field");
+        super(LangUtil.i18n("menu.search.field"));
         addActionListener(e -> {
             Jar jar = JavaOctetEditor.getInstance().jar;
             if (jar == null) {

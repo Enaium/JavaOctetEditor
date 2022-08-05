@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe;
+package cn.enaium.joe.service.decompiler;
 
-import com.formdev.flatlaf.FlatDarkLaf;
-import org.tinylog.Logger;
+import org.objectweb.asm.tree.ClassNode;
 
 /**
  * @author Enaium
+ * @since 0.7.0
  */
-public final class Main {
-    public static void main(String[] args) {
-        Logger.info("DIR:{}", System.getProperty("user.dir"));
-        FlatDarkLaf.setup();
-        new JavaOctetEditor().run();
-    }
+public interface IDecompiler {
+    String decompile(ClassNode classNode);
 }

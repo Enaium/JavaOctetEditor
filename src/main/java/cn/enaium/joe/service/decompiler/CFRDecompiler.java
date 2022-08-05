@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.util;
+package cn.enaium.joe.service.decompiler;
 
+import cn.enaium.joe.JavaOctetEditor;
+import cn.enaium.joe.config.extend.CFRConfig;
 import org.benf.cfr.reader.PluginRunner;
-import org.objectweb.asm.tree.ClassNode;
 import org.benf.cfr.reader.api.ClassFileSource;
 import org.benf.cfr.reader.bytecode.analysis.parse.utils.Pair;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.tree.ClassNode;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -28,9 +30,11 @@ import java.util.HashMap;
 
 /**
  * @author Enaium
+ * @since 0.7.0
  */
-public class CfrUtil {
-    public static String getSource(ClassNode classNode) {
+public class CFRDecompiler implements IDecompiler {
+    @Override
+    public String decompile(ClassNode classNode) {
         ClassFileSource cfs = new ClassFileSource() {
             @Override
             public void informAnalysisRelativePathDetail(String a, String b) {
@@ -57,6 +61,6 @@ public class CfrUtil {
                 throw new RuntimeException();
             }
         };
-        return new PluginRunner(new HashMap<>(), cfs).getDecompilationFor(classNode.name);
+        return new PluginRunner(JavaOctetEditor.getInstance().configManager.getConfigMap(CFRConfig.class), cfs).getDecompilationFor(classNode.name);
     }
 }

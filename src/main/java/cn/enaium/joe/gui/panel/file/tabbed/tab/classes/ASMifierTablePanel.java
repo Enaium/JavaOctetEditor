@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.file.tabbed.tab;
+package cn.enaium.joe.gui.panel.file.tabbed.tab.classes;
 
 import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.gui.panel.CodeAreaPanel;
@@ -24,7 +24,6 @@ import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.Loader;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
-import org.fife.ui.rtextarea.RTextScrollPane;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.util.ASMifier;

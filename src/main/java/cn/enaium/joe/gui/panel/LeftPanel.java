@@ -25,6 +25,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.tree.TreePath;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Locale;
@@ -39,9 +41,25 @@ public class LeftPanel extends JPanel {
         super(new BorderLayout());
         add(new JPanel(new BorderLayout()) {{
             setBorder(new EmptyBorder(5, 0, 5, 0));
-            add(new JLabel("Search:"), BorderLayout.WEST);
             add(new JTextField() {{
                 JTextField jTextField = this;
+                addFocusListener(new FocusListener() {
+                    @Override
+                    public void focusGained(FocusEvent e) {
+                        if (jTextField.getText().equals("Search...")) {
+                            jTextField.setText("");
+                            jTextField.setForeground(Color.WHITE);
+                        }
+                    }
+
+                    @Override
+                    public void focusLost(FocusEvent e) {
+                        if (jTextField.getText().isEmpty()) {
+                            jTextField.setForeground(Color.GRAY);
+                            jTextField.setText("Search...");
+                        }
+                    }
+                });
                 addKeyListener(new KeyAdapter() {
                     @Override
                     public void keyPressed(KeyEvent e) {

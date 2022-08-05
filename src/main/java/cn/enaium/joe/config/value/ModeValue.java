@@ -14,18 +14,24 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe;
+package cn.enaium.joe.config.value;
 
-import com.formdev.flatlaf.FlatDarkLaf;
-import org.tinylog.Logger;
+import java.util.List;
 
 /**
  * @author Enaium
+ * @since 0.7.0
  */
-public final class Main {
-    public static void main(String[] args) {
-        Logger.info("DIR:{}", System.getProperty("user.dir"));
-        FlatDarkLaf.setup();
-        new JavaOctetEditor().run();
+public class ModeValue extends Value<String> {
+
+    private final List<String> mode;
+
+    public ModeValue(String name, String value, String description, List<String> mode) {
+        super(name, value, description);
+        this.mode = mode;
+    }
+
+    public List<String> getMode() {
+        return mode;
     }
 }

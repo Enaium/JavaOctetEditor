@@ -20,6 +20,7 @@ import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.util.ASyncUtil;
 import cn.enaium.joe.util.JFileChooserUtil;
+import cn.enaium.joe.util.LangUtil;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
 
@@ -36,7 +37,7 @@ import java.util.zip.ZipOutputStream;
  */
 public class SaveMenuItem extends JMenuItem {
     public SaveMenuItem() {
-        super("Save...");
+        super(LangUtil.i18n("menu.file.save"));
         addActionListener(e -> {
             Jar jar = JavaOctetEditor.getInstance().jar;
             if (jar == null) {

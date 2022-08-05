@@ -21,6 +21,7 @@ import cn.enaium.joe.dialog.SearchDialog;
 import cn.enaium.joe.gui.panel.search.ResultNode;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.util.ASyncUtil;
+import cn.enaium.joe.util.LangUtil;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.LdcInsnNode;
@@ -35,11 +36,11 @@ import java.util.Map;
  */
 public class SearchLdcDialog extends SearchDialog {
     public SearchLdcDialog() {
-        setTitle("Search LDC");
+        setTitle(LangUtil.i18n("search.ldc.title"));
         add(new JPanel(new FlowLayout()) {{
             JTextField text = new JTextField(15);
             add(text);
-            add(new JButton("Search") {{
+            add(new JButton(LangUtil.i18n("button.search")) {{
                 addActionListener(e -> {
                     if (!text.getText().replace(" ", "").isEmpty()) {
                         ASyncUtil.execute(() -> {

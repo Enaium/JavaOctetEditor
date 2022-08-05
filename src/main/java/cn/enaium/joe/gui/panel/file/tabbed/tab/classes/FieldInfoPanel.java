@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.file.tabbed.tab;
+package cn.enaium.joe.gui.panel.file.tabbed.tab.classes;
 
+import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.StringUtil;
 import org.objectweb.asm.tree.FieldNode;
 
@@ -33,19 +34,19 @@ public class FieldInfoPanel extends JPanel {
         JPanel rights = new JPanel(new GridLayout(0, 1));
         add(labels, BorderLayout.WEST);
         add(rights, BorderLayout.CENTER);
-        labels.add(new JLabel("Name:"));
+        labels.add(new JLabel(LangUtil.i18n("class.info.name")));
         JTextField name = new JTextField(fieldNode.name);
         rights.add(name);
-        labels.add(new JLabel("Description:"));
+        labels.add(new JLabel(LangUtil.i18n("class.info.description")));
         JTextField description = new JTextField(fieldNode.desc);
         rights.add(description);
-        labels.add(new JLabel("Access:"));
+        labels.add(new JLabel(LangUtil.i18n("class.info.access")));
         JTextField access = new JTextField(String.valueOf(fieldNode.access));
         rights.add(access);
-        labels.add(new JLabel("Signature:"));
+        labels.add(new JLabel(LangUtil.i18n("class.info.signature")));
         JTextField signature = new JTextField(fieldNode.signature);
         rights.add(signature);
-        add(new JButton("Save") {{
+        add(new JButton(LangUtil.i18n("button.save")) {{
             addActionListener(e -> {
 
                 if (!StringUtil.isBlank(name.getText())) {

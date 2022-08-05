@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe;
-
-import com.formdev.flatlaf.FlatDarkLaf;
-import org.tinylog.Logger;
+package cn.enaium.joe.config.value;
 
 /**
  * @author Enaium
+ * @since 0.7.0
  */
-public final class Main {
-    public static void main(String[] args) {
-        Logger.info("DIR:{}", System.getProperty("user.dir"));
-        FlatDarkLaf.setup();
-        new JavaOctetEditor().run();
+public class StringValue extends Value<String> {
+    public StringValue(String name, String value, String description) {
+        super(name, value, description);
     }
 }
