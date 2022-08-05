@@ -16,12 +16,9 @@
 
 package cn.enaium.joe.config;
 
-import cn.enaium.joe.annotation.NoDeserialize;
 import cn.enaium.joe.config.extend.ApplicationConfig;
 import cn.enaium.joe.config.extend.CFRConfig;
 import cn.enaium.joe.config.value.Value;
-import com.google.gson.ExclusionStrategy;
-import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.tinylog.Logger;
@@ -47,7 +44,6 @@ public class ConfigManager {
     }
 
     public <T> T getByClass(Class<T> klass) {
-
         if (configMap.containsKey(klass)) {
             return (T) configMap.get(klass);
         } else {
@@ -85,17 +81,7 @@ public class ConfigManager {
     public void load() {
         for (Config value : configMap.values()) {
             try {
-                Gson gson = new GsonBuilder().serializeNulls().addDeserializationExclusionStrategy(new ExclusionStrategy() {
-                    @Override
-                    public boolean shouldSkipField(FieldAttributes f) {
-                        return f.getAnnotation(NoDeserialize.class) != null;
-                    }
-
-                    @Override
-                    public boolean shouldSkipClass(Class<?> clazz) {
-                        return false;
-                    }
-                }).setPrettyPrinting().create();
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 File file = new File(System.getProperty("."), value.getName() + ".json");
                 if (file.exists()) {
                     configMap.put(value.getClass(), gson.fromJson(new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8), value.getClass()));

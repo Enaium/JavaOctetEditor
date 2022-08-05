@@ -16,19 +16,13 @@
 
 package cn.enaium.joe.config.value;
 
-
-import cn.enaium.joe.annotation.NoDeserialize;
-
 /**
  * @author Enaium
  * @since 0.7.0
  */
 public class Value<T> {
-    @NoDeserialize
     private final String name;
-
     private T value;
-    @NoDeserialize
     private final String description;
 
     public Value(String name, T value, String description) {
