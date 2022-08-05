@@ -205,6 +205,7 @@ public class FileTreePanel extends JTree {
             }
         }
         sort(model, resourceRoot);
+        repaint();
     }
 
 
