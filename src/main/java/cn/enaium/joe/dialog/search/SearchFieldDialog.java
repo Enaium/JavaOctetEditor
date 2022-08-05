@@ -49,7 +49,7 @@ public class SearchFieldDialog extends SearchDialog {
             add(new JLabel(LangUtil.i18n("search.description")));
             JTextField description = new JTextField();
             add(description);
-            add(new JButton(LangUtil.i18n("menu.search")) {{
+            add(new JButton(LangUtil.i18n("button.search")) {{
                 addActionListener(e -> {
                     ASyncUtil.execute(() -> {
                         searchInstruction((classNode, instruction) -> {

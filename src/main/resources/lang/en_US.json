@@ -26,5 +26,22 @@
   "menu.search.method": "Method",
   "menu.help": "Help",
   "menu.help.about": "About",
-  "menu.help.contact": "Contact"
+  "menu.help.contact": "Contact",
+  "class.info.name": "Name:",
+  "class.info.sourceFile": "SourceFile:",
+  "class.info.debugFile": "DebugFile:",
+  "class.info.access": "Access:",
+  "class.info.version": "Version:",
+  "class.info.signature": "Signature:",
+  "class.info.superName": "Super Name:",
+  "class.info.interfaces": "Interfaces:",
+  "class.info.outerClass": "Outer Class:",
+  "class.info.outerMethod": "Outer Method:",
+  "class.info.outerMethodDescription": "Outer Method Description:",
+  "class.info.description": "Description:",
+  "class.info.exceptions": "Exceptions:",
+  "button.search": "Search",
+  "button.findNext": "Find Next",
+  "button.findPrevious": "Find Previous",
+  "button.save": "Save"
 }

@@ -40,7 +40,7 @@ public class SearchLdcDialog extends SearchDialog {
         add(new JPanel(new FlowLayout()) {{
             JTextField text = new JTextField(15);
             add(text);
-            add(new JButton(LangUtil.i18n("menu.search")) {{
+            add(new JButton(LangUtil.i18n("button.search")) {{
                 addActionListener(e -> {
                     if (!text.getText().replace(" ", "").isEmpty()) {
                         ASyncUtil.execute(() -> {

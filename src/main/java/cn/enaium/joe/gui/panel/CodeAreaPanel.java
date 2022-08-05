@@ -16,6 +16,7 @@
 
 package cn.enaium.joe.gui.panel;
 
+import cn.enaium.joe.util.LangUtil;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rtextarea.RTextScrollPane;
@@ -55,12 +56,12 @@ public class CodeAreaPanel extends JPanel implements ActionListener {
         JToolBar toolBar = new JToolBar();
         searchField = new JTextField(30);
         toolBar.add(searchField);
-        final JButton nextButton = new JButton("Find Next");
+        final JButton nextButton = new JButton(LangUtil.i18n("button.findNext"));
         nextButton.setActionCommand("FindNext");
         nextButton.addActionListener(this);
         toolBar.add(nextButton);
         searchField.addActionListener(e -> nextButton.doClick(0));
-        JButton prevButton = new JButton("Find Previous");
+        JButton prevButton = new JButton(LangUtil.i18n("button.findPrevious"));
         prevButton.setActionCommand("FindPrev");
         prevButton.addActionListener(this);
         toolBar.add(prevButton);

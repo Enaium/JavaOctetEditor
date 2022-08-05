@@ -48,7 +48,7 @@ public class SearchMethodDialog extends SearchDialog {
             add(description);
             JCheckBox anInterface = new JCheckBox("Interface");
             add(anInterface);
-            add(new JButton(LangUtil.i18n("menu.search")) {{
+            add(new JButton(LangUtil.i18n("button.search")) {{
                 addActionListener(e -> {
                     ASyncUtil.execute(() -> {
                         searchInstruction((classNode, instruction) -> {
