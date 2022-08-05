@@ -20,6 +20,7 @@ import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.config.Config;
 import cn.enaium.joe.config.value.*;
 import cn.enaium.joe.util.LangUtil;
+import cn.enaium.joe.util.MessageUtil;
 import org.tinylog.Logger;
 
 import javax.swing.*;
@@ -105,7 +106,7 @@ public class ConfigDialog extends Dialog {
                 }
             }
         } catch (IllegalAccessException e) {
-            Logger.error(e);
+            MessageUtil.error(e);
         }
         add(new JScrollPane(new JPanel(new BorderLayout()) {{
             add(names, BorderLayout.WEST);

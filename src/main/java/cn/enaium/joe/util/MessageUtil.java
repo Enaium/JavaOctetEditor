@@ -16,6 +16,8 @@
 
 package cn.enaium.joe.util;
 
+import org.tinylog.Logger;
+
 import javax.swing.*;
 
 /**
@@ -25,7 +27,7 @@ import javax.swing.*;
 public class MessageUtil {
 
     public static void error(Throwable e) {
-        e.printStackTrace();
+        Logger.error(e);
         JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
     }
 

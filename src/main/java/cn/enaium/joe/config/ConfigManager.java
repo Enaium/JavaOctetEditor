@@ -19,6 +19,7 @@ package cn.enaium.joe.config;
 import cn.enaium.joe.config.extend.ApplicationConfig;
 import cn.enaium.joe.config.extend.CFRConfig;
 import cn.enaium.joe.config.value.Value;
+import cn.enaium.joe.util.MessageUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.tinylog.Logger;
@@ -87,7 +88,7 @@ public class ConfigManager {
                     configMap.put(value.getClass(), gson.fromJson(new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8), value.getClass()));
                 }
             } catch (IOException e) {
-                Logger.error(e);
+                MessageUtil.error(e);
             }
         }
     }
@@ -98,7 +99,7 @@ public class ConfigManager {
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 Files.write(new File(System.getProperty("."), value.getName() + ".json").toPath(), gson.toJson(value).getBytes(StandardCharsets.UTF_8));
             } catch (IOException e) {
-                Logger.error(e);
+                MessageUtil.error(e);
             }
         }
     }

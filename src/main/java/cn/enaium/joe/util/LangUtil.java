@@ -48,7 +48,7 @@ public class LangUtil {
 
             if (url == null) {
                 RuntimeException runtimeException = new RuntimeException("Lang not Found!");
-                Logger.error(runtimeException);
+                MessageUtil.error(runtimeException);
                 throw runtimeException;
             }
             InputStream inputStream = url.openStream();
@@ -64,10 +64,10 @@ public class LangUtil {
             try {
                 return String.format(jsonObject.get(key).getAsString(), args);
             } catch (NullPointerException e) {
-                Logger.error(new NullPointerException(String.format("Lang not found \" %s \"", key)));
+                MessageUtil.error(new NullPointerException(String.format("Lang not found \" %s \"", key)));
             }
         } catch (IOException e) {
-            Logger.error(e);
+            MessageUtil.error(e);
         }
         return key;
     }
