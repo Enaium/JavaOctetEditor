@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.file.tabbed.tab.classes;
+package cn.enaium.joe.gui.panel.file.tabbed.tab.classes.method;
 
 import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.StringUtil;
