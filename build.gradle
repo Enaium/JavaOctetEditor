@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'cn.enaium'
-version '0.7.0'
+version '0.8.0'
 
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 
@@ -30,8 +30,8 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
 
     implementation 'com.formdev:flatlaf:2.4'
     implementation 'com.formdev:flatlaf-extras:2.4'
