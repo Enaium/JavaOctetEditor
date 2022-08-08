@@ -250,4 +250,12 @@ public class OpcodeUtil {
         }
         return index;
     }
+
+    public static <V, K> Map<V, K> reverse(Map<K, V> map) {
+        Map<V, K> reverseMap = new HashMap<>();
+        for (Map.Entry<K, V> kvEntry : map.entrySet()) {
+            reverseMap.put(kvEntry.getValue(), kvEntry.getKey());
+        }
+        return reverseMap;
+    }
 }
