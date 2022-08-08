@@ -16,6 +16,8 @@
 
 package cn.enaium.joe.gui.panel.file.tabbed.tab.classes.method;
 
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import javax.swing.*;
@@ -28,5 +30,10 @@ import java.awt.*;
 public class MethodInstructionPanel extends JPanel {
     public MethodInstructionPanel(MethodNode methodNode) {
         super(new BorderLayout());
+        JList<MethodInstruction> jList = new JList<>(new DefaultListModel<>());
+        for (AbstractInsnNode instruction : methodNode.instructions) {
+            ((DefaultListModel<MethodInstruction>) jList.getModel()).addElement(new MethodInstruction(methodNode.instructions.indexOf(instruction), instruction));
+        }
+        add(new JScrollPane(jList), BorderLayout.CENTER);
     }
 }
