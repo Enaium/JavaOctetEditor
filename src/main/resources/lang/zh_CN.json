@@ -43,5 +43,6 @@
   "button.findNext": "查找下一个",
   "button.findPrevious": "查找上一个",
   "button.save": "保存",
-  "dialog.wantCloseWindow": "想要关闭吗"
+  "dialog.wantCloseWindow": "想要关闭吗",
+  "instruction.edit": "编辑"
 }
