@@ -31,7 +31,7 @@ public class MessageUtil {
         JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
     }
 
-    public static void confirm(String message, String title, Runnable yes, Runnable no) {
+    public static void confirm(Object message, String title, Runnable yes, Runnable no) {
         int i = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.OK_CANCEL_OPTION);
         if (i == JOptionPane.YES_OPTION) {
             yes.run();
