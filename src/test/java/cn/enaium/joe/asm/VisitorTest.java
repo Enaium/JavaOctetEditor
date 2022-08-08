@@ -12,7 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * @author Enaium
  */
-class UnitTest {
+class VisitorTest {
     @Test
     public void test() throws IOException, CannotCompileException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, NotFoundException {
         StringWriter stringWriter = new StringWriter();
