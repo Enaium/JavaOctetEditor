@@ -145,8 +145,10 @@ public class MethodInstruction {
                 append(stringBuilder, HtmlUtil.setColor(String.valueOf(frameNode.stack), FontColor.desc));
                 break;
             case AbstractInsnNode.LINE:
+                LineNumberNode lineNumberNode = (LineNumberNode) instruction;
                 append(stringBuilder, HtmlUtil.setColor("LINE", FontColor.opcode));
-                append(stringBuilder, HtmlUtil.setColor(String.valueOf(((LineNumberNode) instruction).line), FontColor.base));
+                append(stringBuilder, HtmlUtil.setColor(String.valueOf(lineNumberNode.line), FontColor.base));
+                append(stringBuilder, HtmlUtil.setColor("L" + OpcodeUtil.getLabelIndex(lineNumberNode.start), FontColor.base));
                 break;
         }
 
@@ -154,11 +156,11 @@ public class MethodInstruction {
         return stringBuilder.toString();
     }
 
-    public void append(StringBuilder stringBuilder, String str) {
+    private void append(StringBuilder stringBuilder, String str) {
         stringBuilder.append(" ").append(str);
     }
 
-    public String handle(Handle handle) {
+    private String handle(Handle handle) {
         return HtmlUtil.setColor("handle[", FontColor.other) +
                 HtmlUtil.setColor(OpcodeUtil.HANDLE.get(handle.getTag()), FontColor.opcode) + ":" +
                 HtmlUtil.setColor(handle.getOwner(), FontColor.desc) + "." +

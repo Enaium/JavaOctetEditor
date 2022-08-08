@@ -59,7 +59,6 @@ public class MethodInfoTabPanel extends JPanel {
                     methodNode.name = name.getText();
                 }
 
-
                 if (!StringUtil.isBlank(description.getText())) {
                     methodNode.desc = description.getText();
                 } else {
