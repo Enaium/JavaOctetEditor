@@ -24,11 +24,18 @@ import java.lang.reflect.Field;
 /**
  * @author Enaium
  */
-public class GenerateOpcodeMapTest {
+public class GenerateOpcodeTest {
     @Test
-    public void test() {
+    public void map() {
         for (Field field : Opcodes.class.getFields()) {
             System.out.println("put(Opcodes." + field.getName() + "," + "\"" + field.getName() + "\");");
+        }
+    }
+
+    @Test
+    public void list() {
+        for (Field field : Opcodes.class.getFields()) {
+            System.out.println("add(\"" + field.getName() + "\");");
         }
     }
 }
