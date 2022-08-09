@@ -21,9 +21,11 @@ import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.InsnList;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 /**
  * @author Enaium
@@ -35,28 +37,38 @@ public abstract class AbstractInstructionPanel extends JPanel {
     private final JPanel names = new JPanel(new GridLayout(0, 1));
     private final JPanel components = new JPanel(new GridLayout(0, 1));
 
-    private final List<Runnable> confirms = new ArrayList<>();
+    private Callable<Boolean> confirm = () -> false;
 
     public AbstractInstructionPanel(AbstractInsnNode instruction, InsnList instructions) {
+        setLayout(new BorderLayout());
         if (instruction.getOpcode() != -1) {
-            names.add(new JLabel("Opcode:"));
             DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) opcode.getModel();
             getOpcodes().forEach(model::addElement);
             model.setSelectedItem(OpcodeUtil.OPCODE.get(instruction.getOpcode()));
-            components.add(opcode);
+            addComponent(new JLabel("Opcode:"), opcode);
         }
 
         add(names, BorderLayout.WEST);
-        add(components, BorderLayout.EAST);
+        add(components, BorderLayout.CENTER);
     }
 
     public void addComponent(JComponent name, JComponent component) {
-        names.add(name);
-        components.add(component);
+        names.add(new JPanel(new BorderLayout()) {{
+            setBorder(new EmptyBorder(10, 10, 10, 10));
+            add(name, BorderLayout.CENTER);
+        }});
+        components.add(new JPanel(new BorderLayout()) {{
+            setBorder(new EmptyBorder(10, 10, 10, 10));
+            add(component, BorderLayout.CENTER);
+        }});
     }
 
-    public void addConfirm(Runnable runnable) {
-        confirms.add(runnable);
+    public void setConfirm(Callable<Boolean> callable) {
+        confirm = callable;
+    }
+
+    public Callable<Boolean> getConfirm() {
+        return confirm;
     }
 
     public Integer getOpcode() {
@@ -64,10 +76,6 @@ public abstract class AbstractInstructionPanel extends JPanel {
             throw new NullPointerException("unselected opcode");
         }
         return OpcodeUtil.reverse(OpcodeUtil.OPCODE).get(opcode.getSelectedItem().toString());
-    }
-
-    public List<Runnable> getConfirms() {
-        return confirms;
     }
 
     public abstract List<String> getOpcodes();

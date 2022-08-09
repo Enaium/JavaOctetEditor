@@ -32,9 +32,13 @@ import java.util.List;
 public class IntInstructionPanel extends AbstractInstructionPanel {
     public IntInstructionPanel(IntInsnNode instruction, InsnList instructions) {
         super(instruction, instructions);
-        JSpinner spinner = new JSpinner();
-        addComponent(new JLabel("Operand:"), spinner);
-        addConfirm(() -> instructions.set(instruction, new IntInsnNode(getOpcode(), Integer.parseInt(spinner.getValue().toString()))));
+        JSpinner operand = new JSpinner();
+        operand.setValue(instruction.operand);
+        addComponent(new JLabel("Operand:"), operand);
+        setConfirm(() -> {
+            instructions.set(instruction, new IntInsnNode(getOpcode(), Integer.parseInt(operand.getValue().toString())));
+            return true;
+        });
     }
 
     @Override

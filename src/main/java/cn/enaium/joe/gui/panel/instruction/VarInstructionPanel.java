@@ -35,7 +35,10 @@ public class VarInstructionPanel extends AbstractInstructionPanel {
         JSpinner spinner = new JSpinner();
         spinner.setValue(instruction.var);
         addComponent(new JLabel("Var:"), spinner);
-        addConfirm(() -> instructions.set(instruction, new VarInsnNode(getOpcode(), Integer.parseInt(spinner.getValue().toString()))));
+        setConfirm(() -> {
+            instructions.set(instruction, new VarInsnNode(getOpcode(), Integer.parseInt(spinner.getValue().toString())));
+            return true;
+        });
     }
 
     @Override

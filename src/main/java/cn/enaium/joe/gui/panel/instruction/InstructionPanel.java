@@ -31,7 +31,10 @@ import java.util.List;
 public class InstructionPanel extends AbstractInstructionPanel {
     public InstructionPanel(InsnNode instruction, InsnList instructions) {
         super(instruction, instructions);
-        addConfirm(() -> instructions.set(instruction, new InsnNode(getOpcode())));
+        setConfirm(() -> {
+            instructions.set(instruction, new InsnNode(getOpcode()));
+            return true;
+        });
     }
 
     @Override

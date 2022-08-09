@@ -16,7 +16,7 @@
 
 package cn.enaium.joe.gui.panel.instruction;
 
-import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.TypeInsnNode;
 
@@ -28,13 +28,17 @@ import java.util.List;
  * @author Enaium
  * @since 0.8.0
  */
-public class TypeInstructionPanel extends AbstractInstructionPanel {
-    public TypeInstructionPanel(TypeInsnNode instruction, InsnList instructions) {
+public class FieldInstructionPanel extends AbstractInstructionPanel {
+    public FieldInstructionPanel(FieldInsnNode instruction, InsnList instructions) {
         super(instruction, instructions);
+        JTextField owner = new JTextField(instruction.owner);
+        JTextField name = new JTextField(instruction.name);
         JTextField description = new JTextField(instruction.desc);
+        addComponent(new JLabel("Owner:"), owner);
+        addComponent(new JLabel("Name:"), name);
         addComponent(new JLabel("Description:"), description);
         setConfirm(() -> {
-            instructions.set(instruction, new TypeInsnNode(getOpcode(), description.getText()));
+            instructions.set(instruction, new FieldInsnNode(getOpcode(), owner.getText(), name.getText(), description.getText()));
             return true;
         });
     }
@@ -42,10 +46,10 @@ public class TypeInstructionPanel extends AbstractInstructionPanel {
     @Override
     public List<String> getOpcodes() {
         return new ArrayList<String>() {{
-            add("NEW");
-            add("ANEWARRAY");
-            add("CHECKCAST");
-            add("INSTANCEOF");
+            add("GETSTATIC");
+            add("PUTSTATIC");
+            add("GETFIELD");
+            add("PUTFIELD");
         }};
     }
 }

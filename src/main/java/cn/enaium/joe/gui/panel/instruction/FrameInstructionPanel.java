@@ -17,35 +17,25 @@
 package cn.enaium.joe.gui.panel.instruction;
 
 import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.FrameNode;
 import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.TypeInsnNode;
 
 import javax.swing.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Enaium
  * @since 0.8.0
  */
-public class TypeInstructionPanel extends AbstractInstructionPanel {
-    public TypeInstructionPanel(TypeInsnNode instruction, InsnList instructions) {
+public class FrameInstructionPanel extends AbstractInstructionPanel {
+    public FrameInstructionPanel(FrameNode instruction, InsnList instructions) {
         super(instruction, instructions);
-        JTextField description = new JTextField(instruction.desc);
-        addComponent(new JLabel("Description:"), description);
-        setConfirm(() -> {
-            instructions.set(instruction, new TypeInsnNode(getOpcode(), description.getText()));
-            return true;
-        });
+        addComponent(new JLabel("Type"), new JComboBox<>(new String[]{"F_NEW", "F_FULL", "F_APPEND", "F_CHOP", "F_SAME", "F_SAME1"}));
+
     }
 
     @Override
     public List<String> getOpcodes() {
-        return new ArrayList<String>() {{
-            add("NEW");
-            add("ANEWARRAY");
-            add("CHECKCAST");
-            add("INSTANCEOF");
-        }};
+        return null;
     }
 }
