@@ -50,10 +50,10 @@ public class MethodInstructionPanel extends AbstractInstructionPanel {
     @Override
     public List<String> getOpcodes() {
         return new ArrayList<String>() {{
-            add("GETSTATIC");
-            add("PUTSTATIC");
-            add("GETFIELD");
-            add("PUTFIELD");
+            add("INVOKEVIRTUAL");
+            add("INVOKESPECIAL");
+            add("INVOKESTATIC");
+            add("INVOKEINTERFACE");
         }};
     }
 }
