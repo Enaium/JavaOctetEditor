@@ -16,11 +16,11 @@
 
 package cn.enaium.joe.gui.panel.instruction;
 
-import org.objectweb.asm.tree.IincInsnNode;
+import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.MultiANewArrayInsnNode;
 
 import javax.swing.*;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,23 +28,24 @@ import java.util.List;
  * @author Enaium
  * @since 0.8.0
  */
-public class IncrInstructionPanel extends AbstractInstructionPanel {
-    public IncrInstructionPanel(IincInsnNode instruction, InsnList instructions) {
+public class MultiANewArrayInstructionPanel extends AbstractInstructionPanel {
+    public MultiANewArrayInstructionPanel(MultiANewArrayInsnNode instruction, InsnList instructions) {
         super(instruction, instructions);
-        JSpinner varIndex = new JSpinner();
-        varIndex.setValue(instruction.var);
-        addComponent(new JLabel("Var Index:"), varIndex);
-        JSpinner incr = new JSpinner();
-        incr.setValue(instruction.incr);
-        addComponent(new JLabel("Incr:"), incr);
+        JTextField description = new JTextField();
+        description.setText(instruction.desc);
+        addComponent(new JLabel("Description"), description);
+        JSpinner dimension = new JSpinner();
+        dimension.setValue(instruction.dims);
+        addComponent(new JLabel("Dimension"), dimension);
         setConfirm(() -> {
-            instructions.set(instruction, new IincInsnNode(getOpcode(), Integer.parseInt(varIndex.getValue().toString())));
+            instruction.desc = description.getText();
+            instruction.dims = Integer.parseInt(dimension.getValue().toString());
             return true;
         });
     }
 
     @Override
     public List<String> getOpcodes() {
-        return Collections.singletonList("IINC");
+        return Collections.singletonList("MULTIANEWARRAY");
     }
 }

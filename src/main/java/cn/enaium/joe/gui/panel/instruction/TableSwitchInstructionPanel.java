@@ -16,38 +16,55 @@
 
 package cn.enaium.joe.gui.panel.instruction;
 
+import cn.enaium.joe.gui.panel.confirm.LabelListEditPanel;
+import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.util.OpcodeUtil;
 import cn.enaium.joe.wrapper.LabelNodeWrapper;
+import org.benf.cfr.reader.util.StringUtils;
 import org.objectweb.asm.tree.*;
 
 import javax.swing.*;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Enaium
  * @since 0.8.0
  */
-public class JumpInstructionPanel extends AbstractInstructionPanel {
-    public JumpInstructionPanel(JumpInsnNode instruction, InsnList instructions) {
+public class TableSwitchInstructionPanel extends AbstractInstructionPanel {
+    public TableSwitchInstructionPanel(TableSwitchInsnNode instruction, InsnList instructions) {
         super(instruction, instructions);
+        JSpinner min = new JSpinner();
+        min.setValue(instruction.min);
+        addComponent(new JLabel("Min:"), min);
+        JSpinner max = new JSpinner();
+        max.setValue(instruction.max);
+        addComponent(new JLabel("Max:"), max);
         DefaultComboBoxModel<LabelNodeWrapper> stringDefaultComboBoxModel = new DefaultComboBoxModel<>();
         LabelNodeWrapper selected = null;
         for (AbstractInsnNode abstractInsnNode : instructions) {
             if (abstractInsnNode instanceof LabelNode) {
                 LabelNodeWrapper anObject = new LabelNodeWrapper(((LabelNode) abstractInsnNode));
-                if (abstractInsnNode.equals(instruction.label)) {
+                if (abstractInsnNode.equals(instruction.dflt)) {
                     selected = anObject;
                 }
                 stringDefaultComboBoxModel.addElement(anObject);
             }
         }
         stringDefaultComboBoxModel.setSelectedItem(selected);
-        addComponent(new JLabel("Label:"), new JComboBox<>(stringDefaultComboBoxModel));
+        addComponent(new JLabel("Default:"), new JComboBox<>(stringDefaultComboBoxModel));
+        addComponent(new JLabel("Labels:"), new JButton("Edit") {{
+            addActionListener(e -> {
+                MessageUtil.confirm(new LabelListEditPanel(instruction.labels, instructions), "Labels Edit");
+            });
+        }});
         Object selectedItem = stringDefaultComboBoxModel.getSelectedItem();
         if (selectedItem != null) {
             setConfirm(() -> {
-                instructions.set(instruction, new JumpInsnNode(getOpcode(), ((LabelNodeWrapper) stringDefaultComboBoxModel.getSelectedItem()).getWrapper()));
+                instruction.min = Integer.parseInt(min.getValue().toString());
+                instruction.max = Integer.parseInt(max.getValue().toString());
+                instruction.dflt = ((LabelNodeWrapper) selectedItem).getWrapper();
                 return true;
             });
         }
@@ -55,25 +72,6 @@ public class JumpInstructionPanel extends AbstractInstructionPanel {
 
     @Override
     public List<String> getOpcodes() {
-        return new ArrayList<String>() {{
-            add("IFEQ");
-            add("IFNE");
-            add("IFLT");
-            add("IFGE");
-            add("IFGT");
-            add("IFLE");
-            add("IF_ICMPEQ");
-            add("IF_ICMPNE");
-            add("IF_ICMPLT");
-            add("IF_ICMPGE");
-            add("IF_ICMPGT");
-            add("IF_ICMPLE");
-            add("IF_ACMPEQ");
-            add("IF_ACMPNE");
-            add("GOTO");
-            add("JSR");
-            add("IFNULL");
-            add("IFNONNULL");
-        }};
+        return Collections.singletonList("TABLESWITCH");
     }
 }

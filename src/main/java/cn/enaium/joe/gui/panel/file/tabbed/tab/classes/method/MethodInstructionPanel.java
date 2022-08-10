@@ -16,8 +16,7 @@
 
 package cn.enaium.joe.gui.panel.file.tabbed.tab.classes.method;
 
-import cn.enaium.joe.dialog.InstructionEditDialog;
-import cn.enaium.joe.gui.panel.instruction.*;
+import cn.enaium.joe.gui.panel.confirm.InstructionEditPanel;
 import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.MessageUtil;
 import org.objectweb.asm.tree.*;
@@ -26,7 +25,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.nio.charset.StandardCharsets;
 
 /**
  * @author Enaium
@@ -45,7 +43,7 @@ public class MethodInstructionPanel extends JPanel {
         jMenuItem.addActionListener(e -> {
             MethodInstruction selectedValue = jList.getSelectedValue();
             if (selectedValue != null) {
-                new InstructionEditDialog(selectedValue.getInstruction(), methodNode.instructions).setVisible(true);
+                MessageUtil.confirm(new InstructionEditPanel(selectedValue.getInstruction(), methodNode.instructions), "Instruction Edit");
             }
         });
         jPopupMenu.add(jMenuItem);
@@ -61,5 +59,16 @@ public class MethodInstructionPanel extends JPanel {
             }
         });
         add(new JScrollPane(jList), BorderLayout.CENTER);
+        JLabel comp = new JLabel();
+        jList.addListSelectionListener(e -> {
+            if (jList.getSelectedValue() != null) {
+                MethodInstruction selectedValue = jList.getSelectedValue();
+                comp.setText(String.format("Index:%d", selectedValue.getIndex()));
+                comp.setVisible(true);
+            } else {
+                comp.setVisible(false);
+            }
+        });
+        add(comp, BorderLayout.SOUTH);
     }
 }

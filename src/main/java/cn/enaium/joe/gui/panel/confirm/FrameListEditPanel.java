@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.dialog;
+package cn.enaium.joe.gui.panel.confirm;
 
 import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.util.OpcodeUtil;
@@ -33,10 +33,9 @@ import java.util.stream.Collectors;
  * @author Enaium
  * @since 0.8.0
  */
-public class FrameListEditDialog extends Dialog {
+public class FrameListEditPanel extends ConfirmPanel {
 
-    public FrameListEditDialog(FrameNode frameNode) {
-        super("FrameListEdit");
+    public FrameListEditPanel(FrameNode frameNode) {
         setLayout(new BorderLayout(10, 10));
         JPanel left = new JPanel(new BorderLayout());
         JPanel right = new JPanel(new BorderLayout());
@@ -49,38 +48,25 @@ public class FrameListEditDialog extends Dialog {
         add(left, BorderLayout.WEST);
         add(new JSeparator(JSeparator.VERTICAL), BorderLayout.CENTER);
         add(right, BorderLayout.EAST);
-        add(new JPanel(new BorderLayout()) {{
-            setBorder(new EmptyBorder(10, 10, 10, 10));
-            add(new JButton("Confirm") {{
-                addActionListener(e -> {
-                    frameNode.local = localObjectList.getList().stream().map(it -> {
-                        Map<String, Integer> reverse = OpcodeUtil.reverse(OpcodeUtil.FRAME_ELEMENT);
-                        if (reverse.containsKey(it.toString())) {
-                            return reverse.get(it.toString());
-                        } else {
-                            return it;
-                        }
-                    }).collect(Collectors.toList());
+        setConfirm(() -> {
+            frameNode.local = localObjectList.getList().stream().map(it -> {
+                Map<String, Integer> reverse = OpcodeUtil.reverse(OpcodeUtil.FRAME_ELEMENT);
+                if (reverse.containsKey(it.toString())) {
+                    return reverse.get(it.toString());
+                } else {
+                    return it;
+                }
+            }).collect(Collectors.toList());
 
-                    frameNode.stack = stackObjectList.getList().stream().map(it -> {
-                        Map<String, Integer> reverse = OpcodeUtil.reverse(OpcodeUtil.FRAME_ELEMENT);
-                        if (reverse.containsKey(it.toString())) {
-                            return reverse.get(it.toString());
-                        } else {
-                            return it;
-                        }
-                    }).collect(Collectors.toList());
-                    dispose();
-                });
-            }}, BorderLayout.WEST);
-            add(new JButton("Cancel") {{
-                addActionListener(e -> {
-                    dispose();
-                });
-            }}, BorderLayout.EAST);
-        }}, BorderLayout.SOUTH);
-        pack();
-        setResizable(false);
+            frameNode.stack = stackObjectList.getList().stream().map(it -> {
+                Map<String, Integer> reverse = OpcodeUtil.reverse(OpcodeUtil.FRAME_ELEMENT);
+                if (reverse.containsKey(it.toString())) {
+                    return reverse.get(it.toString());
+                } else {
+                    return it;
+                }
+            }).collect(Collectors.toList());
+        });
     }
 
     private static class ObjectList extends JPanel {

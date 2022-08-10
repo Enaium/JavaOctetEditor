@@ -16,6 +16,7 @@
 
 package cn.enaium.joe.gui.panel.instruction;
 
+import org.objectweb.asm.Handle;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.LdcInsnNode;
@@ -23,6 +24,7 @@ import org.objectweb.asm.tree.VarInsnNode;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -46,6 +48,8 @@ public class LdcInstructionPanel extends AbstractInstructionPanel {
             jComboBox.setSelectedItem("long");
         } else if (instruction.cst instanceof Type) {
             jComboBox.setSelectedItem("Class");
+        } else if (instruction.cst instanceof Handle) {
+            jComboBox.setSelectedItem("Handle");
         }
 
         JTextField ldc = new JTextField();
@@ -55,6 +59,9 @@ public class LdcInstructionPanel extends AbstractInstructionPanel {
             Object value;
             if (jComboBox.getSelectedItem() != null) {
                 switch (jComboBox.getSelectedItem().toString()) {
+                    case "String":
+                        value = ldc.getText();
+                        break;
                     case "float":
                         value = Float.parseFloat(ldc.getText());
                         break;
@@ -71,7 +78,7 @@ public class LdcInstructionPanel extends AbstractInstructionPanel {
                         value = Type.getType(ldc.getText());
                         break;
                     default:
-                        value = ldc.getText();
+                        return false;
                 }
                 instructions.set(instruction, new LdcInsnNode(value));
             }
@@ -81,8 +88,6 @@ public class LdcInstructionPanel extends AbstractInstructionPanel {
 
     @Override
     public List<String> getOpcodes() {
-        return new ArrayList<String>() {{
-            add("LDC");
-        }};
+        return Collections.singletonList("LDC");
     }
 }

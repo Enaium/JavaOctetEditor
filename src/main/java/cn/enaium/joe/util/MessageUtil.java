@@ -16,6 +16,7 @@
 
 package cn.enaium.joe.util;
 
+import cn.enaium.joe.gui.panel.confirm.ConfirmPanel;
 import org.tinylog.Logger;
 
 import javax.swing.*;
@@ -38,6 +39,14 @@ public class MessageUtil {
         } else {
             no.run();
         }
+    }
+
+    public static void confirm(ConfirmPanel confirmPanel, String title) {
+        confirm(confirmPanel, title, () -> {
+            confirmPanel.getConfirm().run();
+        }, () -> {
+            confirmPanel.getCancel().run();
+        });
     }
 
     public static void info(String message) {

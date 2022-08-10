@@ -17,6 +17,7 @@
 package cn.enaium.joe.gui.panel.instruction;
 
 import cn.enaium.joe.util.OpcodeUtil;
+import cn.enaium.joe.wrapper.LabelNodeWrapper;
 import org.objectweb.asm.tree.*;
 
 import javax.swing.*;
@@ -35,11 +36,11 @@ public class LineInstructionPanel extends AbstractInstructionPanel {
         JSpinner spinner = new JSpinner();
         spinner.setValue(instruction.line);
         addComponent(new JLabel("Line:"), spinner);
-        DefaultComboBoxModel<L> stringDefaultComboBoxModel = new DefaultComboBoxModel<>();
-        L selected = null;
+        DefaultComboBoxModel<LabelNodeWrapper> stringDefaultComboBoxModel = new DefaultComboBoxModel<>();
+        LabelNodeWrapper selected = null;
         for (AbstractInsnNode abstractInsnNode : instructions) {
             if (abstractInsnNode instanceof LabelNode) {
-                L anObject = new L(((LabelNode) abstractInsnNode));
+                LabelNodeWrapper anObject = new LabelNodeWrapper(((LabelNode) abstractInsnNode));
                 if (abstractInsnNode.equals(instruction.start)) {
                     selected = anObject;
                 }
@@ -51,7 +52,7 @@ public class LineInstructionPanel extends AbstractInstructionPanel {
         Object selectedItem = stringDefaultComboBoxModel.getSelectedItem();
         if (selectedItem != null) {
             setConfirm(() -> {
-                instructions.set(instruction, new LineNumberNode(Integer.parseInt(spinner.getValue().toString()), ((L) stringDefaultComboBoxModel.getSelectedItem()).labelNode));
+                instructions.set(instruction, new LineNumberNode(Integer.parseInt(spinner.getValue().toString()), ((LabelNodeWrapper) stringDefaultComboBoxModel.getSelectedItem()).getWrapper()));
                 return true;
             });
         }
@@ -60,18 +61,5 @@ public class LineInstructionPanel extends AbstractInstructionPanel {
     @Override
     public List<String> getOpcodes() {
         return null;
-    }
-
-    private static class L {
-        public LabelNode labelNode;
-
-        public L(LabelNode labelNode) {
-            this.labelNode = labelNode;
-        }
-
-        @Override
-        public String toString() {
-            return "L " + OpcodeUtil.getLabelIndex(labelNode);
-        }
     }
 }

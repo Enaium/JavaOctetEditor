@@ -14,27 +14,21 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.dialog;
+package cn.enaium.joe.gui.panel.confirm;
 
 import cn.enaium.joe.gui.panel.instruction.*;
-import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.MessageUtil;
 import org.objectweb.asm.tree.*;
-import org.tinylog.Logger;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 /**
  * @author Enaium
  * @since 0.8.0
  */
-public class InstructionEditDialog extends Dialog {
-    public InstructionEditDialog(AbstractInsnNode instruction, InsnList instructions) {
-        super("Instruction Edit");
+public class InstructionEditPanel extends ConfirmPanel {
+    public InstructionEditPanel(AbstractInsnNode instruction, InsnList instructions) {
         setLayout(new BorderLayout());
-
         AbstractInstructionPanel abstractInstructionPanel = null;
 
         switch (instruction.getType()) {
@@ -57,6 +51,7 @@ public class InstructionEditDialog extends Dialog {
                 abstractInstructionPanel = new MethodInstructionPanel((MethodInsnNode) instruction, instructions);
                 break;
             case AbstractInsnNode.INVOKE_DYNAMIC_INSN:
+                abstractInstructionPanel = new InvokeDynamicInstructionPanel(((InvokeDynamicInsnNode) instruction), instructions);
                 break;
             case AbstractInsnNode.JUMP_INSN:
                 abstractInstructionPanel = new JumpInstructionPanel(((JumpInsnNode) instruction), instructions);
@@ -70,10 +65,12 @@ public class InstructionEditDialog extends Dialog {
                 abstractInstructionPanel = new IncrInstructionPanel((IincInsnNode) instruction, instructions);
                 break;
             case AbstractInsnNode.TABLESWITCH_INSN:
+                abstractInstructionPanel = new TableSwitchInstructionPanel(((TableSwitchInsnNode) instruction), instructions);
                 break;
             case AbstractInsnNode.LOOKUPSWITCH_INSN:
                 break;
             case AbstractInsnNode.MULTIANEWARRAY_INSN:
+                abstractInstructionPanel = new MultiANewArrayInstructionPanel(((MultiANewArrayInsnNode) instruction), instructions);
                 break;
             case AbstractInsnNode.FRAME:
                 abstractInstructionPanel = new FrameInstructionPanel(((FrameNode) instruction), instructions);
@@ -83,31 +80,17 @@ public class InstructionEditDialog extends Dialog {
                 break;
         }
         if (abstractInstructionPanel != null) {
-            AbstractInstructionPanel finalMessage = abstractInstructionPanel;
-            add(new JPanel(new BorderLayout()) {{
-                setBorder(new EmptyBorder(10, 10, 10, 10));
-                add(finalMessage, BorderLayout.CENTER);
-            }}, BorderLayout.CENTER);
-            add(new JPanel() {{
-                add(new JButton("Confirm") {{
-                    addActionListener(e -> {
-                        try {
-                            if (finalMessage.getConfirm().call()) {
-                                MessageUtil.info("Succeed");
-                                dispose();
-                            } else {
-                                MessageUtil.info("Failed");
-                            }
-                        } catch (Exception ex) {
-                            MessageUtil.error(ex);
-                        }
-                    });
-                }});
-                add(new JButton("Cancel") {{
-                    addActionListener(e -> dispose());
-                }});
-            }}, BorderLayout.SOUTH);
+            AbstractInstructionPanel finalAbstractInstructionPanel = abstractInstructionPanel;
+            add(abstractInstructionPanel, BorderLayout.CENTER);
+            setConfirm(() -> {
+                try {
+                    if (!finalAbstractInstructionPanel.getConfirm().call()) {
+                        MessageUtil.info("Failed");
+                    }
+                } catch (Exception ex) {
+                    MessageUtil.error(ex);
+                }
+            });
         }
-        pack();
     }
 }
