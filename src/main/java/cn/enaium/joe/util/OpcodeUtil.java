@@ -78,6 +78,15 @@ public class OpcodeUtil {
         put(Opcodes.F_SAME, "F_SAME");
         put(Opcodes.F_SAME1, "F_SAME1");
     }};
+    public static final Map<Integer, String> FRAME_ELEMENT = new HashMap<Integer, String>() {{
+        put(Opcodes.INTEGER, "INTEGER");
+        put(Opcodes.FLOAT, "FLOAT");
+        put(Opcodes.DOUBLE, "DOUBLE");
+        put(Opcodes.LONG, "LONG");
+        put(Opcodes.NULL, "NULL");
+        put(Opcodes.UNINITIALIZED_THIS, "UNINITIALIZED_THIS");
+    }};
+
     public static final Map<Integer, String> OPCODE = new HashMap<Integer, String>() {{
         put(Opcodes.NOP, "NOP");
         put(Opcodes.ACONST_NULL, "ACONST_NULL");

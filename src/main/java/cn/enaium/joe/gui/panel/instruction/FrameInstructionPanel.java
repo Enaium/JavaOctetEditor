@@ -16,7 +16,8 @@
 
 package cn.enaium.joe.gui.panel.instruction;
 
-import org.objectweb.asm.tree.AbstractInsnNode;
+import cn.enaium.joe.dialog.FrameListEditDialog;
+import cn.enaium.joe.util.OpcodeUtil;
 import org.objectweb.asm.tree.FrameNode;
 import org.objectweb.asm.tree.InsnList;
 
@@ -30,8 +31,22 @@ import java.util.List;
 public class FrameInstructionPanel extends AbstractInstructionPanel {
     public FrameInstructionPanel(FrameNode instruction, InsnList instructions) {
         super(instruction, instructions);
-        addComponent(new JLabel("Type"), new JComboBox<>(new String[]{"F_NEW", "F_FULL", "F_APPEND", "F_CHOP", "F_SAME", "F_SAME1"}));
-
+        JComboBox<String> component = new JComboBox<>(new String[]{"F_NEW", "F_FULL", "F_APPEND", "F_CHOP", "F_SAME", "F_SAME1"});
+        component.setSelectedItem(OpcodeUtil.FRAME.get(instruction.type));
+        addComponent(new JLabel("Type:"), component);
+        addComponent(new JLabel("Local/Stack:"), new JButton("Edit") {{
+            addActionListener(e -> {
+                new FrameListEditDialog(instruction).setVisible(true);
+            });
+        }});
+        setConfirm(() -> {
+            if (component.getSelectedItem() != null) {
+                instruction.type = OpcodeUtil.reverse(OpcodeUtil.FRAME).get(component.getSelectedItem().toString());
+                return true;
+            } else {
+                return false;
+            }
+        });
     }
 
     @Override
