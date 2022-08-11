@@ -28,9 +28,8 @@ import java.util.List;
  * @since 0.8.0
  */
 public class LookupSwitchInstructionPanel extends AbstractInstructionPanel {
-    public LookupSwitchInstructionPanel(LookupSwitchInsnNode instruction, InsnList instructions) {
-        super(instruction, instructions);
-
+    public LookupSwitchInstructionPanel(LookupSwitchInsnNode instruction) {
+        super(instruction);
     }
 
     @Override

@@ -27,56 +27,56 @@ import java.awt.*;
  * @since 0.8.0
  */
 public class InstructionEditPanel extends ConfirmPanel {
-    public InstructionEditPanel(AbstractInsnNode instruction, InsnList instructions) {
+    public InstructionEditPanel(AbstractInsnNode instruction) {
         setLayout(new BorderLayout());
         AbstractInstructionPanel abstractInstructionPanel = null;
 
         switch (instruction.getType()) {
             case AbstractInsnNode.INSN:
-                abstractInstructionPanel = new InstructionPanel((InsnNode) instruction, instructions);
+                abstractInstructionPanel = new InstructionPanel((InsnNode) instruction);
                 break;
             case AbstractInsnNode.INT_INSN:
-                abstractInstructionPanel = new IntInstructionPanel((IntInsnNode) instruction, instructions);
+                abstractInstructionPanel = new IntInstructionPanel((IntInsnNode) instruction);
                 break;
             case AbstractInsnNode.VAR_INSN:
-                abstractInstructionPanel = new VarInstructionPanel((VarInsnNode) instruction, instructions);
+                abstractInstructionPanel = new VarInstructionPanel((VarInsnNode) instruction);
                 break;
             case AbstractInsnNode.TYPE_INSN:
-                abstractInstructionPanel = new TypeInstructionPanel((TypeInsnNode) instruction, instructions);
+                abstractInstructionPanel = new TypeInstructionPanel((TypeInsnNode) instruction);
                 break;
             case AbstractInsnNode.FIELD_INSN:
-                abstractInstructionPanel = new FieldInstructionPanel((FieldInsnNode) instruction, instructions);
+                abstractInstructionPanel = new FieldInstructionPanel((FieldInsnNode) instruction);
                 break;
             case AbstractInsnNode.METHOD_INSN:
-                abstractInstructionPanel = new MethodInstructionPanel((MethodInsnNode) instruction, instructions);
+                abstractInstructionPanel = new MethodInstructionPanel((MethodInsnNode) instruction);
                 break;
             case AbstractInsnNode.INVOKE_DYNAMIC_INSN:
-                abstractInstructionPanel = new InvokeDynamicInstructionPanel(((InvokeDynamicInsnNode) instruction), instructions);
+                abstractInstructionPanel = new InvokeDynamicInstructionPanel(((InvokeDynamicInsnNode) instruction));
                 break;
             case AbstractInsnNode.JUMP_INSN:
-                abstractInstructionPanel = new JumpInstructionPanel(((JumpInsnNode) instruction), instructions);
+                abstractInstructionPanel = new JumpInstructionPanel(((JumpInsnNode) instruction));
                 break;
             case AbstractInsnNode.LABEL:
                 break;
             case AbstractInsnNode.LDC_INSN:
-                abstractInstructionPanel = new LdcInstructionPanel(((LdcInsnNode) instruction), instructions);
+                abstractInstructionPanel = new LdcInstructionPanel(((LdcInsnNode) instruction));
                 break;
             case AbstractInsnNode.IINC_INSN:
-                abstractInstructionPanel = new IncrInstructionPanel((IincInsnNode) instruction, instructions);
+                abstractInstructionPanel = new IncrInstructionPanel((IincInsnNode) instruction);
                 break;
             case AbstractInsnNode.TABLESWITCH_INSN:
-                abstractInstructionPanel = new TableSwitchInstructionPanel(((TableSwitchInsnNode) instruction), instructions);
+                abstractInstructionPanel = new TableSwitchInstructionPanel(((TableSwitchInsnNode) instruction));
                 break;
             case AbstractInsnNode.LOOKUPSWITCH_INSN:
                 break;
             case AbstractInsnNode.MULTIANEWARRAY_INSN:
-                abstractInstructionPanel = new MultiANewArrayInstructionPanel(((MultiANewArrayInsnNode) instruction), instructions);
+                abstractInstructionPanel = new MultiANewArrayInstructionPanel(((MultiANewArrayInsnNode) instruction));
                 break;
             case AbstractInsnNode.FRAME:
-                abstractInstructionPanel = new FrameInstructionPanel(((FrameNode) instruction), instructions);
+                abstractInstructionPanel = new FrameInstructionPanel(((FrameNode) instruction));
                 break;
             case AbstractInsnNode.LINE:
-                abstractInstructionPanel = new LineInstructionPanel(((LineNumberNode) instruction), instructions);
+                abstractInstructionPanel = new LineInstructionPanel(((LineNumberNode) instruction));
                 break;
         }
         if (abstractInstructionPanel != null) {

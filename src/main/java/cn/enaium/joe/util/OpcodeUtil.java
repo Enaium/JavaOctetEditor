@@ -18,6 +18,7 @@ package cn.enaium.joe.util;
 
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.LabelNode;
 
 import java.util.HashMap;
@@ -258,6 +259,28 @@ public class OpcodeUtil {
             }
         }
         return index;
+    }
+
+    public static InsnList getInstructionList(AbstractInsnNode abstractInsnNode) {
+        InsnList insnList = new InsnList();
+
+        //Find the first
+        AbstractInsnNode previous = abstractInsnNode;
+        while (previous.getPrevious() != null) {
+            previous = previous.getPrevious();
+        }
+
+        //Add the first
+        insnList.add(previous);
+
+        //walk from first to last
+        AbstractInsnNode next = previous;
+        while (next.getNext() != null) {
+            next = next.getNext();
+            //add the instruction
+            insnList.add(next);
+        }
+        return insnList;
     }
 
     public static <V, K> Map<V, K> reverse(Map<K, V> map) {

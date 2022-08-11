@@ -29,10 +29,12 @@ import java.util.List;
  * @since 0.8.0
  */
 public class InstructionPanel extends AbstractInstructionPanel {
-    public InstructionPanel(InsnNode instruction, InsnList instructions) {
-        super(instruction, instructions);
+    public InstructionPanel(InsnNode instruction) {
+        super(instruction);
         setConfirm(() -> {
-            instructions.set(instruction, new InsnNode(getOpcode()));
+            Field opcode = instruction.getClass().getSuperclass().getDeclaredField("opcode");
+            opcode.setAccessible(true);
+            opcode.set(instruction, getOpcode());
             return true;
         });
     }

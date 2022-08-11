@@ -29,8 +29,8 @@ import java.util.List;
  * @since 0.8.0
  */
 public class MethodInstructionPanel extends AbstractInstructionPanel {
-    public MethodInstructionPanel(MethodInsnNode instruction, InsnList instructions) {
-        super(instruction, instructions);
+    public MethodInstructionPanel(MethodInsnNode instruction) {
+        super(instruction);
         JTextField owner = new JTextField(instruction.owner);
         JTextField name = new JTextField(instruction.name);
         JTextField description = new JTextField(instruction.desc);
@@ -42,7 +42,11 @@ public class MethodInstructionPanel extends AbstractInstructionPanel {
         addComponent(new JLabel("Description:"), description);
         addComponent(new JLabel("Interface:"), isInterface);
         setConfirm(() -> {
-            instructions.set(instruction, new MethodInsnNode(getOpcode(), owner.getText(), name.getText(), description.getText(), isInterface.isSelected()));
+            instruction.setOpcode(getOpcode());
+            instruction.owner = owner.getText();
+            instruction.name = name.getText();
+            instruction.desc = description.getText();
+            instruction.itf = isInterface.isSelected();
             return true;
         });
     }

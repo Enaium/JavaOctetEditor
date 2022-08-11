@@ -29,11 +29,11 @@ import java.util.List;
  * @since 0.8.0
  */
 public class JumpInstructionPanel extends AbstractInstructionPanel {
-    public JumpInstructionPanel(JumpInsnNode instruction, InsnList instructions) {
-        super(instruction, instructions);
+    public JumpInstructionPanel(JumpInsnNode instruction) {
+        super(instruction);
         DefaultComboBoxModel<LabelNodeWrapper> stringDefaultComboBoxModel = new DefaultComboBoxModel<>();
         LabelNodeWrapper selected = null;
-        for (AbstractInsnNode abstractInsnNode : instructions) {
+        for (AbstractInsnNode abstractInsnNode : OpcodeUtil.getInstructionList(instruction)) {
             if (abstractInsnNode instanceof LabelNode) {
                 LabelNodeWrapper anObject = new LabelNodeWrapper(((LabelNode) abstractInsnNode));
                 if (abstractInsnNode.equals(instruction.label)) {
@@ -47,7 +47,8 @@ public class JumpInstructionPanel extends AbstractInstructionPanel {
         Object selectedItem = stringDefaultComboBoxModel.getSelectedItem();
         if (selectedItem != null) {
             setConfirm(() -> {
-                instructions.set(instruction, new JumpInsnNode(getOpcode(), ((LabelNodeWrapper) stringDefaultComboBoxModel.getSelectedItem()).getWrapper()));
+                instruction.setOpcode(getOpcode());
+                instruction.label = ((LabelNodeWrapper) stringDefaultComboBoxModel.getSelectedItem()).getWrapper();
                 return true;
             });
         }

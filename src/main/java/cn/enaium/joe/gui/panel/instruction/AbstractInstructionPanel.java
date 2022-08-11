@@ -39,7 +39,7 @@ public abstract class AbstractInstructionPanel extends JPanel {
 
     private Callable<Boolean> confirm = () -> false;
 
-    public AbstractInstructionPanel(AbstractInsnNode instruction, InsnList instructions) {
+    public AbstractInstructionPanel(AbstractInsnNode instruction) {
         setLayout(new BorderLayout());
         if (instruction.getOpcode() != -1) {
             DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) opcode.getModel();

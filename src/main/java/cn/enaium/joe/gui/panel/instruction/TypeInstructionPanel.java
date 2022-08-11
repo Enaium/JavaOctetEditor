@@ -29,12 +29,13 @@ import java.util.List;
  * @since 0.8.0
  */
 public class TypeInstructionPanel extends AbstractInstructionPanel {
-    public TypeInstructionPanel(TypeInsnNode instruction, InsnList instructions) {
-        super(instruction, instructions);
+    public TypeInstructionPanel(TypeInsnNode instruction) {
+        super(instruction);
         JTextField description = new JTextField(instruction.desc);
         addComponent(new JLabel("Description:"), description);
         setConfirm(() -> {
-            instructions.set(instruction, new TypeInsnNode(getOpcode(), description.getText()));
+            instruction.setOpcode(getOpcode());
+            instruction.desc = description.getText();
             return true;
         });
     }

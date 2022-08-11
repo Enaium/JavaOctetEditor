@@ -30,15 +30,15 @@ import java.util.List;
  * @since 0.8.0
  */
 public class FrameInstructionPanel extends AbstractInstructionPanel {
-    public FrameInstructionPanel(FrameNode instruction, InsnList instructions) {
-        super(instruction, instructions);
+    public FrameInstructionPanel(FrameNode instruction) {
+        super(instruction);
         JComboBox<String> component = new JComboBox<>(OpcodeUtil.FRAME.values().toArray(new String[0]));
         component.setSelectedItem(OpcodeUtil.FRAME.get(instruction.type));
         addComponent(new JLabel("Type:"), component);
         addComponent(new JLabel("Local/Stack:"), new JButton("Edit") {{
             addActionListener(e -> {
                 FrameListEditPanel frameListEditPanel = new FrameListEditPanel(instruction);
-                MessageUtil.confirm(frameListEditPanel, "Handle Edit", () -> {
+                MessageUtil.confirm(frameListEditPanel, "Frame Edit", () -> {
                     frameListEditPanel.getConfirm().run();
                 }, () -> {
                     frameListEditPanel.getCancel().run();

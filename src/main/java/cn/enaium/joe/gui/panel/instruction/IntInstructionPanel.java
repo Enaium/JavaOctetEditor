@@ -30,13 +30,14 @@ import java.util.List;
  * @since 0.8.0
  */
 public class IntInstructionPanel extends AbstractInstructionPanel {
-    public IntInstructionPanel(IntInsnNode instruction, InsnList instructions) {
-        super(instruction, instructions);
+    public IntInstructionPanel(IntInsnNode instruction) {
+        super(instruction);
         JSpinner operand = new JSpinner();
         operand.setValue(instruction.operand);
         addComponent(new JLabel("Operand:"), operand);
         setConfirm(() -> {
-            instructions.set(instruction, new IntInsnNode(getOpcode(), Integer.parseInt(operand.getValue().toString())));
+            instruction.setOpcode(getOpcode());
+            instruction.operand = Integer.parseInt(operand.getValue().toString());
             return true;
         });
     }

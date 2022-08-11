@@ -30,13 +30,14 @@ import java.util.List;
  * @since 0.8.0
  */
 public class VarInstructionPanel extends AbstractInstructionPanel {
-    public VarInstructionPanel(VarInsnNode instruction, InsnList instructions) {
-        super(instruction, instructions);
+    public VarInstructionPanel(VarInsnNode instruction) {
+        super(instruction);
         JSpinner spinner = new JSpinner();
         spinner.setValue(instruction.var);
         addComponent(new JLabel("Var:"), spinner);
         setConfirm(() -> {
-            instructions.set(instruction, new VarInsnNode(getOpcode(), Integer.parseInt(spinner.getValue().toString())));
+            instruction.setOpcode(getOpcode());
+            instruction.var = Integer.parseInt(spinner.getValue().toString());
             return true;
         });
     }

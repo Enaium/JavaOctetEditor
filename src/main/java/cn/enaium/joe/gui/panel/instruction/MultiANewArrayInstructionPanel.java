@@ -29,8 +29,8 @@ import java.util.List;
  * @since 0.8.0
  */
 public class MultiANewArrayInstructionPanel extends AbstractInstructionPanel {
-    public MultiANewArrayInstructionPanel(MultiANewArrayInsnNode instruction, InsnList instructions) {
-        super(instruction, instructions);
+    public MultiANewArrayInstructionPanel(MultiANewArrayInsnNode instruction) {
+        super(instruction);
         JTextField description = new JTextField();
         description.setText(instruction.desc);
         addComponent(new JLabel("Description"), description);

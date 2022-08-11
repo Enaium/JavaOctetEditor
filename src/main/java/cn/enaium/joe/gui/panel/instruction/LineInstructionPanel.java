@@ -31,14 +31,14 @@ import java.util.Map;
  * @since 0.8.0
  */
 public class LineInstructionPanel extends AbstractInstructionPanel {
-    public LineInstructionPanel(LineNumberNode instruction, InsnList instructions) {
-        super(instruction, instructions);
+    public LineInstructionPanel(LineNumberNode instruction) {
+        super(instruction);
         JSpinner spinner = new JSpinner();
         spinner.setValue(instruction.line);
         addComponent(new JLabel("Line:"), spinner);
         DefaultComboBoxModel<LabelNodeWrapper> stringDefaultComboBoxModel = new DefaultComboBoxModel<>();
         LabelNodeWrapper selected = null;
-        for (AbstractInsnNode abstractInsnNode : instructions) {
+        for (AbstractInsnNode abstractInsnNode : OpcodeUtil.getInstructionList(instruction)) {
             if (abstractInsnNode instanceof LabelNode) {
                 LabelNodeWrapper anObject = new LabelNodeWrapper(((LabelNode) abstractInsnNode));
                 if (abstractInsnNode.equals(instruction.start)) {
@@ -52,7 +52,8 @@ public class LineInstructionPanel extends AbstractInstructionPanel {
         Object selectedItem = stringDefaultComboBoxModel.getSelectedItem();
         if (selectedItem != null) {
             setConfirm(() -> {
-                instructions.set(instruction, new LineNumberNode(Integer.parseInt(spinner.getValue().toString()), ((LabelNodeWrapper) stringDefaultComboBoxModel.getSelectedItem()).getWrapper()));
+                instruction.line = Integer.parseInt(spinner.getValue().toString());
+                instruction.start = ((LabelNodeWrapper) stringDefaultComboBoxModel.getSelectedItem()).getWrapper();
                 return true;
             });
         }

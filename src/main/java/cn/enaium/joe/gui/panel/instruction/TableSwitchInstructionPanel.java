@@ -33,8 +33,8 @@ import java.util.stream.Collectors;
  * @since 0.8.0
  */
 public class TableSwitchInstructionPanel extends AbstractInstructionPanel {
-    public TableSwitchInstructionPanel(TableSwitchInsnNode instruction, InsnList instructions) {
-        super(instruction, instructions);
+    public TableSwitchInstructionPanel(TableSwitchInsnNode instruction) {
+        super(instruction);
         JSpinner min = new JSpinner();
         min.setValue(instruction.min);
         addComponent(new JLabel("Min:"), min);
@@ -43,7 +43,7 @@ public class TableSwitchInstructionPanel extends AbstractInstructionPanel {
         addComponent(new JLabel("Max:"), max);
         DefaultComboBoxModel<LabelNodeWrapper> stringDefaultComboBoxModel = new DefaultComboBoxModel<>();
         LabelNodeWrapper selected = null;
-        for (AbstractInsnNode abstractInsnNode : instructions) {
+        for (AbstractInsnNode abstractInsnNode : OpcodeUtil.getInstructionList(instruction)) {
             if (abstractInsnNode instanceof LabelNode) {
                 LabelNodeWrapper anObject = new LabelNodeWrapper(((LabelNode) abstractInsnNode));
                 if (abstractInsnNode.equals(instruction.dflt)) {
@@ -56,7 +56,7 @@ public class TableSwitchInstructionPanel extends AbstractInstructionPanel {
         addComponent(new JLabel("Default:"), new JComboBox<>(stringDefaultComboBoxModel));
         addComponent(new JLabel("Labels:"), new JButton("Edit") {{
             addActionListener(e -> {
-                MessageUtil.confirm(new LabelListEditPanel(instruction.labels, instructions), "Labels Edit");
+                MessageUtil.confirm(new LabelListEditPanel(instruction.labels, OpcodeUtil.getInstructionList(instruction)), "Labels Edit");
             });
         }});
         Object selectedItem = stringDefaultComboBoxModel.getSelectedItem();

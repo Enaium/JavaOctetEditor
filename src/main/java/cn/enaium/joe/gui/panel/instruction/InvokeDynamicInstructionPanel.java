@@ -32,8 +32,8 @@ import java.util.List;
  * @since 0.8.0
  */
 public class InvokeDynamicInstructionPanel extends AbstractInstructionPanel {
-    public InvokeDynamicInstructionPanel(InvokeDynamicInsnNode instruction, InsnList instructions) {
-        super(instruction, instructions);
+    public InvokeDynamicInstructionPanel(InvokeDynamicInsnNode instruction) {
+        super(instruction);
         JTextField name = new JTextField(instruction.name);
         JTextField description = new JTextField(instruction.desc);
         addComponent(new JLabel("Name:"), name);
@@ -51,6 +51,11 @@ public class InvokeDynamicInstructionPanel extends AbstractInstructionPanel {
             });
         }});
         addComponent(new JLabel("Bootstrap Method Argument"), new JButton("Edit"));
+        setConfirm(() -> {
+            instruction.name = name.getText();
+            instruction.desc = description.getText();
+            return true;
+        });
     }
 
     @Override

@@ -29,8 +29,8 @@ import java.util.List;
  * @since 0.8.0
  */
 public class IncrInstructionPanel extends AbstractInstructionPanel {
-    public IncrInstructionPanel(IincInsnNode instruction, InsnList instructions) {
-        super(instruction, instructions);
+    public IncrInstructionPanel(IincInsnNode instruction) {
+        super(instruction);
         JSpinner varIndex = new JSpinner();
         varIndex.setValue(instruction.var);
         addComponent(new JLabel("Var Index:"), varIndex);
