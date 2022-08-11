@@ -16,11 +16,11 @@
 
 package cn.enaium.joe.gui.panel.instruction;
 
+import cn.enaium.joe.gui.panel.confirm.BootstrapMethodArgumentEditPanel;
 import cn.enaium.joe.gui.panel.confirm.HandleEditPanel;
 import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.wrapper.Wrapper;
 import org.objectweb.asm.Handle;
-import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InvokeDynamicInsnNode;
 
 import javax.swing.*;
@@ -38,7 +38,7 @@ public class InvokeDynamicInstructionPanel extends AbstractInstructionPanel {
         JTextField description = new JTextField(instruction.desc);
         addComponent(new JLabel("Name:"), name);
         addComponent(new JLabel("Description:"), description);
-        addComponent(new JLabel("Bootstrap Method"), new JButton("Edit") {{
+        addComponent(new JLabel("Bootstrap Method:"), new JButton("Edit") {{
             addActionListener(e -> {
                 Wrapper<Handle> wrapper = new Wrapper<>(instruction.bsm);
                 HandleEditPanel handleEditPanel = new HandleEditPanel(wrapper);
@@ -50,7 +50,17 @@ public class InvokeDynamicInstructionPanel extends AbstractInstructionPanel {
                 });
             });
         }});
-        addComponent(new JLabel("Bootstrap Method Argument"), new JButton("Edit"));
+        addComponent(new JLabel("Bootstrap Method Argument:"), new JButton("Edit") {{
+            addActionListener(e -> {
+                Wrapper<Object[]> bsmArgs = new Wrapper<>(instruction.bsmArgs);
+                BootstrapMethodArgumentEditPanel confirmPanel = new BootstrapMethodArgumentEditPanel(bsmArgs);
+                MessageUtil.confirm(confirmPanel, "Bootstrap method argument", () -> {
+                    confirmPanel.getConfirm().run();
+                    instruction.bsmArgs = bsmArgs.getWrapper();
+                }, () -> {
+                });
+            });
+        }});
         setConfirm(() -> {
             instruction.name = name.getText();
             instruction.desc = description.getText();

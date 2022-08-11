@@ -16,6 +16,7 @@
 
 package cn.enaium.joe.gui.panel.instruction;
 
+import cn.enaium.joe.gui.component.LabelNodeComboBox;
 import cn.enaium.joe.gui.panel.confirm.LabelListEditPanel;
 import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.util.OpcodeUtil;
@@ -41,33 +42,24 @@ public class TableSwitchInstructionPanel extends AbstractInstructionPanel {
         JSpinner max = new JSpinner();
         max.setValue(instruction.max);
         addComponent(new JLabel("Max:"), max);
-        DefaultComboBoxModel<LabelNodeWrapper> stringDefaultComboBoxModel = new DefaultComboBoxModel<>();
-        LabelNodeWrapper selected = null;
-        for (AbstractInsnNode abstractInsnNode : OpcodeUtil.getInstructionList(instruction)) {
-            if (abstractInsnNode instanceof LabelNode) {
-                LabelNodeWrapper anObject = new LabelNodeWrapper(((LabelNode) abstractInsnNode));
-                if (abstractInsnNode.equals(instruction.dflt)) {
-                    selected = anObject;
-                }
-                stringDefaultComboBoxModel.addElement(anObject);
-            }
-        }
-        stringDefaultComboBoxModel.setSelectedItem(selected);
-        addComponent(new JLabel("Default:"), new JComboBox<>(stringDefaultComboBoxModel));
+        LabelNodeComboBox component = new LabelNodeComboBox(instruction, instruction.dflt);
+        addComponent(new JLabel("Default:"), component);
         addComponent(new JLabel("Labels:"), new JButton("Edit") {{
             addActionListener(e -> {
                 MessageUtil.confirm(new LabelListEditPanel(instruction.labels, OpcodeUtil.getInstructionList(instruction)), "Labels Edit");
             });
         }});
-        Object selectedItem = stringDefaultComboBoxModel.getSelectedItem();
-        if (selectedItem != null) {
-            setConfirm(() -> {
+
+        setConfirm(() -> {
+            Object selectedItem = component.getSelectedItem();
+            if (selectedItem != null) {
                 instruction.min = Integer.parseInt(min.getValue().toString());
                 instruction.max = Integer.parseInt(max.getValue().toString());
                 instruction.dflt = ((LabelNodeWrapper) selectedItem).getWrapper();
                 return true;
-            });
-        }
+            }
+            return false;
+        });
     }
 
     @Override

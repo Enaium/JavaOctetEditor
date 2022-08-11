@@ -16,6 +16,7 @@
 
 package cn.enaium.joe.gui.panel.instruction;
 
+import cn.enaium.joe.gui.component.LabelNodeComboBox;
 import cn.enaium.joe.util.OpcodeUtil;
 import cn.enaium.joe.wrapper.LabelNodeWrapper;
 import org.objectweb.asm.tree.*;
@@ -31,27 +32,17 @@ import java.util.List;
 public class JumpInstructionPanel extends AbstractInstructionPanel {
     public JumpInstructionPanel(JumpInsnNode instruction) {
         super(instruction);
-        DefaultComboBoxModel<LabelNodeWrapper> stringDefaultComboBoxModel = new DefaultComboBoxModel<>();
-        LabelNodeWrapper selected = null;
-        for (AbstractInsnNode abstractInsnNode : OpcodeUtil.getInstructionList(instruction)) {
-            if (abstractInsnNode instanceof LabelNode) {
-                LabelNodeWrapper anObject = new LabelNodeWrapper(((LabelNode) abstractInsnNode));
-                if (abstractInsnNode.equals(instruction.label)) {
-                    selected = anObject;
-                }
-                stringDefaultComboBoxModel.addElement(anObject);
-            }
-        }
-        stringDefaultComboBoxModel.setSelectedItem(selected);
-        addComponent(new JLabel("Label:"), new JComboBox<>(stringDefaultComboBoxModel));
-        Object selectedItem = stringDefaultComboBoxModel.getSelectedItem();
-        if (selectedItem != null) {
-            setConfirm(() -> {
+        LabelNodeComboBox component = new LabelNodeComboBox(instruction, instruction.label);
+        addComponent(new JLabel("Label:"), component);
+        setConfirm(() -> {
+            Object selectedItem = component.getSelectedItem();
+            if (selectedItem != null) {
                 instruction.setOpcode(getOpcode());
-                instruction.label = ((LabelNodeWrapper) stringDefaultComboBoxModel.getSelectedItem()).getWrapper();
+                instruction.label = ((LabelNodeWrapper) selectedItem).getWrapper();
                 return true;
-            });
-        }
+            }
+            return false;
+        });
     }
 
     @Override

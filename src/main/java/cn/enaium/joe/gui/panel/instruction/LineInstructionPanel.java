@@ -16,6 +16,7 @@
 
 package cn.enaium.joe.gui.panel.instruction;
 
+import cn.enaium.joe.gui.component.LabelNodeComboBox;
 import cn.enaium.joe.util.OpcodeUtil;
 import cn.enaium.joe.wrapper.LabelNodeWrapper;
 import org.objectweb.asm.tree.*;
@@ -36,27 +37,18 @@ public class LineInstructionPanel extends AbstractInstructionPanel {
         JSpinner spinner = new JSpinner();
         spinner.setValue(instruction.line);
         addComponent(new JLabel("Line:"), spinner);
-        DefaultComboBoxModel<LabelNodeWrapper> stringDefaultComboBoxModel = new DefaultComboBoxModel<>();
-        LabelNodeWrapper selected = null;
-        for (AbstractInsnNode abstractInsnNode : OpcodeUtil.getInstructionList(instruction)) {
-            if (abstractInsnNode instanceof LabelNode) {
-                LabelNodeWrapper anObject = new LabelNodeWrapper(((LabelNode) abstractInsnNode));
-                if (abstractInsnNode.equals(instruction.start)) {
-                    selected = anObject;
-                }
-                stringDefaultComboBoxModel.addElement(anObject);
-            }
-        }
-        stringDefaultComboBoxModel.setSelectedItem(selected);
-        addComponent(new JLabel("Start:"), new JComboBox<>(stringDefaultComboBoxModel));
-        Object selectedItem = stringDefaultComboBoxModel.getSelectedItem();
-        if (selectedItem != null) {
-            setConfirm(() -> {
+        LabelNodeComboBox component = new LabelNodeComboBox(instruction, instruction.start);
+        addComponent(new JLabel("Start:"), component);
+
+        setConfirm(() -> {
+            Object selectedItem = component.getSelectedItem();
+            if (selectedItem != null) {
                 instruction.line = Integer.parseInt(spinner.getValue().toString());
-                instruction.start = ((LabelNodeWrapper) stringDefaultComboBoxModel.getSelectedItem()).getWrapper();
+                instruction.start = ((LabelNodeWrapper) selectedItem).getWrapper();
                 return true;
-            });
-        }
+            }
+            return false;
+        });
     }
 
     @Override

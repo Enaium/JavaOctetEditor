@@ -68,6 +68,7 @@ public class InstructionEditPanel extends ConfirmPanel {
                 abstractInstructionPanel = new TableSwitchInstructionPanel(((TableSwitchInsnNode) instruction));
                 break;
             case AbstractInsnNode.LOOKUPSWITCH_INSN:
+                abstractInstructionPanel = new LookupSwitchInstructionPanel(((LookupSwitchInsnNode) instruction));
                 break;
             case AbstractInsnNode.MULTIANEWARRAY_INSN:
                 abstractInstructionPanel = new MultiANewArrayInstructionPanel(((MultiANewArrayInsnNode) instruction));

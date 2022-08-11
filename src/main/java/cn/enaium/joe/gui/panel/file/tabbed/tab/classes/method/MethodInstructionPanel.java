@@ -42,7 +42,7 @@ public class MethodInstructionPanel extends JPanel {
         JMenuItem jMenuItem = new JMenuItem(LangUtil.i18n("instruction.edit"));
         jMenuItem.addActionListener(e -> {
             MethodInstruction selectedValue = jList.getSelectedValue();
-            if (selectedValue != null) {
+            if (selectedValue != null && !(selectedValue.getInstruction() instanceof LabelNode)) {
                 MessageUtil.confirm(new InstructionEditPanel(selectedValue.getInstruction()), "Instruction Edit");
             }
         });
