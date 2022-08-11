@@ -16,6 +16,7 @@
 
 package cn.enaium.joe.util;
 
+import cn.enaium.joe.gui.panel.confirm.ConfirmPanel;
 import org.tinylog.Logger;
 
 import javax.swing.*;
@@ -31,13 +32,21 @@ public class MessageUtil {
         JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
     }
 
-    public static void confirm(String message, String title, Runnable yes, Runnable no) {
+    public static void confirm(Object message, String title, Runnable yes, Runnable no) {
         int i = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.OK_CANCEL_OPTION);
         if (i == JOptionPane.YES_OPTION) {
             yes.run();
         } else {
             no.run();
         }
+    }
+
+    public static void confirm(ConfirmPanel confirmPanel, String title) {
+        confirm(confirmPanel, title, () -> {
+            confirmPanel.getConfirm().run();
+        }, () -> {
+            confirmPanel.getCancel().run();
+        });
     }
 
     public static void info(String message) {

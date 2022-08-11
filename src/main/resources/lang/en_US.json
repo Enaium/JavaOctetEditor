@@ -44,5 +44,6 @@
   "button.findNext": "Find Next",
   "button.findPrevious": "Find Previous",
   "button.save": "Save",
-  "dialog.wantCloseWindow": "Do you want to close"
+  "dialog.wantCloseWindow": "Do you want to close",
+  "instruction.edit": "Edit"
 }

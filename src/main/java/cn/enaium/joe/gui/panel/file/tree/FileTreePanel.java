@@ -20,7 +20,8 @@ import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.gui.panel.file.FileDropTarget;
 import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassTabPanel;
 import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.FieldInfoPanel;
-import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.MethodInfoTabPanel;
+import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.method.MethodInfoTabPanel;
+import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.method.MethodTabPanel;
 import cn.enaium.joe.gui.panel.file.tabbed.tab.resources.HexTablePanel;
 import cn.enaium.joe.gui.panel.file.tree.node.*;
 import cn.enaium.joe.jar.Jar;
@@ -69,7 +70,7 @@ public class FileTreePanel extends JTree {
                     } else if (packageTreeNode instanceof MethodTreeNode) {
                         MethodTreeNode methodTreeNode = (MethodTreeNode) packageTreeNode;
                         MethodNode methodNode = methodTreeNode.methodNode;
-                        JavaOctetEditor.getInstance().fileTabbedPanel.addTab(methodTreeNode.classNode.name.substring(methodTreeNode.classNode.name.lastIndexOf("/") + 1) + "#" + methodNode.name, new MethodInfoTabPanel(methodNode));
+                        JavaOctetEditor.getInstance().fileTabbedPanel.addTab(methodTreeNode.classNode.name.substring(methodTreeNode.classNode.name.lastIndexOf("/") + 1) + "#" + methodNode.name, new MethodTabPanel(methodNode));
                     } else if (packageTreeNode instanceof FieldTreeNode) {
                         FieldTreeNode fieldTreeNode = (FieldTreeNode) packageTreeNode;
                         FieldNode fieldNode = fieldTreeNode.fieldNode;

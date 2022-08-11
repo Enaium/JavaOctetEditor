@@ -29,7 +29,7 @@
   "class.info.name": "名称:",
   "class.info.sourceFile": "源文件:",
   "class.info.debugFile": "调试文件:",
-  "class.info.access": "权限:",
+  "class.info.access": "访问:",
   "class.info.version": "版本:",
   "class.info.signature": "签名:",
   "class.info.superName": "超类:",
@@ -43,5 +43,6 @@
   "button.findNext": "查找下一个",
   "button.findPrevious": "查找上一个",
   "button.save": "保存",
-  "dialog.wantCloseWindow": "想要关闭吗"
+  "dialog.wantCloseWindow": "想要关闭吗",
+  "instruction.edit": "编辑"
 }

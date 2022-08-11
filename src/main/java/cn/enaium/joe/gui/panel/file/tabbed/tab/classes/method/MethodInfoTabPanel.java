@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.file.tabbed.tab.classes;
+package cn.enaium.joe.gui.panel.file.tabbed.tab.classes.method;
 
 import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.StringUtil;
@@ -58,7 +58,6 @@ public class MethodInfoTabPanel extends JPanel {
                 if (!StringUtil.isBlank(name.getText())) {
                     methodNode.name = name.getText();
                 }
-
 
                 if (!StringUtil.isBlank(description.getText())) {
                     methodNode.desc = description.getText();
