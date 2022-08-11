@@ -38,7 +38,8 @@ public class IncrInstructionPanel extends AbstractInstructionPanel {
         incr.setValue(instruction.incr);
         addComponent(new JLabel("Incr:"), incr);
         setConfirm(() -> {
-            instructions.set(instruction, new IincInsnNode(getOpcode(), Integer.parseInt(varIndex.getValue().toString())));
+            instruction.var = Integer.parseInt(varIndex.getValue().toString());
+            instruction.incr = Integer.parseInt(incr.getValue().toString());
             return true;
         });
     }
