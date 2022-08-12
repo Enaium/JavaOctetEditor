@@ -55,8 +55,15 @@ public class MethodInstructionPanel extends JPanel {
             addActionListener(e -> {
                 InstructionWrapper selectedValue = instructionJList.getSelectedValue();
                 if (instructionJList.getSelectedIndex() != -1 || selectedValue != null) {
-                    instructionDefaultListModel.add(instructionJList.getSelectedIndex(), selectedValue);
-                    methodNode.instructions.insert(selectedValue.getWrapper(), selectedValue.getWrapper().clone(new HashMap<>()));
+                    AbstractInsnNode clone;
+                    if (selectedValue.getWrapper() instanceof LabelNode) {
+                        clone = new LabelNode();
+                    } else {
+                        clone = selectedValue.getWrapper().clone(new HashMap<>());
+                    }
+
+                    instructionDefaultListModel.add(instructionJList.getSelectedIndex(), new InstructionWrapper(clone));
+                    methodNode.instructions.insert(selectedValue.getWrapper(), clone);
                 }
             });
         }});
