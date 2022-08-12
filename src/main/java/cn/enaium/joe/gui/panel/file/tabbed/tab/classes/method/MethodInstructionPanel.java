@@ -19,12 +19,14 @@ package cn.enaium.joe.gui.panel.file.tabbed.tab.classes.method;
 import cn.enaium.joe.gui.panel.confirm.InstructionEditPanel;
 import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.MessageUtil;
+import cn.enaium.joe.wrapper.InstructionWrapper;
 import org.objectweb.asm.tree.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.HashMap;
 
 /**
  * @author Enaium
@@ -33,37 +35,47 @@ import java.awt.event.MouseEvent;
 public class MethodInstructionPanel extends JPanel {
     public MethodInstructionPanel(MethodNode methodNode) {
         super(new BorderLayout());
-        JList<MethodInstruction> jList = new JList<>(new DefaultListModel<>());
+        DefaultListModel<InstructionWrapper> instructionDefaultListModel = new DefaultListModel<>();
+        JList<InstructionWrapper> instructionJList = new JList<>(instructionDefaultListModel);
         for (AbstractInsnNode instruction : methodNode.instructions) {
-            ((DefaultListModel<MethodInstruction>) jList.getModel()).addElement(new MethodInstruction(methodNode.instructions.indexOf(instruction), instruction));
+            instructionDefaultListModel.addElement(new InstructionWrapper(instruction));
         }
 
         JPopupMenu jPopupMenu = new JPopupMenu();
-        JMenuItem jMenuItem = new JMenuItem(LangUtil.i18n("instruction.edit"));
-        jMenuItem.addActionListener(e -> {
-            MethodInstruction selectedValue = jList.getSelectedValue();
-            if (selectedValue != null && !(selectedValue.getInstruction() instanceof LabelNode)) {
-                MessageUtil.confirm(new InstructionEditPanel(selectedValue.getInstruction()), "Instruction Edit");
-            }
-        });
-        jPopupMenu.add(jMenuItem);
+        jPopupMenu.add(new JMenuItem(LangUtil.i18n("instruction.edit")) {{
+            addActionListener(e -> {
+                InstructionWrapper selectedValue = instructionJList.getSelectedValue();
+                if (selectedValue != null && !(selectedValue.getWrapper() instanceof LabelNode)) {
+                    MessageUtil.confirm(new InstructionEditPanel(selectedValue.getWrapper()), "Instruction Edit");
+                }
+            });
+        }});
 
-        jList.addMouseListener(new MouseAdapter() {
+        jPopupMenu.add(new JMenuItem(LangUtil.i18n("instruction.clone")) {{
+            addActionListener(e -> {
+                InstructionWrapper selectedValue = instructionJList.getSelectedValue();
+                if (instructionJList.getSelectedIndex() != -1 || selectedValue != null) {
+                    instructionDefaultListModel.add(instructionJList.getSelectedIndex(), selectedValue);
+                    methodNode.instructions.insert(selectedValue.getWrapper(), selectedValue.getWrapper().clone(new HashMap<>()));
+                }
+            });
+        }});
+
+        instructionJList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (SwingUtilities.isRightMouseButton(e)) {
-                    if (jList.getSelectedValue() != null) {
-                        jPopupMenu.show(jList, e.getX(), e.getY());
+                    if (instructionJList.getSelectedValue() != null) {
+                        jPopupMenu.show(instructionJList, e.getX(), e.getY());
                     }
                 }
             }
         });
-        add(new JScrollPane(jList), BorderLayout.CENTER);
+        add(new JScrollPane(instructionJList), BorderLayout.CENTER);
         JLabel comp = new JLabel();
-        jList.addListSelectionListener(e -> {
-            if (jList.getSelectedValue() != null) {
-                MethodInstruction selectedValue = jList.getSelectedValue();
-                comp.setText(String.format("Index:%d", selectedValue.getIndex()));
+        instructionJList.addListSelectionListener(e -> {
+            if (instructionJList.getSelectedIndex() != -1) {
+                comp.setText(String.format("Index:%d", instructionJList.getSelectedIndex()));
                 comp.setVisible(true);
             } else {
                 comp.setVisible(false);
