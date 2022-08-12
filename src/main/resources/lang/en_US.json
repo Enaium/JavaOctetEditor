@@ -46,5 +46,6 @@
   "button.save": "Save",
   "dialog.wantCloseWindow": "Do you want to close",
   "instruction.edit": "Edit",
-  "instruction.clone": "Clone"
+  "instruction.clone": "Clone",
+  "instructions.remove": "Remove"
 }

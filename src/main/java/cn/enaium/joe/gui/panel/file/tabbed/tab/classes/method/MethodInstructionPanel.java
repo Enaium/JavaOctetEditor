@@ -68,6 +68,16 @@ public class MethodInstructionPanel extends JPanel {
             });
         }});
 
+        jPopupMenu.add(new JMenuItem(LangUtil.i18n("instructions.remove")) {{
+            addActionListener(e -> {
+                InstructionWrapper selectedValue = instructionJList.getSelectedValue();
+                if (instructionJList.getSelectedIndex() != -1 || selectedValue != null) {
+                    instructionDefaultListModel.remove(instructionJList.getSelectedIndex());
+                    methodNode.instructions.remove(selectedValue.getWrapper());
+                }
+            });
+        }});
+
         instructionJList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {

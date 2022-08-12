@@ -45,5 +45,6 @@
   "button.save": "保存",
   "dialog.wantCloseWindow": "想要关闭吗",
   "instruction.edit": "编辑",
-  "instruction.clone": "克隆"
+  "instruction.clone": "克隆",
+  "instructions.remove": "移除"
 }
