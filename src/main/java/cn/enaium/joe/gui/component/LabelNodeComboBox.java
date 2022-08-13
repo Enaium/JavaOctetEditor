@@ -31,7 +31,7 @@ public class LabelNodeComboBox extends JComboBox<LabelNodeWrapper> {
     public LabelNodeComboBox(AbstractInsnNode instruction, LabelNode select) {
         super(new DefaultComboBoxModel<>());
         LabelNodeWrapper selected = null;
-        for (AbstractInsnNode abstractInsnNode : OpcodeUtil.getInstructionList(instruction)) {
+        for (AbstractInsnNode abstractInsnNode : OpcodeUtil.getInstructionList(select)) {
             if (abstractInsnNode instanceof LabelNode) {
                 LabelNodeWrapper anObject = new LabelNodeWrapper(((LabelNode) abstractInsnNode));
                 if (abstractInsnNode.equals(select)) {
