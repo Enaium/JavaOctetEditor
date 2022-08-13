@@ -46,5 +46,8 @@
   "dialog.wantCloseWindow": "想要关闭吗",
   "instruction.edit": "编辑",
   "instruction.clone": "克隆",
-  "instructions.remove": "移除"
+  "instructions.remove": "移除",
+  "instructions.copyText": "复制文本",
+  "instructions.insertBefore": "前插入",
+  "instructions.insertAfter": "后插入"
 }

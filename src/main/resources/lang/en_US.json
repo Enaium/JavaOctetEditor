@@ -47,5 +47,8 @@
   "dialog.wantCloseWindow": "Do you want to close",
   "instruction.edit": "Edit",
   "instruction.clone": "Clone",
-  "instructions.remove": "Remove"
+  "instructions.remove": "Remove",
+  "instructions.copyText": "Copy Text",
+  "instructions.insertBefore": "Insert Before",
+  "instructions.insertAfter": "Insert After"
 }

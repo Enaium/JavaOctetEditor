@@ -35,9 +35,13 @@ public class MessageUtil {
     public static void confirm(Object message, String title, Runnable yes, Runnable no) {
         int i = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.OK_CANCEL_OPTION);
         if (i == JOptionPane.YES_OPTION) {
-            yes.run();
+            if (yes != null) {
+                yes.run();
+            }
         } else {
-            no.run();
+            if (no != null) {
+                no.run();
+            }
         }
     }
 
@@ -48,6 +52,11 @@ public class MessageUtil {
             confirmPanel.getCancel().run();
         });
     }
+
+    public static void confirm(Object message, String title, Runnable yes) {
+        confirm(message, title, yes, null);
+    }
+
 
     public static void info(String message) {
         JOptionPane.showMessageDialog(null, message, "INFO", JOptionPane.INFORMATION_MESSAGE);
