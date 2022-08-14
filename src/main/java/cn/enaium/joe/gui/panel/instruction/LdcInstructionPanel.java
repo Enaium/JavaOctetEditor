@@ -17,6 +17,7 @@
 package cn.enaium.joe.gui.panel.instruction;
 
 import cn.enaium.joe.gui.panel.confirm.HandleEditPanel;
+import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.wrapper.Wrapper;
 import org.objectweb.asm.Handle;
@@ -62,7 +63,7 @@ public class LdcInstructionPanel extends AbstractInstructionPanel {
 
         JTextField ldc = new JTextField();
         ldc.setText(instruction.cst.toString());
-        JLabel verLabel = new JLabel("Var:");
+        JLabel verLabel = new JLabel(LangUtil.i18n("instruction.var"));
         verLabel.setVisible(!(Objects.equals(jComboBox.getSelectedItem(), "Handle")));
         ldc.setVisible(!(Objects.equals(jComboBox.getSelectedItem(), "Handle")));
         addComponent(verLabel, ldc);
@@ -97,14 +98,14 @@ public class LdcInstructionPanel extends AbstractInstructionPanel {
         });
         Handle finalHandle = handle;
 
-        JLabel handleLabel = new JLabel("Handle");
+        JLabel handleLabel = new JLabel(LangUtil.i18n("instruction.handle"));
         handleLabel.setVisible(Objects.equals(jComboBox.getSelectedItem(), "Handle"));
-        JButton handleButton = new JButton("Edit") {{
+        JButton handleButton = new JButton(LangUtil.i18n("button.edit")) {{
             setVisible(Objects.equals(jComboBox.getSelectedItem(), "Handle"));
             addActionListener(e -> {
                 Wrapper<Handle> wrapper = new Wrapper<>(finalHandle);
                 HandleEditPanel message = new HandleEditPanel(wrapper);
-                MessageUtil.confirm(message, "Handle Edit", () -> {
+                MessageUtil.confirm(message, LangUtil.i18n("instruction.handle"), () -> {
                     message.getConfirm().run();
                     instruction.cst = wrapper.getWrapper();
                 }, () -> {

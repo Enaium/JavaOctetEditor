@@ -16,6 +16,7 @@
 
 package cn.enaium.joe.gui.panel.instruction;
 
+import cn.enaium.joe.util.LangUtil;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.MultiANewArrayInsnNode;
@@ -33,10 +34,10 @@ public class MultiANewArrayInstructionPanel extends AbstractInstructionPanel {
         super(instruction);
         JTextField description = new JTextField();
         description.setText(instruction.desc);
-        addComponent(new JLabel("Description"), description);
+        addComponent(new JLabel(LangUtil.i18n("instruction.description")), description);
         JSpinner dimension = new JSpinner();
         dimension.setValue(instruction.dims);
-        addComponent(new JLabel("Dimension"), dimension);
+        addComponent(new JLabel(LangUtil.i18n("instruction.dimension")), dimension);
         setConfirm(() -> {
             instruction.desc = description.getText();
             instruction.dims = Integer.parseInt(dimension.getValue().toString());

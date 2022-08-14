@@ -16,6 +16,7 @@
 
 package cn.enaium.joe.gui.panel.instruction;
 
+import cn.enaium.joe.util.LangUtil;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.TypeInsnNode;
@@ -32,7 +33,7 @@ public class TypeInstructionPanel extends AbstractInstructionPanel {
     public TypeInstructionPanel(TypeInsnNode instruction) {
         super(instruction);
         JTextField description = new JTextField(instruction.desc);
-        addComponent(new JLabel("Description:"), description);
+        addComponent(new JLabel(LangUtil.i18n("instruction.description")), description);
         setConfirm(() -> {
             instruction.setOpcode(getOpcode());
             instruction.desc = description.getText();

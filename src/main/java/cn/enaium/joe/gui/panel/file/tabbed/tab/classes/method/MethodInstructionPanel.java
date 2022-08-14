@@ -50,7 +50,7 @@ public class MethodInstructionPanel extends JPanel {
         }
 
         JPopupMenu jPopupMenu = new JPopupMenu();
-        jPopupMenu.add(new JMenuItem(LangUtil.i18n("instruction.edit")) {{
+        jPopupMenu.add(new JMenuItem(LangUtil.i18n("menu.instruction.edit")) {{
             addActionListener(e -> {
                 InstructionWrapper selectedValue = instructionJList.getSelectedValue();
                 if (selectedValue != null && !(selectedValue.getWrapper() instanceof LabelNode)) {
@@ -59,7 +59,7 @@ public class MethodInstructionPanel extends JPanel {
             });
         }});
 
-        jPopupMenu.add(new JMenuItem(LangUtil.i18n("instruction.clone")) {{
+        jPopupMenu.add(new JMenuItem(LangUtil.i18n("menu.instruction.clone")) {{
             addActionListener(e -> {
                 InstructionWrapper selectedValue = instructionJList.getSelectedValue();
                 if (instructionJList.getSelectedIndex() != -1 || selectedValue != null) {
@@ -76,7 +76,7 @@ public class MethodInstructionPanel extends JPanel {
             });
         }});
 
-        jPopupMenu.add(new JMenuItem(LangUtil.i18n("instructions.remove")) {{
+        jPopupMenu.add(new JMenuItem(LangUtil.i18n("menu.instructions.remove")) {{
             addActionListener(e -> {
                 InstructionWrapper selectedValue = instructionJList.getSelectedValue();
                 if (instructionJList.getSelectedIndex() != -1 || selectedValue != null) {
@@ -88,7 +88,7 @@ public class MethodInstructionPanel extends JPanel {
             });
         }});
 
-        jPopupMenu.add(new JMenuItem(LangUtil.i18n("instructions.copyText")) {{
+        jPopupMenu.add(new JMenuItem(LangUtil.i18n("menu.instructions.copyText")) {{
             addActionListener(e -> {
                 InstructionWrapper selectedValue = instructionJList.getSelectedValue();
                 if (instructionJList.getSelectedIndex() != -1 || selectedValue != null) {
@@ -97,25 +97,25 @@ public class MethodInstructionPanel extends JPanel {
             });
         }});
 
-        jPopupMenu.add(new JMenuItem(LangUtil.i18n("instructions.insertBefore")) {{
+        jPopupMenu.add(new JMenuItem(LangUtil.i18n("menu.instructions.insertBefore")) {{
             addActionListener(e -> {
                 insert(methodNode, instructionJList, true);
             });
         }});
 
-        jPopupMenu.add(new JMenuItem(LangUtil.i18n("instructions.insertAfter")) {{
+        jPopupMenu.add(new JMenuItem(LangUtil.i18n("menu.instructions.insertAfter")) {{
             addActionListener(e -> {
                 insert(methodNode, instructionJList, false);
             });
         }});
 
-        jPopupMenu.add(new JMenuItem(LangUtil.i18n("instructions.moveUp")) {{
+        jPopupMenu.add(new JMenuItem(LangUtil.i18n("menu.instructions.moveUp")) {{
             addActionListener(e -> {
                 moveInstruction(instructionJList, methodNode, true);
             });
         }});
 
-        jPopupMenu.add(new JMenuItem(LangUtil.i18n("instructions.moveDown")) {{
+        jPopupMenu.add(new JMenuItem(LangUtil.i18n("menu.instructions.moveDown")) {{
             addActionListener(e -> {
                 moveInstruction(instructionJList, methodNode, false);
             });

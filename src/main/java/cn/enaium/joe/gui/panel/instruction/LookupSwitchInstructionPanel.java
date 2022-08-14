@@ -18,6 +18,7 @@ package cn.enaium.joe.gui.panel.instruction;
 
 import cn.enaium.joe.gui.component.LabelNodeComboBox;
 import cn.enaium.joe.gui.panel.confirm.LookupSwitchEditPanel;
+import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.util.OpcodeUtil;
 import cn.enaium.joe.wrapper.LabelNodeWrapper;
@@ -38,10 +39,10 @@ public class LookupSwitchInstructionPanel extends AbstractInstructionPanel {
     public LookupSwitchInstructionPanel(LookupSwitchInsnNode instruction) {
         super(instruction);
         LabelNodeComboBox component = new LabelNodeComboBox(instruction, instruction.dflt);
-        addComponent(new JLabel("Default:"), component);
-        addComponent(new JLabel("Keys/Labels"), new JButton("Edit") {{
+        addComponent(new JLabel(LangUtil.i18n("instruction.default")), component);
+        addComponent(new JLabel(LangUtil.i18n("instruction.keyOrLabel")), new JButton(LangUtil.i18n("button.edit")) {{
             addActionListener(e -> {
-                MessageUtil.confirm(new LookupSwitchEditPanel(instruction.keys, instruction.labels), "Keys/Labels");
+                MessageUtil.confirm(new LookupSwitchEditPanel(instruction.keys, instruction.labels), LangUtil.i18n("instruction.keyOrLabel"));
             });
         }});
         setConfirm(() -> {

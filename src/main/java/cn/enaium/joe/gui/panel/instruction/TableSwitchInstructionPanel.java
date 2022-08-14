@@ -18,6 +18,7 @@ package cn.enaium.joe.gui.panel.instruction;
 
 import cn.enaium.joe.gui.component.LabelNodeComboBox;
 import cn.enaium.joe.gui.panel.confirm.LabelListEditPanel;
+import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.util.OpcodeUtil;
 import cn.enaium.joe.wrapper.LabelNodeWrapper;
@@ -38,13 +39,13 @@ public class TableSwitchInstructionPanel extends AbstractInstructionPanel {
         super(instruction);
         JSpinner min = new JSpinner();
         min.setValue(instruction.min);
-        addComponent(new JLabel("Min:"), min);
+        addComponent(new JLabel(LangUtil.i18n("instruction.min")), min);
         JSpinner max = new JSpinner();
         max.setValue(instruction.max);
-        addComponent(new JLabel("Max:"), max);
+        addComponent(new JLabel(LangUtil.i18n("instruction.max")), max);
         LabelNodeComboBox component = new LabelNodeComboBox(instruction, instruction.dflt);
-        addComponent(new JLabel("Default:"), component);
-        addComponent(new JLabel("Labels:"), new JButton("Edit") {{
+        addComponent(new JLabel(LangUtil.i18n("instruction.default")), component);
+        addComponent(new JLabel(LangUtil.i18n("instruction.labels")), new JButton(LangUtil.i18n("button.edit")) {{
             addActionListener(e -> {
                 MessageUtil.confirm(new LabelListEditPanel(instruction.labels, OpcodeUtil.getInstructionList(instruction)), "Labels Edit");
             });

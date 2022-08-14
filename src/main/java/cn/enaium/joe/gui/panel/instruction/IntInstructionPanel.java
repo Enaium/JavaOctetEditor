@@ -16,6 +16,7 @@
 
 package cn.enaium.joe.gui.panel.instruction;
 
+import cn.enaium.joe.util.LangUtil;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
@@ -34,7 +35,7 @@ public class IntInstructionPanel extends AbstractInstructionPanel {
         super(instruction);
         JSpinner operand = new JSpinner();
         operand.setValue(instruction.operand);
-        addComponent(new JLabel("Operand:"), operand);
+        addComponent(new JLabel(LangUtil.i18n("instruction.operand")), operand);
         setConfirm(() -> {
             instruction.setOpcode(getOpcode());
             instruction.operand = Integer.parseInt(operand.getValue().toString());
