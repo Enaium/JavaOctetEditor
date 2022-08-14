@@ -70,7 +70,7 @@ public class MethodInstructionPanel extends JPanel {
                         clone = selectedValue.getWrapper().clone(new HashMap<>());
                     }
 
-                    instructionDefaultListModel.add(instructionJList.getSelectedIndex(), new InstructionWrapper(clone));
+                    instructionDefaultListModel.add(instructionJList.getSelectedIndex() + 1, new InstructionWrapper(clone));
                     methodNode.instructions.insert(selectedValue.getWrapper(), clone);
                 }
             });
@@ -106,9 +106,12 @@ public class MethodInstructionPanel extends JPanel {
 
         jPopupMenu.add(new JMenuItem(LangUtil.i18n("instructions.insertAfter")) {{
             addActionListener(e -> {
+                if (instructionJList.getSelectedIndex() == -1 || instructionJList.getSelectedValue() == null) {
+                    return;
+                }
                 InstructionComboBox instructionComboBox = new InstructionComboBox();
                 MessageUtil.confirm(instructionComboBox, "select insert instruction", () -> {
-                    AbstractInsnNode abstractInsnNode = null;
+                    AbstractInsnNode abstractInsnNode;
                     int selectedIndex = instructionComboBox.getSelectedIndex();
                     switch (selectedIndex) {
                         case AbstractInsnNode.INSN:
@@ -166,6 +169,8 @@ public class MethodInstructionPanel extends JPanel {
                     InstructionEditPanel message = new InstructionEditPanel(abstractInsnNode);
                     MessageUtil.confirm(message, "Instruction Edit", () -> {
                         message.getConfirm().run();
+                        methodNode.instructions.insert(instructionJList.getSelectedValue().getWrapper(), abstractInsnNode);
+                        instructionDefaultListModel.add(instructionJList.getSelectedIndex() + 1, new InstructionWrapper(abstractInsnNode));
                     });
                 });
             });
