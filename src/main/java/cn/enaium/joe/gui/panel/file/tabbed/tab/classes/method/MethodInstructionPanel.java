@@ -99,80 +99,13 @@ public class MethodInstructionPanel extends JPanel {
 
         jPopupMenu.add(new JMenuItem(LangUtil.i18n("instructions.insertBefore")) {{
             addActionListener(e -> {
-
-
+                insert(methodNode, instructionJList, true);
             });
         }});
 
         jPopupMenu.add(new JMenuItem(LangUtil.i18n("instructions.insertAfter")) {{
             addActionListener(e -> {
-                if (instructionJList.getSelectedIndex() == -1 || instructionJList.getSelectedValue() == null) {
-                    return;
-                }
-                InstructionComboBox instructionComboBox = new InstructionComboBox();
-                MessageUtil.confirm(instructionComboBox, "select insert instruction", () -> {
-                    AbstractInsnNode abstractInsnNode;
-                    int selectedIndex = instructionComboBox.getSelectedIndex();
-                    switch (selectedIndex) {
-                        case AbstractInsnNode.INSN:
-                            abstractInsnNode = new InsnNode(Opcodes.NOP);
-                            break;
-                        case AbstractInsnNode.INT_INSN:
-                            abstractInsnNode = new IntInsnNode(Opcodes.BIPUSH, 0);
-                            break;
-                        case AbstractInsnNode.VAR_INSN:
-                            abstractInsnNode = new VarInsnNode(Opcodes.ILOAD, 0);
-                            break;
-                        case AbstractInsnNode.TYPE_INSN:
-                            abstractInsnNode = new TypeInsnNode(Opcodes.ILOAD, "");
-                            break;
-                        case AbstractInsnNode.FIELD_INSN:
-                            abstractInsnNode = new FieldInsnNode(Opcodes.GETSTATIC, "", "", "");
-                            break;
-                        case AbstractInsnNode.METHOD_INSN:
-                            abstractInsnNode = new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "", "", "", false);
-                            break;
-                        case AbstractInsnNode.INVOKE_DYNAMIC_INSN:
-                            abstractInsnNode = new InvokeDynamicInsnNode("", "", new Handle(Opcodes.H_GETFIELD, "", "", "", false));
-                            break;
-                        case AbstractInsnNode.JUMP_INSN:
-                            abstractInsnNode = new JumpInsnNode(Opcodes.IFEQ, OpcodeUtil.getFirstLabel(methodNode.instructions));
-                            break;
-                        case AbstractInsnNode.LABEL:
-                            abstractInsnNode = new LabelNode();
-                            break;
-                        case AbstractInsnNode.LDC_INSN:
-                            abstractInsnNode = new LdcInsnNode("");
-                            break;
-                        case AbstractInsnNode.IINC_INSN:
-                            abstractInsnNode = new IntInsnNode(Opcodes.IINC, 0);
-                            break;
-                        case AbstractInsnNode.TABLESWITCH_INSN:
-                            abstractInsnNode = new TableSwitchInsnNode(0, 0, OpcodeUtil.getFirstLabel(methodNode.instructions));
-                            break;
-                        case AbstractInsnNode.LOOKUPSWITCH_INSN:
-                            abstractInsnNode = new LookupSwitchInsnNode(OpcodeUtil.getFirstLabel(methodNode.instructions), new int[]{}, new LabelNode[]{});
-                            break;
-                        case AbstractInsnNode.MULTIANEWARRAY_INSN:
-                            abstractInsnNode = new MultiANewArrayInsnNode("", 0);
-                            break;
-                        case AbstractInsnNode.FRAME:
-                            abstractInsnNode = new FrameNode(Opcodes.F_NEW, 0, new Object[]{}, 0, new Object[]{});
-                            break;
-                        case AbstractInsnNode.LINE:
-                            abstractInsnNode = new LineNumberNode(0, OpcodeUtil.getFirstLabel(methodNode.instructions));
-                            break;
-                        default:
-                            throw new RuntimeException();
-                    }
-
-                    InstructionEditPanel message = new InstructionEditPanel(abstractInsnNode);
-                    MessageUtil.confirm(message, "Instruction Edit", () -> {
-                        message.getConfirm().run();
-                        methodNode.instructions.insert(instructionJList.getSelectedValue().getWrapper(), abstractInsnNode);
-                        instructionDefaultListModel.add(instructionJList.getSelectedIndex() + 1, new InstructionWrapper(abstractInsnNode));
-                    });
-                });
+                insert(methodNode, instructionJList, false);
             });
         }});
 
@@ -197,5 +130,80 @@ public class MethodInstructionPanel extends JPanel {
             }
         });
         add(comp, BorderLayout.SOUTH);
+    }
+
+    private static void insert(MethodNode methodNode, JList<InstructionWrapper> instructionJList, boolean before) {
+        if (instructionJList.getSelectedIndex() == -1 || instructionJList.getSelectedValue() == null) {
+            return;
+        }
+        DefaultListModel<InstructionWrapper> instructionDefaultListModel = ((DefaultListModel<InstructionWrapper>) instructionJList.getModel());
+        InstructionComboBox instructionComboBox = new InstructionComboBox();
+        MessageUtil.confirm(instructionComboBox, "select insert instruction", () -> {
+            AbstractInsnNode abstractInsnNode;
+            int selectedIndex = instructionComboBox.getSelectedIndex();
+            switch (selectedIndex) {
+                case AbstractInsnNode.INSN:
+                    abstractInsnNode = new InsnNode(Opcodes.NOP);
+                    break;
+                case AbstractInsnNode.INT_INSN:
+                    abstractInsnNode = new IntInsnNode(Opcodes.BIPUSH, 0);
+                    break;
+                case AbstractInsnNode.VAR_INSN:
+                    abstractInsnNode = new VarInsnNode(Opcodes.ILOAD, 0);
+                    break;
+                case AbstractInsnNode.TYPE_INSN:
+                    abstractInsnNode = new TypeInsnNode(Opcodes.ILOAD, "");
+                    break;
+                case AbstractInsnNode.FIELD_INSN:
+                    abstractInsnNode = new FieldInsnNode(Opcodes.GETSTATIC, "", "", "");
+                    break;
+                case AbstractInsnNode.METHOD_INSN:
+                    abstractInsnNode = new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "", "", "", false);
+                    break;
+                case AbstractInsnNode.INVOKE_DYNAMIC_INSN:
+                    abstractInsnNode = new InvokeDynamicInsnNode("", "", new Handle(Opcodes.H_GETFIELD, "", "", "", false));
+                    break;
+                case AbstractInsnNode.JUMP_INSN:
+                    abstractInsnNode = new JumpInsnNode(Opcodes.IFEQ, OpcodeUtil.getFirstLabel(methodNode.instructions));
+                    break;
+                case AbstractInsnNode.LABEL:
+                    abstractInsnNode = new LabelNode();
+                    break;
+                case AbstractInsnNode.LDC_INSN:
+                    abstractInsnNode = new LdcInsnNode("");
+                    break;
+                case AbstractInsnNode.IINC_INSN:
+                    abstractInsnNode = new IntInsnNode(Opcodes.IINC, 0);
+                    break;
+                case AbstractInsnNode.TABLESWITCH_INSN:
+                    abstractInsnNode = new TableSwitchInsnNode(0, 0, OpcodeUtil.getFirstLabel(methodNode.instructions));
+                    break;
+                case AbstractInsnNode.LOOKUPSWITCH_INSN:
+                    abstractInsnNode = new LookupSwitchInsnNode(OpcodeUtil.getFirstLabel(methodNode.instructions), new int[]{}, new LabelNode[]{});
+                    break;
+                case AbstractInsnNode.MULTIANEWARRAY_INSN:
+                    abstractInsnNode = new MultiANewArrayInsnNode("", 0);
+                    break;
+                case AbstractInsnNode.FRAME:
+                    abstractInsnNode = new FrameNode(Opcodes.F_NEW, 0, new Object[]{}, 0, new Object[]{});
+                    break;
+                case AbstractInsnNode.LINE:
+                    abstractInsnNode = new LineNumberNode(0, OpcodeUtil.getFirstLabel(methodNode.instructions));
+                    break;
+                default:
+                    throw new RuntimeException();
+            }
+
+            InstructionEditPanel message = new InstructionEditPanel(abstractInsnNode);
+            MessageUtil.confirm(message, "Instruction Edit", () -> {
+                message.getConfirm().run();
+                if (before) {
+                    methodNode.instructions.insertBefore(instructionJList.getSelectedValue().getWrapper(), abstractInsnNode);
+                } else {
+                    methodNode.instructions.insert(instructionJList.getSelectedValue().getWrapper(), abstractInsnNode);
+                }
+                instructionDefaultListModel.add(instructionJList.getSelectedIndex() + (before ? 0 : 1), new InstructionWrapper(abstractInsnNode));
+            });
+        });
     }
 }
