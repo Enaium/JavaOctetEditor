@@ -109,6 +109,18 @@ public class MethodInstructionPanel extends JPanel {
             });
         }});
 
+        jPopupMenu.add(new JMenuItem(LangUtil.i18n("instructions.moveUp")) {{
+            addActionListener(e -> {
+                moveInstruction(instructionJList, methodNode, true);
+            });
+        }});
+
+        jPopupMenu.add(new JMenuItem(LangUtil.i18n("instructions.moveDown")) {{
+            addActionListener(e -> {
+                moveInstruction(instructionJList, methodNode, false);
+            });
+        }});
+
         instructionJList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -130,6 +142,29 @@ public class MethodInstructionPanel extends JPanel {
             }
         });
         add(comp, BorderLayout.SOUTH);
+    }
+
+    private static void moveInstruction(JList<InstructionWrapper> instructionJList, MethodNode methodNode, boolean up) {
+        DefaultListModel<InstructionWrapper> instructionDefaultListModel = ((DefaultListModel<InstructionWrapper>) instructionJList.getModel());
+        InstructionWrapper selectedValue = instructionJList.getSelectedValue();
+        if (instructionJList.getSelectedIndex() != -1 || selectedValue != null) {
+            AbstractInsnNode node = up ? selectedValue.getWrapper().getPrevious() : selectedValue.getWrapper().getNext();
+            if (node != null) {
+                try {
+                    InstructionWrapper instructionWrapper = instructionDefaultListModel.get(instructionJList.getSelectedIndex() + (up ? -1 : 1));
+                    instructionDefaultListModel.removeElement(instructionWrapper);
+                    instructionDefaultListModel.add(instructionJList.getSelectedIndex() + (up ? 1 : 0), instructionWrapper);
+                } catch (Exception ignore) {
+
+                }
+                methodNode.instructions.remove(node);
+                if (up) {
+                    methodNode.instructions.insert(selectedValue.getWrapper(), node);
+                } else {
+                    methodNode.instructions.insertBefore(selectedValue.getWrapper(), node);
+                }
+            }
+        }
     }
 
     private static void insert(MethodNode methodNode, JList<InstructionWrapper> instructionJList, boolean before) {

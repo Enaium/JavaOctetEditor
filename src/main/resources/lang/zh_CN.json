@@ -49,5 +49,7 @@
   "instructions.remove": "移除",
   "instructions.copyText": "复制文本",
   "instructions.insertBefore": "前插入",
-  "instructions.insertAfter": "后插入"
+  "instructions.insertAfter": "后插入",
+  "instructions.moveUp": "上移",
+  "instructions.moveDown": "下移"
 }

@@ -50,5 +50,7 @@
   "instructions.remove": "Remove",
   "instructions.copyText": "Copy Text",
   "instructions.insertBefore": "Insert Before",
-  "instructions.insertAfter": "Insert After"
+  "instructions.insertAfter": "Insert After",
+  "instructions.moveUp": "Move Up",
+  "instructions.moveDown": "Move Down"
 }
