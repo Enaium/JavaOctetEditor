@@ -129,7 +129,7 @@ public class ClassInfoTabPanel extends ClassNodeTabPanel {
                     classNode.outerClass = null;
                 }
 
-                JOptionPane.showMessageDialog(ClassInfoTabPanel.this, "Save success");
+                JOptionPane.showMessageDialog(ClassInfoTabPanel.this,  LangUtil.i18n("success"));
             });
         }}, BorderLayout.SOUTH);
     }

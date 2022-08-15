@@ -19,6 +19,7 @@ package cn.enaium.joe.gui.panel.file.tabbed.tab.classes;
 import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.gui.panel.CodeAreaPanel;
 import cn.enaium.joe.util.ASyncUtil;
+import cn.enaium.joe.util.LangUtil;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
@@ -80,7 +81,7 @@ public class ASMifierTablePanel extends ClassNodeTabPanel {
                                 ClassNode newClassNode = new ClassNode();
                                 new ClassReader(dumps).accept(newClassNode, ClassReader.EXPAND_FRAMES);
                                 JavaOctetEditor.getInstance().jar.classes.put(newClassNode.name + ".class", newClassNode);
-                                JOptionPane.showMessageDialog(null, "Save Success");
+                                JOptionPane.showMessageDialog(null,  LangUtil.i18n("success"));
                             } catch (Throwable ex) {
                                 throw new RuntimeException(ex);
                             }

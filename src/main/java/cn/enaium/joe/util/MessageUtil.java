@@ -29,7 +29,7 @@ public class MessageUtil {
 
     public static void error(Throwable e) {
         Logger.error(e);
-        JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, e.getMessage(),  LangUtil.i18n("error"), JOptionPane.ERROR_MESSAGE);
     }
 
     public static void confirm(Object message, String title, Runnable yes, Runnable no) {
@@ -59,10 +59,10 @@ public class MessageUtil {
 
 
     public static void info(String message) {
-        JOptionPane.showMessageDialog(null, message, "INFO", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, message,  LangUtil.i18n("info"), JOptionPane.INFORMATION_MESSAGE);
     }
 
     public static void warning(String message) {
-        JOptionPane.showMessageDialog(null, message, "WARNING", JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(null, message,  LangUtil.i18n("warning"), JOptionPane.WARNING_MESSAGE);
     }
 }

@@ -16,6 +16,7 @@
 
 package cn.enaium.joe.gui.panel.confirm;
 
+import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.util.OpcodeUtil;
 import cn.enaium.joe.util.StringUtil;
@@ -106,7 +107,7 @@ public class FrameListEditPanel extends ConfirmPanel {
                         });
                     });
                 }});
-                add(new JButton("Remove") {{
+                add(new JButton(LangUtil.i18n("button.remove")) {{
                     addActionListener(e -> {
                         if (jList.getSelectedIndex() != -1) {
                             stringDefaultListModel.remove(jList.getSelectedIndex());

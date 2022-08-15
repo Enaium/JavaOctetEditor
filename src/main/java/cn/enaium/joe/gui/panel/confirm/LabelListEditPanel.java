@@ -16,6 +16,7 @@
 
 package cn.enaium.joe.gui.panel.confirm;
 
+import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.wrapper.LabelNodeWrapper;
 import cn.enaium.joe.wrapper.Wrapper;
@@ -41,7 +42,7 @@ public class LabelListEditPanel extends ConfirmPanel {
         }
         add(new JScrollPane(labelNodeWrapperJList), BorderLayout.CENTER);
         add(new JPanel() {{
-            add(new JButton("Add") {{
+            add(new JButton(LangUtil.i18n("button.add")) {{
                 addActionListener(e -> {
                     DefaultComboBoxModel<LabelNodeWrapper> labelNodeWrapperDefaultComboBoxModel = new DefaultComboBoxModel<>();
                     JComboBox<LabelNodeWrapper> labelNodeWrapperJComboBox = new JComboBox<>(labelNodeWrapperDefaultComboBoxModel);
@@ -58,7 +59,7 @@ public class LabelListEditPanel extends ConfirmPanel {
                     });
                 });
             }});
-            add(new JButton("Remove") {{
+            add(new JButton(LangUtil.i18n("button.remove")) {{
                 addActionListener(e -> {
                     if (labelNodeWrapperJList.getSelectedIndex() != -1) {
                         labelNodeWrapperDefaultListModel.remove(labelNodeWrapperJList.getSelectedIndex());

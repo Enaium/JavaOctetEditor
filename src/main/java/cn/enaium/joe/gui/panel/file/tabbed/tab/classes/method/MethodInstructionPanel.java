@@ -50,16 +50,16 @@ public class MethodInstructionPanel extends JPanel {
         }
 
         JPopupMenu jPopupMenu = new JPopupMenu();
-        jPopupMenu.add(new JMenuItem(LangUtil.i18n("menu.instruction.edit")) {{
+        jPopupMenu.add(new JMenuItem(LangUtil.i18n("popup.instruction.edit")) {{
             addActionListener(e -> {
                 InstructionWrapper selectedValue = instructionJList.getSelectedValue();
                 if (selectedValue != null && !(selectedValue.getWrapper() instanceof LabelNode)) {
-                    MessageUtil.confirm(new InstructionEditPanel(selectedValue.getWrapper()), "Instruction Edit");
+                    MessageUtil.confirm(new InstructionEditPanel(selectedValue.getWrapper()), LangUtil.i18n("popup.instruction.edit"));
                 }
             });
         }});
 
-        jPopupMenu.add(new JMenuItem(LangUtil.i18n("menu.instruction.clone")) {{
+        jPopupMenu.add(new JMenuItem(LangUtil.i18n("popup.instruction.clone")) {{
             addActionListener(e -> {
                 InstructionWrapper selectedValue = instructionJList.getSelectedValue();
                 if (instructionJList.getSelectedIndex() != -1 || selectedValue != null) {
@@ -76,11 +76,11 @@ public class MethodInstructionPanel extends JPanel {
             });
         }});
 
-        jPopupMenu.add(new JMenuItem(LangUtil.i18n("menu.instructions.remove")) {{
+        jPopupMenu.add(new JMenuItem(LangUtil.i18n("popup.instructions.remove")) {{
             addActionListener(e -> {
                 InstructionWrapper selectedValue = instructionJList.getSelectedValue();
                 if (instructionJList.getSelectedIndex() != -1 || selectedValue != null) {
-                    MessageUtil.confirm("do you really want to remove?", "Delete", () -> {
+                    MessageUtil.confirm(LangUtil.i18n("dialog.wantRemove"), LangUtil.i18n("button.remove"), () -> {
                         instructionDefaultListModel.remove(instructionJList.getSelectedIndex());
                         methodNode.instructions.remove(selectedValue.getWrapper());
                     });
@@ -88,7 +88,7 @@ public class MethodInstructionPanel extends JPanel {
             });
         }});
 
-        jPopupMenu.add(new JMenuItem(LangUtil.i18n("menu.instructions.copyText")) {{
+        jPopupMenu.add(new JMenuItem(LangUtil.i18n("popup.instructions.copyText")) {{
             addActionListener(e -> {
                 InstructionWrapper selectedValue = instructionJList.getSelectedValue();
                 if (instructionJList.getSelectedIndex() != -1 || selectedValue != null) {
@@ -97,25 +97,25 @@ public class MethodInstructionPanel extends JPanel {
             });
         }});
 
-        jPopupMenu.add(new JMenuItem(LangUtil.i18n("menu.instructions.insertBefore")) {{
+        jPopupMenu.add(new JMenuItem(LangUtil.i18n("popup.instructions.insertBefore")) {{
             addActionListener(e -> {
                 insert(methodNode, instructionJList, true);
             });
         }});
 
-        jPopupMenu.add(new JMenuItem(LangUtil.i18n("menu.instructions.insertAfter")) {{
+        jPopupMenu.add(new JMenuItem(LangUtil.i18n("popup.instructions.insertAfter")) {{
             addActionListener(e -> {
                 insert(methodNode, instructionJList, false);
             });
         }});
 
-        jPopupMenu.add(new JMenuItem(LangUtil.i18n("menu.instructions.moveUp")) {{
+        jPopupMenu.add(new JMenuItem(LangUtil.i18n("popup.instructions.moveUp")) {{
             addActionListener(e -> {
                 moveInstruction(instructionJList, methodNode, true);
             });
         }});
 
-        jPopupMenu.add(new JMenuItem(LangUtil.i18n("menu.instructions.moveDown")) {{
+        jPopupMenu.add(new JMenuItem(LangUtil.i18n("popup.instructions.moveDown")) {{
             addActionListener(e -> {
                 moveInstruction(instructionJList, methodNode, false);
             });
@@ -230,7 +230,7 @@ public class MethodInstructionPanel extends JPanel {
             }
 
             InstructionEditPanel message = new InstructionEditPanel(abstractInsnNode);
-            MessageUtil.confirm(message, "Instruction Edit", () -> {
+            MessageUtil.confirm(message, LangUtil.i18n("popup.instruction.edit"), () -> {
                 message.getConfirm().run();
                 if (before) {
                     methodNode.instructions.insertBefore(instructionJList.getSelectedValue().getWrapper(), abstractInsnNode);

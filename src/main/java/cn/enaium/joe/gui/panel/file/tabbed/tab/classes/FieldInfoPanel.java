@@ -70,7 +70,7 @@ public class FieldInfoPanel extends JPanel {
                     fieldNode.signature = null;
                 }
 
-                JOptionPane.showMessageDialog(FieldInfoPanel.this, "Save success");
+                JOptionPane.showMessageDialog(FieldInfoPanel.this,  LangUtil.i18n("success"));
             });
         }}, BorderLayout.SOUTH);
     }
