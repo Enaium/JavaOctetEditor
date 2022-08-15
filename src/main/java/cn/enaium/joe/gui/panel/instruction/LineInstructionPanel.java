@@ -17,6 +17,7 @@
 package cn.enaium.joe.gui.panel.instruction;
 
 import cn.enaium.joe.gui.component.LabelNodeComboBox;
+import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.OpcodeUtil;
 import cn.enaium.joe.wrapper.LabelNodeWrapper;
 import org.objectweb.asm.tree.*;
@@ -36,9 +37,9 @@ public class LineInstructionPanel extends AbstractInstructionPanel {
         super(instruction);
         JSpinner spinner = new JSpinner();
         spinner.setValue(instruction.line);
-        addComponent(new JLabel("Line:"), spinner);
+        addComponent(new JLabel(LangUtil.i18n("instruction.line")), spinner);
         LabelNodeComboBox component = new LabelNodeComboBox(instruction, instruction.start);
-        addComponent(new JLabel("Start:"), component);
+        addComponent(new JLabel(LangUtil.i18n("instruction.start")), component);
 
         setConfirm(() -> {
             Object selectedItem = component.getSelectedItem();

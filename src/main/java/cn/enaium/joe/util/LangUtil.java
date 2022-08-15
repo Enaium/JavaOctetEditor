@@ -41,30 +41,27 @@ public class LangUtil {
             lang = language.getValue();
         }
         try {
+
+            String en = IOUtil.getString(LangUtil.class.getResourceAsStream("/lang/en_US.json"));
+
             URL url = LangUtil.class.getResource("/lang/" + lang + ".json");
-            if (url == null) {
-                url = LangUtil.class.getResource("/lang/en_US.json");
-            }
 
             if (url == null) {
-                RuntimeException runtimeException = new RuntimeException("Lang not Found!");
+                RuntimeException runtimeException = new RuntimeException(String.format("lang ' %s ' not Found!", lang));
                 MessageUtil.error(runtimeException);
                 throw runtimeException;
             }
-            InputStream inputStream = url.openStream();
-            StringBuilder stringBuilder = new StringBuilder();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                stringBuilder.append(line).append("\n");
-            }
-            String text = stringBuilder.toString();
-            inputStream.close();
-            JsonObject jsonObject = new Gson().fromJson(text, JsonObject.class);
+
+            JsonObject jsonObject = new Gson().fromJson(IOUtil.getString(url.openStream()), JsonObject.class);
             try {
                 return String.format(jsonObject.get(key).getAsString(), args);
             } catch (NullPointerException e) {
-                MessageUtil.error(new NullPointerException(String.format("Lang not found \" %s \"", key)));
+                Logger.warn(String.format("Lang not found \" %s \" ", key));
+                try {
+                    return String.format(new Gson().fromJson(en, JsonObject.class).get(key).getAsString(), args);
+                } catch (NullPointerException ex) {
+                    MessageUtil.error(new NullPointerException(String.format("not found key ' %s ' in en_us", key)));
+                }
             }
         } catch (IOException e) {
             MessageUtil.error(e);

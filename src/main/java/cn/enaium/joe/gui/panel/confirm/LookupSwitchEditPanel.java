@@ -17,6 +17,7 @@
 package cn.enaium.joe.gui.panel.confirm;
 
 import cn.enaium.joe.gui.component.LabelNodeComboBox;
+import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.wrapper.LabelNodeWrapper;
 import org.objectweb.asm.tree.LabelNode;
@@ -46,7 +47,7 @@ public class LookupSwitchEditPanel extends ConfirmPanel {
         }
         add(new JScrollPane(jTable), BorderLayout.CENTER);
         add(new JPanel() {{
-            add(new JButton("Add") {{
+            add(new JButton(LangUtil.i18n("button.add")) {{
                 addActionListener(e -> {
                     MessageUtil.confirm(new ConfirmPanel() {{
                         JSpinner key = new JSpinner();
@@ -62,7 +63,7 @@ public class LookupSwitchEditPanel extends ConfirmPanel {
                     }}, "Add");
                 });
             }});
-            add(new JButton("Remove") {{
+            add(new JButton(LangUtil.i18n("button.remove")) {{
                 addActionListener(e -> {
                     if (jTable.getSelectedRow() != -1) {
                         dm.removeRow(jTable.getSelectedRow());

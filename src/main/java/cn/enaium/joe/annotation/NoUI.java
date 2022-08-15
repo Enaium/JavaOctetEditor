@@ -14,26 +14,18 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.util;
+package cn.enaium.joe.annotation;
 
-import java.awt.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author Enaium
- * @since 0.5.0
+ * @since 0.9.0
  */
-public class HtmlUtil {
-    public static String toHtml(String text) {
-        return String.format("<html>%s</html>", text);
-    }
-
-    public static String setColor(String text, Color color) {
-        return String.format("<font color=rgb(%d,%d,%d)>%s</font>", color.getRed(), color.getGreen(), color.getBlue(), text);
-    }
-
-    public static String remove(String text) {
-        return text.replaceAll("<[^>]+>","");
-    }
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+public @interface NoUI {
 }

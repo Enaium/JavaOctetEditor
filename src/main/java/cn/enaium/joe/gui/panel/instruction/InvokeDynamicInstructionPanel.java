@@ -18,6 +18,7 @@ package cn.enaium.joe.gui.panel.instruction;
 
 import cn.enaium.joe.gui.panel.confirm.BootstrapMethodArgumentEditPanel;
 import cn.enaium.joe.gui.panel.confirm.HandleEditPanel;
+import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.wrapper.Wrapper;
 import org.objectweb.asm.Handle;
@@ -36,9 +37,9 @@ public class InvokeDynamicInstructionPanel extends AbstractInstructionPanel {
         super(instruction);
         JTextField name = new JTextField(instruction.name);
         JTextField description = new JTextField(instruction.desc);
-        addComponent(new JLabel("Name:"), name);
-        addComponent(new JLabel("Description:"), description);
-        addComponent(new JLabel("Bootstrap Method:"), new JButton("Edit") {{
+        addComponent(new JLabel(LangUtil.i18n("instruction.name")), name);
+        addComponent(new JLabel(LangUtil.i18n("instruction.description")), description);
+        addComponent(new JLabel(LangUtil.i18n("instruction.bootstrapMethod")), new JButton(LangUtil.i18n("button.edit")) {{
             addActionListener(e -> {
                 Wrapper<Handle> wrapper = new Wrapper<>(instruction.bsm);
                 HandleEditPanel handleEditPanel = new HandleEditPanel(wrapper);
@@ -50,11 +51,11 @@ public class InvokeDynamicInstructionPanel extends AbstractInstructionPanel {
                 });
             });
         }});
-        addComponent(new JLabel("Bootstrap Method Argument:"), new JButton("Edit") {{
+        addComponent(new JLabel(LangUtil.i18n("instruction.bootstrapMethodArgument")), new JButton(LangUtil.i18n("button.edit")) {{
             addActionListener(e -> {
                 Wrapper<Object[]> bsmArgs = new Wrapper<>(instruction.bsmArgs);
                 BootstrapMethodArgumentEditPanel confirmPanel = new BootstrapMethodArgumentEditPanel(bsmArgs);
-                MessageUtil.confirm(confirmPanel, "Bootstrap method argument", () -> {
+                MessageUtil.confirm(confirmPanel, LangUtil.i18n("instruction.bootstrapMethodArgument"), () -> {
                     confirmPanel.getConfirm().run();
                     instruction.bsmArgs = bsmArgs.getWrapper();
                 }, () -> {

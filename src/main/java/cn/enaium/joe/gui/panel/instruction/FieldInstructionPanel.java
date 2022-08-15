@@ -16,6 +16,7 @@
 
 package cn.enaium.joe.gui.panel.instruction;
 
+import cn.enaium.joe.util.LangUtil;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.TypeInsnNode;
@@ -34,9 +35,9 @@ public class FieldInstructionPanel extends AbstractInstructionPanel {
         JTextField owner = new JTextField(instruction.owner);
         JTextField name = new JTextField(instruction.name);
         JTextField description = new JTextField(instruction.desc);
-        addComponent(new JLabel("Owner:"), owner);
-        addComponent(new JLabel("Name:"), name);
-        addComponent(new JLabel("Description:"), description);
+        addComponent(new JLabel(LangUtil.i18n("instruction.owner")), owner);
+        addComponent(new JLabel(LangUtil.i18n("instruction.name")), name);
+        addComponent(new JLabel(LangUtil.i18n("instruction.description")), description);
         setConfirm(() -> {
             instruction.setOpcode(getOpcode());
             instruction.owner = owner.getText();

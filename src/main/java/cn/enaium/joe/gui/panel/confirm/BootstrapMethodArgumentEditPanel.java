@@ -16,6 +16,7 @@
 
 package cn.enaium.joe.gui.panel.confirm;
 
+import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.wrapper.Wrapper;
 import org.objectweb.asm.Handle;
@@ -40,7 +41,7 @@ public class BootstrapMethodArgumentEditPanel extends ConfirmPanel {
         }
         add(new JScrollPane(objectJList), BorderLayout.CENTER);
         add(new JPanel() {{
-            add(new JButton("Add") {{
+            add(new JButton(LangUtil.i18n("button.add")) {{
                 addActionListener(e -> {
                     MessageUtil.confirm(new ConfirmPanel() {{
                         setLayout(new BorderLayout());
@@ -49,9 +50,9 @@ public class BootstrapMethodArgumentEditPanel extends ConfirmPanel {
                         add(left, BorderLayout.WEST);
                         add(right, BorderLayout.CENTER);
                         JComboBox<String> jComboBox = new JComboBox<>(new String[]{"String", "float", "double", "int", "long", "Class"});
-                        left.add(new JLabel("Type:"));
+                        left.add(new JLabel(LangUtil.i18n("instruction.type")));
                         right.add(jComboBox);
-                        left.add(new JLabel("Var:"));
+                        left.add(new JLabel(LangUtil.i18n("instruction.var")));
                         JTextField ldc = new JTextField();
                         right.add(ldc);
                         setConfirm(() -> {
@@ -79,7 +80,7 @@ public class BootstrapMethodArgumentEditPanel extends ConfirmPanel {
                                 objectDefaultListModel.addElement(value);
                             }
                         });
-                    }}, "Add");
+                    }}, LangUtil.i18n("button.add"));
                 });
             }});
             add(new JButton("Add Handle") {{
@@ -93,7 +94,7 @@ public class BootstrapMethodArgumentEditPanel extends ConfirmPanel {
                     });
                 });
             }});
-            add(new JButton("Remove") {{
+            add(new JButton(LangUtil.i18n("button.remove")) {{
                 addActionListener(e -> {
                     if (objectJList.getSelectedIndex() != -1) {
                         objectDefaultListModel.remove(objectJList.getSelectedIndex());

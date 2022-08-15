@@ -49,21 +49,25 @@ public class JavaOctetEditor {
 
     public Jar jar;
 
-    public FileTabbedPanel fileTabbedPanel = new FileTabbedPanel();
+    public FileTabbedPanel fileTabbedPanel;
 
-    public FileTreePanel fileTreePanel = new FileTreePanel();
+    public FileTreePanel fileTreePanel;
 
-    public BottomPanel bottomPanel = new BottomPanel();
+    public BottomPanel bottomPanel;
 
-    public ConfigManager configManager = new ConfigManager();
+    public ConfigManager configManager;
 
     public JavaOctetEditor() {
         instance = this;
+        configManager = new ConfigManager();
+        configManager.load();
+        Runtime.getRuntime().addShutdownHook(new Thread(configManager::save));
+        fileTabbedPanel = new FileTabbedPanel();
+        fileTreePanel = new FileTreePanel();
+        bottomPanel = new BottomPanel();
     }
 
     public void run() {
-        configManager.load();
-        Runtime.getRuntime().addShutdownHook(new Thread(configManager::save));
 
         ToolTipManager.sharedInstance().setInitialDelay(0);
 
@@ -91,7 +95,7 @@ public class JavaOctetEditor {
         window.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                MessageUtil.confirm(LangUtil.i18n("dialog.wantCloseWindow"), "WARNING", () -> {
+                MessageUtil.confirm(LangUtil.i18n("dialog.wantCloseWindow"), LangUtil.i18n("warning"), () -> {
                     window.dispose();
                     System.exit(0);
                 }, () -> {

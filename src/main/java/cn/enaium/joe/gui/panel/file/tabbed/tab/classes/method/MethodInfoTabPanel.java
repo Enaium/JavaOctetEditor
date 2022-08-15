@@ -81,7 +81,7 @@ public class MethodInfoTabPanel extends JPanel {
                     methodNode.exceptions = new ArrayList<>();
                 }
 
-                JOptionPane.showMessageDialog(MethodInfoTabPanel.this, "Save success");
+                JOptionPane.showMessageDialog(MethodInfoTabPanel.this, LangUtil.i18n("success"));
             });
         }}, BorderLayout.SOUTH);
     }

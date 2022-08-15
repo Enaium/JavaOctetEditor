@@ -27,6 +27,7 @@ import cn.enaium.joe.gui.panel.file.tree.node.*;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.util.ASyncUtil;
 import cn.enaium.joe.util.JTreeUtil;
+import cn.enaium.joe.util.LangUtil;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -101,7 +102,7 @@ public class FileTreePanel extends JTree {
         JPopupMenu jPopupMenu = new JPopupMenu();
 
 
-        jPopupMenu.add(new JMenuItem("Expand all") {{
+        jPopupMenu.add(new JMenuItem(LangUtil.i18n("popup.expandAll")) {{
             addActionListener(e -> {
                 JTreeUtil.setNodeExpandedState(FileTreePanel.this, ((DefaultMutableTreeNode) Objects.requireNonNull(getSelectionPath()).getLastPathComponent()), true);
             });

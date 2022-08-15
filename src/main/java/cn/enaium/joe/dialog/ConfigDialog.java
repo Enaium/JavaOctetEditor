@@ -17,6 +17,7 @@
 package cn.enaium.joe.dialog;
 
 import cn.enaium.joe.JavaOctetEditor;
+import cn.enaium.joe.annotation.NoUI;
 import cn.enaium.joe.config.Config;
 import cn.enaium.joe.config.value.*;
 import cn.enaium.joe.util.LangUtil;
@@ -44,6 +45,12 @@ public class ConfigDialog extends Dialog {
         try {
             for (Field declaredField : config.getClass().getDeclaredFields()) {
                 declaredField.setAccessible(true);
+
+
+                if (declaredField.isAnnotationPresent(NoUI.class)) {
+                    continue;
+                }
+
                 Object o = declaredField.get(config);
 
                 if (o instanceof Value) {

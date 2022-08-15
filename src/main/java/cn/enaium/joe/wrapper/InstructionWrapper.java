@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.file.tabbed.tab.classes.method;
+package cn.enaium.joe.wrapper;
 
 import cn.enaium.joe.util.HtmlUtil;
 import cn.enaium.joe.util.OpcodeUtil;
@@ -28,21 +28,11 @@ import java.util.Arrays;
  * @author Enaium
  * @since 0.8.0
  */
-public class MethodInstruction {
-    private final int index;
-    private final AbstractInsnNode instruction;
+public class InstructionWrapper extends Wrapper<AbstractInsnNode> {
 
-    public MethodInstruction(int index, AbstractInsnNode instruction) {
-        this.index = index;
-        this.instruction = instruction;
-    }
 
-    public int getIndex() {
-        return index;
-    }
-
-    public AbstractInsnNode getInstruction() {
-        return instruction;
+    public InstructionWrapper(AbstractInsnNode wrapper) {
+        super(wrapper);
     }
 
     @Override
@@ -50,37 +40,37 @@ public class MethodInstruction {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<html>");
 
-        if (instruction.getOpcode() != -1) {
-            stringBuilder.append(HtmlUtil.setColor(OpcodeUtil.OPCODE.get(instruction.getOpcode()), FontColor.opcode));
+        if (getWrapper().getOpcode() != -1) {
+            stringBuilder.append(HtmlUtil.setColor(OpcodeUtil.OPCODE.get(getWrapper().getOpcode()), FontColor.opcode));
         }
 
-        switch (instruction.getType()) {
+        switch (getWrapper().getType()) {
             case AbstractInsnNode.INSN:
                 //Opcode
                 break;
             case AbstractInsnNode.INT_INSN:
-                IntInsnNode intInsnNode = (IntInsnNode) instruction;
+                IntInsnNode intInsnNode = (IntInsnNode) getWrapper();
                 append(stringBuilder, HtmlUtil.setColor(String.valueOf(intInsnNode.operand), FontColor.base));
                 break;
             case AbstractInsnNode.VAR_INSN:
-                append(stringBuilder, HtmlUtil.setColor(String.valueOf(((VarInsnNode) instruction).var), FontColor.base));
+                append(stringBuilder, HtmlUtil.setColor(String.valueOf(((VarInsnNode) getWrapper()).var), FontColor.base));
                 break;
             case AbstractInsnNode.TYPE_INSN:
-                append(stringBuilder, HtmlUtil.setColor(((TypeInsnNode) instruction).desc, FontColor.desc));
+                append(stringBuilder, HtmlUtil.setColor(((TypeInsnNode) getWrapper()).desc, FontColor.desc));
                 break;
             case AbstractInsnNode.FIELD_INSN:
-                FieldInsnNode fieldInsnNode = (FieldInsnNode) instruction;
+                FieldInsnNode fieldInsnNode = (FieldInsnNode) getWrapper();
                 append(stringBuilder, HtmlUtil.setColor(fieldInsnNode.name, FontColor.name));
                 append(stringBuilder, HtmlUtil.setColor(fieldInsnNode.desc, FontColor.desc));
                 break;
             case AbstractInsnNode.METHOD_INSN:
-                MethodInsnNode methodInsnNode = (MethodInsnNode) instruction;
+                MethodInsnNode methodInsnNode = (MethodInsnNode) getWrapper();
                 append(stringBuilder, HtmlUtil.setColor(methodInsnNode.name, FontColor.name));
                 append(stringBuilder, HtmlUtil.setColor(methodInsnNode.desc, FontColor.desc));
                 append(stringBuilder, HtmlUtil.setColor(String.valueOf(methodInsnNode.itf), FontColor.bool));
                 break;
             case AbstractInsnNode.INVOKE_DYNAMIC_INSN:
-                InvokeDynamicInsnNode invokeDynamicInsnNode = (InvokeDynamicInsnNode) instruction;
+                InvokeDynamicInsnNode invokeDynamicInsnNode = (InvokeDynamicInsnNode) getWrapper();
                 append(stringBuilder, HtmlUtil.setColor(invokeDynamicInsnNode.name, FontColor.name));
                 append(stringBuilder, HtmlUtil.setColor(invokeDynamicInsnNode.desc, FontColor.desc));
                 append(stringBuilder, "\n");
@@ -95,14 +85,14 @@ public class MethodInstruction {
                 append(stringBuilder, HtmlUtil.setColor(Arrays.toString(strings), FontColor.desc));
                 break;
             case AbstractInsnNode.JUMP_INSN:
-                append(stringBuilder, HtmlUtil.setColor("L" + OpcodeUtil.getLabelIndex(((JumpInsnNode) instruction).label), FontColor.base));
+                append(stringBuilder, HtmlUtil.setColor("L" + OpcodeUtil.getLabelIndex(((JumpInsnNode) getWrapper()).label), FontColor.base));
                 break;
             case AbstractInsnNode.LABEL:
                 append(stringBuilder, HtmlUtil.setColor("L", FontColor.opcode));
-                append(stringBuilder, HtmlUtil.setColor(String.valueOf(OpcodeUtil.getLabelIndex(instruction)), FontColor.base));
+                append(stringBuilder, HtmlUtil.setColor(String.valueOf(OpcodeUtil.getLabelIndex(getWrapper())), FontColor.base));
                 break;
             case AbstractInsnNode.LDC_INSN:
-                LdcInsnNode ldcInsnNode = (LdcInsnNode) instruction;
+                LdcInsnNode ldcInsnNode = (LdcInsnNode) getWrapper();
                 if (ldcInsnNode.cst instanceof String) {
                     append(stringBuilder, HtmlUtil.setColor("\"" + ldcInsnNode.cst + "\"", FontColor.string));
                 } else if (ldcInsnNode.cst instanceof Boolean) {
@@ -112,12 +102,12 @@ public class MethodInstruction {
                 }
                 break;
             case AbstractInsnNode.IINC_INSN:
-                IincInsnNode iincInsnNode = (IincInsnNode) instruction;
+                IincInsnNode iincInsnNode = (IincInsnNode) getWrapper();
                 append(stringBuilder, HtmlUtil.setColor(String.valueOf(iincInsnNode.var), FontColor.base));
                 append(stringBuilder, HtmlUtil.setColor(String.valueOf(iincInsnNode.incr), FontColor.base));
                 break;
             case AbstractInsnNode.TABLESWITCH_INSN:
-                TableSwitchInsnNode tableSwitchInsnNode = (TableSwitchInsnNode) instruction;
+                TableSwitchInsnNode tableSwitchInsnNode = (TableSwitchInsnNode) getWrapper();
                 append(stringBuilder, HtmlUtil.setColor(String.format("range[%s:%s]", tableSwitchInsnNode.min, tableSwitchInsnNode.max), FontColor.desc));
                 tableSwitchInsnNode.labels.stream().map(OpcodeUtil::getLabelIndex).forEach(it -> append(stringBuilder, HtmlUtil.setColor("L" + it, FontColor.base)));
                 if (tableSwitchInsnNode.dflt != null) {
@@ -125,7 +115,7 @@ public class MethodInstruction {
                 }
                 break;
             case AbstractInsnNode.LOOKUPSWITCH_INSN:
-                LookupSwitchInsnNode lookupSwitchInsnNode = (LookupSwitchInsnNode) instruction;
+                LookupSwitchInsnNode lookupSwitchInsnNode = (LookupSwitchInsnNode) getWrapper();
                 for (int i = 0; i < lookupSwitchInsnNode.keys.size(); i++) {
                     append(stringBuilder, HtmlUtil.setColor(String.valueOf(lookupSwitchInsnNode.keys.get(i)), FontColor.base) + ":" + HtmlUtil.setColor("L" + OpcodeUtil.getLabelIndex(lookupSwitchInsnNode.labels.get(i)), FontColor.base));
                 }
@@ -134,18 +124,18 @@ public class MethodInstruction {
                 }
                 break;
             case AbstractInsnNode.MULTIANEWARRAY_INSN:
-                MultiANewArrayInsnNode multiANewArrayInsnNode = (MultiANewArrayInsnNode) instruction;
+                MultiANewArrayInsnNode multiANewArrayInsnNode = (MultiANewArrayInsnNode) getWrapper();
                 append(stringBuilder, HtmlUtil.setColor(multiANewArrayInsnNode.desc, FontColor.desc));
                 append(stringBuilder, HtmlUtil.setColor(String.valueOf(multiANewArrayInsnNode.dims), FontColor.base));
                 break;
             case AbstractInsnNode.FRAME:
-                FrameNode frameNode = (FrameNode) instruction;
+                FrameNode frameNode = (FrameNode) getWrapper();
                 append(stringBuilder, HtmlUtil.setColor(OpcodeUtil.FRAME.get(frameNode.type), FontColor.opcode));
                 append(stringBuilder, HtmlUtil.setColor(String.valueOf(frameNode.local), FontColor.desc));
                 append(stringBuilder, HtmlUtil.setColor(String.valueOf(frameNode.stack), FontColor.desc));
                 break;
             case AbstractInsnNode.LINE:
-                LineNumberNode lineNumberNode = (LineNumberNode) instruction;
+                LineNumberNode lineNumberNode = (LineNumberNode) getWrapper();
                 append(stringBuilder, HtmlUtil.setColor("LINE", FontColor.opcode));
                 append(stringBuilder, HtmlUtil.setColor(String.valueOf(lineNumberNode.line), FontColor.base));
                 append(stringBuilder, HtmlUtil.setColor("L" + OpcodeUtil.getLabelIndex(lineNumberNode.start), FontColor.base));

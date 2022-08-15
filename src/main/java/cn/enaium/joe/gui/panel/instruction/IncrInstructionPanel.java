@@ -16,6 +16,7 @@
 
 package cn.enaium.joe.gui.panel.instruction;
 
+import cn.enaium.joe.util.LangUtil;
 import org.objectweb.asm.tree.IincInsnNode;
 import org.objectweb.asm.tree.InsnList;
 
@@ -33,10 +34,10 @@ public class IncrInstructionPanel extends AbstractInstructionPanel {
         super(instruction);
         JSpinner varIndex = new JSpinner();
         varIndex.setValue(instruction.var);
-        addComponent(new JLabel("Var Index:"), varIndex);
+        addComponent(new JLabel(LangUtil.i18n("instruction.varIndex")), varIndex);
         JSpinner incr = new JSpinner();
         incr.setValue(instruction.incr);
-        addComponent(new JLabel("Incr:"), incr);
+        addComponent(new JLabel(LangUtil.i18n("instruction.incr")), incr);
         setConfirm(() -> {
             instruction.var = Integer.parseInt(varIndex.getValue().toString());
             instruction.incr = Integer.parseInt(incr.getValue().toString());

@@ -16,6 +16,7 @@
 
 package cn.enaium.joe.gui.panel.instruction;
 
+import cn.enaium.joe.util.LangUtil;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.MethodInsnNode;
@@ -37,10 +38,10 @@ public class MethodInstructionPanel extends AbstractInstructionPanel {
         JCheckBox isInterface = new JCheckBox() {{
             setHorizontalAlignment(JCheckBox.RIGHT);
         }};
-        addComponent(new JLabel("Owner:"), owner);
-        addComponent(new JLabel("Name:"), name);
-        addComponent(new JLabel("Description:"), description);
-        addComponent(new JLabel("Interface:"), isInterface);
+        addComponent(new JLabel(LangUtil.i18n("instruction.owner")), owner);
+        addComponent(new JLabel(LangUtil.i18n("instruction.name")), name);
+        addComponent(new JLabel(LangUtil.i18n("instruction.description")), description);
+        addComponent(new JLabel(LangUtil.i18n("instruction.interface")), isInterface);
         setConfirm(() -> {
             instruction.setOpcode(getOpcode());
             instruction.owner = owner.getText();

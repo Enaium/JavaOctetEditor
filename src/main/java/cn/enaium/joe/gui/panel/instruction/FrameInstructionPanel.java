@@ -17,6 +17,7 @@
 package cn.enaium.joe.gui.panel.instruction;
 
 import cn.enaium.joe.gui.panel.confirm.FrameListEditPanel;
+import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.util.OpcodeUtil;
 import org.objectweb.asm.tree.FrameNode;
@@ -34,8 +35,8 @@ public class FrameInstructionPanel extends AbstractInstructionPanel {
         super(instruction);
         JComboBox<String> component = new JComboBox<>(OpcodeUtil.FRAME.values().toArray(new String[0]));
         component.setSelectedItem(OpcodeUtil.FRAME.get(instruction.type));
-        addComponent(new JLabel("Type:"), component);
-        addComponent(new JLabel("Local/Stack:"), new JButton("Edit") {{
+        addComponent(new JLabel(LangUtil.i18n("instruction.type")), component);
+        addComponent(new JLabel(LangUtil.i18n("instruction.localOrStack")), new JButton(LangUtil.i18n("button.edit")) {{
             addActionListener(e -> {
                 FrameListEditPanel frameListEditPanel = new FrameListEditPanel(instruction);
                 MessageUtil.confirm(frameListEditPanel, "Frame Edit", () -> {

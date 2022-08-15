@@ -16,6 +16,7 @@
 
 package cn.enaium.joe.gui.panel.instruction;
 
+import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.OpcodeUtil;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.InsnList;
@@ -45,7 +46,7 @@ public abstract class AbstractInstructionPanel extends JPanel {
             DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) opcode.getModel();
             getOpcodes().forEach(model::addElement);
             model.setSelectedItem(OpcodeUtil.OPCODE.get(instruction.getOpcode()));
-            addComponent(new JLabel("Opcode:"), opcode);
+            addComponent(new JLabel(LangUtil.i18n("instruction.opcode")), opcode);
         }
 
         add(names, BorderLayout.WEST);

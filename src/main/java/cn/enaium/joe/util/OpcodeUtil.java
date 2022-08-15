@@ -283,6 +283,15 @@ public class OpcodeUtil {
         return insnList;
     }
 
+    public static LabelNode getFirstLabel(InsnList instructions) {
+        for (AbstractInsnNode instruction : instructions) {
+            if (instruction instanceof LabelNode) {
+                return (LabelNode) instruction;
+            }
+        }
+        return null;
+    }
+
     public static <V, K> Map<V, K> reverse(Map<K, V> map) {
         Map<V, K> reverseMap = new HashMap<>();
         for (Map.Entry<K, V> kvEntry : map.entrySet()) {

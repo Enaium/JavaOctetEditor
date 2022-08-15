@@ -17,6 +17,7 @@
 package cn.enaium.joe.jar;
 
 import cn.enaium.joe.JavaOctetEditor;
+import cn.enaium.joe.config.extend.ApplicationConfig;
 import cn.enaium.joe.util.Util;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
@@ -39,6 +40,7 @@ public class Jar {
     public Map<String, byte[]> resources = new LinkedHashMap<>();
 
     public void load(File file) {
+        JavaOctetEditor.getInstance().configManager.getByClass(ApplicationConfig.class).loadRecent.getValue().add(file.getAbsolutePath());
         JavaOctetEditor.getInstance().jar = this;
         JavaOctetEditor.getInstance().window.setTitle(JavaOctetEditor.TITLE + "-" + file.getName());
         try {
