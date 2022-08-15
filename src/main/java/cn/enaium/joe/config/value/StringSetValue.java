@@ -14,26 +14,17 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.menu;
+package cn.enaium.joe.config.value;
 
-import cn.enaium.joe.gui.panel.menu.file.LoadMenuItem;
-import cn.enaium.joe.gui.panel.menu.file.LoadRecentMenu;
-import cn.enaium.joe.gui.panel.menu.file.SaveAllSourceMenuItem;
-import cn.enaium.joe.gui.panel.menu.file.SaveMenuItem;
-import cn.enaium.joe.util.LangUtil;
-
-import javax.swing.*;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author Enaium
+ * @since 0.9.0
  */
-public class FileMenu extends JMenu {
-    public FileMenu() {
-        super(LangUtil.i18n("menu.file"));
-        add(new LoadMenuItem());
-        add(new LoadRecentMenu());
-        add(new SaveMenuItem());
-        add(new JSeparator());
-        add(new SaveAllSourceMenuItem());
+public class StringSetValue extends Value<Set<String>>{
+    public StringSetValue(String name, Set<String> value, String description) {
+        super(name, value, description);
     }
 }

@@ -16,10 +16,14 @@
 
 package cn.enaium.joe.config.extend;
 
+import cn.enaium.joe.annotation.NoUI;
 import cn.enaium.joe.config.Config;
 import cn.enaium.joe.config.value.ModeValue;
+import cn.enaium.joe.config.value.StringSetValue;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 
 /**
  * @author Enaium
@@ -28,6 +32,8 @@ import java.util.Arrays;
 public class ApplicationConfig extends Config {
     public final ModeValue decompilerMode = new ModeValue("Decompiler", "CFR", "Java Decompiler", Arrays.asList("CFR", "Procyon", "JD-Core"));
     public final ModeValue language = new ModeValue("Language", "System", "UI language", Arrays.asList("System", "zh_CN", "en_US"));
+    @NoUI
+    public final StringSetValue loadRecent = new StringSetValue("Load Recent", new HashSet<>(), "");
 
     public ApplicationConfig() {
         super("Application");

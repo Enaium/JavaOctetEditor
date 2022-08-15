@@ -14,26 +14,18 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.menu;
+package cn.enaium.joe.annotation;
 
-import cn.enaium.joe.gui.panel.menu.file.LoadMenuItem;
-import cn.enaium.joe.gui.panel.menu.file.LoadRecentMenu;
-import cn.enaium.joe.gui.panel.menu.file.SaveAllSourceMenuItem;
-import cn.enaium.joe.gui.panel.menu.file.SaveMenuItem;
-import cn.enaium.joe.util.LangUtil;
-
-import javax.swing.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author Enaium
+ * @since 0.9.0
  */
-public class FileMenu extends JMenu {
-    public FileMenu() {
-        super(LangUtil.i18n("menu.file"));
-        add(new LoadMenuItem());
-        add(new LoadRecentMenu());
-        add(new SaveMenuItem());
-        add(new JSeparator());
-        add(new SaveAllSourceMenuItem());
-    }
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+public @interface NoUI {
 }
