@@ -22,7 +22,6 @@ import cn.enaium.joe.config.Config;
 import cn.enaium.joe.config.value.*;
 import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.MessageUtil;
-import org.tinylog.Logger;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -122,7 +121,7 @@ public class ConfigDialog extends Dialog {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                JavaOctetEditor.getInstance().configManager.save();
+                JavaOctetEditor.getInstance().config.save();
             }
         });
     }

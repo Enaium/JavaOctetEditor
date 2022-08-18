@@ -39,7 +39,7 @@ public class LoadRecentMenu extends JMenuItem {
             @Override
             public void mouseReleased(MouseEvent e) {
                 JPopupMenu jPopupMenu = new JPopupMenu();
-                Set<String> loadRecent = JavaOctetEditor.getInstance().configManager.getByClass(ApplicationConfig.class).loadRecent.getValue();
+                Set<String> loadRecent = JavaOctetEditor.getInstance().config.getByClass(ApplicationConfig.class).loadRecent.getValue();
                 for (String s : loadRecent) {
                     jPopupMenu.add(new JMenuItem(s) {{
                         addActionListener(e -> {

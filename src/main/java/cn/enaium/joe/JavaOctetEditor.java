@@ -17,7 +17,6 @@
 package cn.enaium.joe;
 
 import cn.enaium.joe.config.ConfigManager;
-import cn.enaium.joe.config.extend.CFRConfig;
 import cn.enaium.joe.gui.panel.BottomPanel;
 import cn.enaium.joe.gui.panel.LeftPanel;
 import cn.enaium.joe.gui.panel.file.tabbed.FileTabbedPanel;
@@ -55,13 +54,13 @@ public class JavaOctetEditor {
 
     public BottomPanel bottomPanel;
 
-    public ConfigManager configManager;
+    public ConfigManager config;
 
     public JavaOctetEditor() {
         instance = this;
-        configManager = new ConfigManager();
-        configManager.load();
-        Runtime.getRuntime().addShutdownHook(new Thread(configManager::save));
+        config = new ConfigManager();
+        config.load();
+        Runtime.getRuntime().addShutdownHook(new Thread(config::save));
         fileTabbedPanel = new FileTabbedPanel();
         fileTreePanel = new FileTreePanel();
         bottomPanel = new BottomPanel();

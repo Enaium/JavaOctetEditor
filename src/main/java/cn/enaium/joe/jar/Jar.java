@@ -40,7 +40,7 @@ public class Jar {
     public Map<String, byte[]> resources = new LinkedHashMap<>();
 
     public void load(File file) {
-        JavaOctetEditor.getInstance().configManager.getByClass(ApplicationConfig.class).loadRecent.getValue().add(file.getAbsolutePath());
+        JavaOctetEditor.getInstance().config.getByClass(ApplicationConfig.class).loadRecent.getValue().add(file.getAbsolutePath());
         JavaOctetEditor.getInstance().jar = this;
         JavaOctetEditor.getInstance().window.setTitle(JavaOctetEditor.TITLE + "-" + file.getName());
         try {
