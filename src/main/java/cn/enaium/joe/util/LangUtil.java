@@ -23,12 +23,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.tinylog.Logger;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 public class LangUtil {
@@ -36,7 +32,7 @@ public class LangUtil {
     public static String i18n(String key, Object... args) {
         Locale locale = Locale.getDefault();
         String lang = locale.getLanguage() + "_" + locale.getCountry();
-        ModeValue language = JavaOctetEditor.getInstance().configManager.getByClass(ApplicationConfig.class).language;
+        ModeValue language = JavaOctetEditor.getInstance().config.getByClass(ApplicationConfig.class).language;
         if (!language.getValue().equals("System")) {
             lang = language.getValue();
         }
