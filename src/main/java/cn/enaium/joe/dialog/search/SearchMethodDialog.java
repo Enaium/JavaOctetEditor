@@ -19,15 +19,16 @@ package cn.enaium.joe.dialog.search;
 import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.dialog.SearchDialog;
 import cn.enaium.joe.gui.panel.search.ResultNode;
-import cn.enaium.joe.jar.Jar;
+import cn.enaium.joe.task.SearchFieldTask;
+import cn.enaium.joe.task.SearchMethodTask;
 import cn.enaium.joe.util.ASyncUtil;
 import cn.enaium.joe.util.LangUtil;
+import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.util.StringUtil;
 import org.objectweb.asm.tree.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Map;
 
 /**
  * @author Enaium
@@ -50,20 +51,20 @@ public class SearchMethodDialog extends SearchDialog {
             add(anInterface);
             add(new JButton(LangUtil.i18n("button.search")) {{
                 addActionListener(e -> {
-                    ASyncUtil.execute(() -> {
-                        searchInstruction((classNode, instruction) -> {
-                            if (instruction instanceof MethodInsnNode) {
-                                MethodInsnNode methodInsnNode = (MethodInsnNode) instruction;
-                                if ((methodInsnNode.owner.contains(owner.getText()) || StringUtil.isBlank(owner.getText())) &&
-                                        (methodInsnNode.name.contains(name.getText()) || StringUtil.isBlank(name.getText())) &&
-                                        (methodInsnNode.desc.contains(description.getText()) || StringUtil.isBlank(description.getText())) &&
-                                        (methodInsnNode.itf && anInterface.isSelected() || !anInterface.isSelected())
-                                ) {
-                                    ((DefaultListModel<ResultNode>) resultPanel.getList().getModel()).addElement(new ResultNode(classNode, methodInsnNode.name + "#" + methodInsnNode.desc));
+
+
+                    if (StringUtil.isBlank(owner.getText()) && StringUtil.isBlank(name.getText()) && StringUtil.isBlank(description.getText()) && !anInterface.isSelected()) {
+                        MessageUtil.warning("Please input");
+                        return;
+                    }
+
+                    JavaOctetEditor.getInstance().task
+                            .submit(new SearchMethodTask(JavaOctetEditor.getInstance().jar, owner.getText(), name.getText(), description.getName(), anInterface.isSelected()))
+                            .thenAccept(it -> {
+                                for (ResultNode resultNode : it) {
+                                    ((DefaultListModel<ResultNode>) resultList.getModel()).addElement(resultNode);
                                 }
-                            }
-                        });
-                    });
+                            });
                 });
             }});
         }}, BorderLayout.SOUTH);

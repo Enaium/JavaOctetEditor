@@ -25,12 +25,19 @@ import java.awt.*;
  * @author Enaium
  */
 public class ResultNode {
-    private final ClassNode classNode;
-    private final String result;
+    private ClassNode classNode;
+    private String result;
+
+    private final String text;
+
+    public ResultNode() {
+        text = " ";
+    }
 
     public ResultNode(ClassNode classNode, String result) {
         this.classNode = classNode;
         this.result = result;
+        text = HtmlUtil.toHtml(HtmlUtil.setColor(classNode.name, new Color(255, 255, 255)) + "#" + HtmlUtil.setColor(result, new Color(151, 194, 120)));
     }
 
     public ClassNode getClassNode() {
@@ -43,6 +50,6 @@ public class ResultNode {
 
     @Override
     public String toString() {
-        return HtmlUtil.toHtml(HtmlUtil.setColor(classNode.name, new Color(255, 255, 255)) + "#" + HtmlUtil.setColor(result, new Color(151, 194, 120)));
+        return text;
     }
 }

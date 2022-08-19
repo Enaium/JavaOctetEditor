@@ -14,36 +14,30 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.dialog;
+package cn.enaium.joe.task;
 
-import cn.enaium.joe.JavaOctetEditor;
-import cn.enaium.joe.gui.component.ResultList;
 import cn.enaium.joe.jar.Jar;
-import cn.enaium.joe.util.LangUtil;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import javax.swing.*;
-import java.awt.*;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
 /**
  * @author Enaium
+ * @since 0.10.0
  */
-public class SearchDialog extends Dialog {
-    public ResultList resultList = new ResultList();
+public abstract class SearchInstructionTask<T> extends AbstractTask<T> {
 
-    public SearchDialog() {
-        super(LangUtil.i18n("menu.search"));
-        setLayout(new BorderLayout());
-        setSize(700, 400);
-        add(new JScrollPane(resultList), BorderLayout.CENTER);
+    private final Jar jar;
+
+    public SearchInstructionTask(String name, Jar jar) {
+        super(name);
+        this.jar = jar;
     }
 
     public void searchInstruction(BiConsumer<ClassNode, AbstractInsnNode> consumer) {
-        Jar jar = JavaOctetEditor.getInstance().jar;
         float loaded = 0;
         float total = 0;
         for (Map.Entry<String, ClassNode> stringClassNodeEntry : jar.classes.entrySet()) {
@@ -56,10 +50,9 @@ public class SearchDialog extends Dialog {
             for (MethodNode method : stringClassNodeEntry.getValue().methods) {
                 for (AbstractInsnNode instruction : method.instructions) {
                     consumer.accept(stringClassNodeEntry.getValue(), instruction);
-//                    JavaOctetEditor.getInstance().bottomPanel.setProcess((int) ((loaded++ / total) * 100f));
+                    setProgress((int) ((loaded++ / total) * 100f));
                 }
             }
         }
-//        JavaOctetEditor.getInstance().bottomPanel.setProcess(0);
     }
 }

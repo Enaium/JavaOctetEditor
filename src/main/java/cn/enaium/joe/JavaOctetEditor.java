@@ -26,6 +26,7 @@ import cn.enaium.joe.gui.panel.menu.FileMenu;
 import cn.enaium.joe.gui.panel.menu.HelpMenu;
 import cn.enaium.joe.gui.panel.menu.SearchMenu;
 import cn.enaium.joe.jar.Jar;
+import cn.enaium.joe.task.TaskManager;
 import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.MessageUtil;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
@@ -56,10 +57,13 @@ public class JavaOctetEditor {
 
     public ConfigManager config;
 
+    public TaskManager task;
+
     public JavaOctetEditor() {
         instance = this;
         config = new ConfigManager();
         config.load();
+        task = new TaskManager();
         Runtime.getRuntime().addShutdownHook(new Thread(config::save));
         fileTabbedPanel = new FileTabbedPanel();
         fileTreePanel = new FileTreePanel();

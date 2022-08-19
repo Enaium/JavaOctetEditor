@@ -19,18 +19,13 @@ package cn.enaium.joe.dialog.search;
 import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.dialog.SearchDialog;
 import cn.enaium.joe.gui.panel.search.ResultNode;
-import cn.enaium.joe.jar.Jar;
-import cn.enaium.joe.util.ASyncUtil;
+import cn.enaium.joe.task.SearchFieldTask;
 import cn.enaium.joe.util.LangUtil;
+import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.util.StringUtil;
-import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.MethodNode;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Map;
 
 /**
  * @author Enaium
@@ -51,19 +46,19 @@ public class SearchFieldDialog extends SearchDialog {
             add(description);
             add(new JButton(LangUtil.i18n("button.search")) {{
                 addActionListener(e -> {
-                    ASyncUtil.execute(() -> {
-                        searchInstruction((classNode, instruction) -> {
-                            if (instruction instanceof FieldInsnNode) {
-                                FieldInsnNode fieldInsnNode = (FieldInsnNode) instruction;
-                                if ((fieldInsnNode.owner.contains(owner.getText()) || StringUtil.isBlank(owner.getText())) &&
-                                        (fieldInsnNode.name.contains(name.getText()) || StringUtil.isBlank(name.getText())) &&
-                                        (fieldInsnNode.desc.contains(description.getText()) || StringUtil.isBlank(description.getText()))
-                                ) {
-                                    ((DefaultListModel<ResultNode>) resultPanel.getList().getModel()).addElement(new ResultNode(classNode, fieldInsnNode.name + ":" + fieldInsnNode.desc));
+
+                    if (StringUtil.isBlank(owner.getText()) && StringUtil.isBlank(name.getText()) && StringUtil.isBlank(description.getText())) {
+                        MessageUtil.warning("Please input");
+                        return;
+                    }
+
+                    JavaOctetEditor.getInstance().task
+                            .submit(new SearchFieldTask(JavaOctetEditor.getInstance().jar, owner.getText(), name.getText(), description.getName()))
+                            .thenAccept(it -> {
+                                for (ResultNode resultNode : it) {
+                                    ((DefaultListModel<ResultNode>) resultList.getModel()).addElement(resultNode);
                                 }
-                            }
-                        });
-                    });
+                            });
                 });
             }});
         }}, BorderLayout.SOUTH);

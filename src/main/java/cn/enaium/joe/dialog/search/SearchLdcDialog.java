@@ -19,17 +19,14 @@ package cn.enaium.joe.dialog.search;
 import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.dialog.SearchDialog;
 import cn.enaium.joe.gui.panel.search.ResultNode;
-import cn.enaium.joe.jar.Jar;
+import cn.enaium.joe.task.SearchFieldTask;
+import cn.enaium.joe.task.SearchLdcTask;
 import cn.enaium.joe.util.ASyncUtil;
 import cn.enaium.joe.util.LangUtil;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.LdcInsnNode;
-import org.objectweb.asm.tree.MethodNode;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Map;
 
 /**
  * @author Enaium
@@ -42,17 +39,14 @@ public class SearchLdcDialog extends SearchDialog {
             add(text);
             add(new JButton(LangUtil.i18n("button.search")) {{
                 addActionListener(e -> {
-                    if (!text.getText().replace(" ", "").isEmpty()) {
-                        ASyncUtil.execute(() -> {
-                            searchInstruction((classNode, instruction) -> {
-                                if (instruction instanceof LdcInsnNode) {
-                                    String ldc = ((LdcInsnNode) instruction).cst.toString();
-                                    if (ldc.contains(text.getText())) {
-                                        ((DefaultListModel<ResultNode>) resultPanel.getList().getModel()).addElement(new ResultNode(classNode, ldc));
+                    if (!text.getText().isEmpty()) {
+                        JavaOctetEditor.getInstance().task
+                                .submit(new SearchLdcTask(JavaOctetEditor.getInstance().jar, text.getText()))
+                                .thenAccept(it -> {
+                                    for (ResultNode resultNode : it) {
+                                        ((DefaultListModel<ResultNode>) resultList.getModel()).addElement(resultNode);
                                     }
-                                }
-                            });
-                        });
+                                });
                     }
                 });
             }});

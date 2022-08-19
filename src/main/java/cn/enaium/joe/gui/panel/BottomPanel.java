@@ -16,9 +16,19 @@
 
 package cn.enaium.joe.gui.panel;
 
+import cn.enaium.joe.JavaOctetEditor;
+import cn.enaium.joe.task.AbstractTask;
+import cn.enaium.joe.util.ASyncUtil;
+import org.benf.cfr.reader.bytecode.analysis.parse.utils.Pair;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Enaium
@@ -33,17 +43,31 @@ public class BottomPanel extends JPanel {
         add(jProgressBar);
 
 
+        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
+        scheduledExecutorService.scheduleAtFixedRate(() -> {
+            List<Pair<AbstractTask<?>, CompletableFuture<?>>> task = JavaOctetEditor.getInstance().task.getTask();
+            if (task.isEmpty()) {
+                SwingUtilities.invokeLater(() -> {
+                    jProgressBar.setValue(0);
+                    jProgressBar.setStringPainted(true);
+                    jProgressBar.setString("");
+                    jProgressBar.repaint();
+                });
+            } else {
+                Pair<AbstractTask<?>, CompletableFuture<?>> classCompletableFuturePair = task.get(0);
+                SwingUtilities.invokeLater(() -> {
+                    int progress = classCompletableFuturePair.getFirst().getProgress();
+                    jProgressBar.setValue(progress);
+                    jProgressBar.setStringPainted(true);
+                    jProgressBar.setString(progress + "%");
+                    jProgressBar.repaint();
+                });
+            }
+        }, 1, 1, TimeUnit.MILLISECONDS);
+
         add(scale);
         JLabel label = new JLabel("\u00A9 Enaium 2022");
         label.setHorizontalAlignment(SwingConstants.RIGHT);
         add(label);
-    }
-
-    public void setProcess(int n) {
-        SwingUtilities.invokeLater(() -> {
-            jProgressBar.setValue(n);
-            scale.setText(n == 0 ? "" : n + "%");
-            jProgressBar.repaint();
-        });
     }
 }
