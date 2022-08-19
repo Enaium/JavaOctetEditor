@@ -1,6 +1,7 @@
 {
-  "search.field.title": "搜索字段",
   "search.ldc.title": "搜索常量",
+  "search.field.title": "搜索字段",
+  "search.method.title": "搜索方法",
   "search.owner": "拥有者:",
   "search.name": "名称:",
   "search.description": "描述:",
