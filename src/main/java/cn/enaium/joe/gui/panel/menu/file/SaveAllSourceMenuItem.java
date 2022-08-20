@@ -20,6 +20,7 @@ import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.service.decompiler.ProcyonDecompiler;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.task.OutputJarTask;
+import cn.enaium.joe.task.SaveAllSourceTask;
 import cn.enaium.joe.util.ASyncUtil;
 import cn.enaium.joe.util.JFileChooserUtil;
 import cn.enaium.joe.util.LangUtil;
@@ -49,7 +50,7 @@ public class SaveAllSourceMenuItem extends JMenuItem {
 
             File show = JFileChooserUtil.show(JFileChooserUtil.Type.SAVE);
             if (show != null) {
-                JavaOctetEditor.getInstance().task.submit(new OutputJarTask(jar, show));
+                JavaOctetEditor.getInstance().task.submit(new SaveAllSourceTask(jar, show));
             }
         });
     }

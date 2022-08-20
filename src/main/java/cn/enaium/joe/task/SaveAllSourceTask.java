@@ -18,6 +18,7 @@ package cn.enaium.joe.task;
 
 import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.jar.Jar;
+import cn.enaium.joe.service.DecompileService;
 import cn.enaium.joe.service.decompiler.ProcyonDecompiler;
 import cn.enaium.joe.util.MessageUtil;
 import org.objectweb.asm.tree.ClassNode;
@@ -56,7 +57,7 @@ public class SaveAllSourceTask extends AbstractTask<Boolean> {
                 String name = stringClassNodeEntry.getKey().substring(0, stringClassNodeEntry.getKey().lastIndexOf(".")) + ".java";
                 name = "src/main/java/" + name;
                 zipOutputStream.putNextEntry(new ZipEntry(name));
-                zipOutputStream.write(new ProcyonDecompiler().decompile(stringClassNodeEntry.getValue()).getBytes(StandardCharsets.UTF_8));
+                zipOutputStream.write(DecompileService.getService().decompile(stringClassNodeEntry.getValue()).getBytes(StandardCharsets.UTF_8));
                 setProgress((int) ((loaded++ / files) * 100f));
             }
 
