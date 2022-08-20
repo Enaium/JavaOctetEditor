@@ -29,7 +29,7 @@ public class MessageUtil {
 
     public static void error(Throwable e) {
         Logger.error(e);
-        JOptionPane.showMessageDialog(null, e.getMessage(), LangUtil.i18n("error"), JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, e.toString(), LangUtil.i18n("error"), JOptionPane.ERROR_MESSAGE);
     }
 
     public static void confirm(Object message, String title, Runnable yes, Runnable no) {
