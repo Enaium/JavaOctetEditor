@@ -16,6 +16,7 @@
 
 package cn.enaium.joe.wrapper;
 
+import cn.enaium.joe.util.ColorUtil;
 import cn.enaium.joe.util.HtmlUtil;
 import cn.enaium.joe.util.OpcodeUtil;
 import org.objectweb.asm.Handle;
@@ -41,7 +42,7 @@ public class InstructionWrapper extends Wrapper<AbstractInsnNode> {
         stringBuilder.append("<html>");
 
         if (getWrapper().getOpcode() != -1) {
-            stringBuilder.append(HtmlUtil.setColor(OpcodeUtil.OPCODE.get(getWrapper().getOpcode()), FontColor.opcode));
+            stringBuilder.append(HtmlUtil.setColor(OpcodeUtil.OPCODE.get(getWrapper().getOpcode()), ColorUtil.opcode));
         }
 
         switch (getWrapper().getType()) {
@@ -50,29 +51,29 @@ public class InstructionWrapper extends Wrapper<AbstractInsnNode> {
                 break;
             case AbstractInsnNode.INT_INSN:
                 IntInsnNode intInsnNode = (IntInsnNode) getWrapper();
-                append(stringBuilder, HtmlUtil.setColor(String.valueOf(intInsnNode.operand), FontColor.base));
+                append(stringBuilder, HtmlUtil.setColor(String.valueOf(intInsnNode.operand), ColorUtil.base));
                 break;
             case AbstractInsnNode.VAR_INSN:
-                append(stringBuilder, HtmlUtil.setColor(String.valueOf(((VarInsnNode) getWrapper()).var), FontColor.base));
+                append(stringBuilder, HtmlUtil.setColor(String.valueOf(((VarInsnNode) getWrapper()).var), ColorUtil.base));
                 break;
             case AbstractInsnNode.TYPE_INSN:
-                append(stringBuilder, HtmlUtil.setColor(((TypeInsnNode) getWrapper()).desc, FontColor.desc));
+                append(stringBuilder, HtmlUtil.setColor(((TypeInsnNode) getWrapper()).desc, ColorUtil.desc));
                 break;
             case AbstractInsnNode.FIELD_INSN:
                 FieldInsnNode fieldInsnNode = (FieldInsnNode) getWrapper();
-                append(stringBuilder, HtmlUtil.setColor(fieldInsnNode.name, FontColor.name));
-                append(stringBuilder, HtmlUtil.setColor(fieldInsnNode.desc, FontColor.desc));
+                append(stringBuilder, HtmlUtil.setColor(fieldInsnNode.name, ColorUtil.name));
+                append(stringBuilder, HtmlUtil.setColor(fieldInsnNode.desc, ColorUtil.desc));
                 break;
             case AbstractInsnNode.METHOD_INSN:
                 MethodInsnNode methodInsnNode = (MethodInsnNode) getWrapper();
-                append(stringBuilder, HtmlUtil.setColor(methodInsnNode.name, FontColor.name));
-                append(stringBuilder, HtmlUtil.setColor(methodInsnNode.desc, FontColor.desc));
-                append(stringBuilder, HtmlUtil.setColor(String.valueOf(methodInsnNode.itf), FontColor.bool));
+                append(stringBuilder, HtmlUtil.setColor(methodInsnNode.name, ColorUtil.name));
+                append(stringBuilder, HtmlUtil.setColor(methodInsnNode.desc, ColorUtil.desc));
+                append(stringBuilder, HtmlUtil.setColor(String.valueOf(methodInsnNode.itf), ColorUtil.bool));
                 break;
             case AbstractInsnNode.INVOKE_DYNAMIC_INSN:
                 InvokeDynamicInsnNode invokeDynamicInsnNode = (InvokeDynamicInsnNode) getWrapper();
-                append(stringBuilder, HtmlUtil.setColor(invokeDynamicInsnNode.name, FontColor.name));
-                append(stringBuilder, HtmlUtil.setColor(invokeDynamicInsnNode.desc, FontColor.desc));
+                append(stringBuilder, HtmlUtil.setColor(invokeDynamicInsnNode.name, ColorUtil.name));
+                append(stringBuilder, HtmlUtil.setColor(invokeDynamicInsnNode.desc, ColorUtil.desc));
                 append(stringBuilder, "\n");
                 append(stringBuilder, handle(invokeDynamicInsnNode.bsm));
                 String[] strings = Arrays.stream(invokeDynamicInsnNode.bsmArgs).map(it -> {
@@ -82,63 +83,63 @@ public class InstructionWrapper extends Wrapper<AbstractInsnNode> {
                         return it.toString();
                     }
                 }).toArray(String[]::new);
-                append(stringBuilder, HtmlUtil.setColor(Arrays.toString(strings), FontColor.desc));
+                append(stringBuilder, HtmlUtil.setColor(Arrays.toString(strings), ColorUtil.desc));
                 break;
             case AbstractInsnNode.JUMP_INSN:
-                append(stringBuilder, HtmlUtil.setColor("L" + OpcodeUtil.getLabelIndex(((JumpInsnNode) getWrapper()).label), FontColor.base));
+                append(stringBuilder, HtmlUtil.setColor("L" + OpcodeUtil.getLabelIndex(((JumpInsnNode) getWrapper()).label), ColorUtil.base));
                 break;
             case AbstractInsnNode.LABEL:
-                append(stringBuilder, HtmlUtil.setColor("L", FontColor.opcode));
-                append(stringBuilder, HtmlUtil.setColor(String.valueOf(OpcodeUtil.getLabelIndex(getWrapper())), FontColor.base));
+                append(stringBuilder, HtmlUtil.setColor("L", ColorUtil.opcode));
+                append(stringBuilder, HtmlUtil.setColor(String.valueOf(OpcodeUtil.getLabelIndex(getWrapper())), ColorUtil.base));
                 break;
             case AbstractInsnNode.LDC_INSN:
                 LdcInsnNode ldcInsnNode = (LdcInsnNode) getWrapper();
                 if (ldcInsnNode.cst instanceof String) {
-                    append(stringBuilder, HtmlUtil.setColor("\"" + ldcInsnNode.cst + "\"", FontColor.string));
+                    append(stringBuilder, HtmlUtil.setColor("\"" + ldcInsnNode.cst + "\"", ColorUtil.string));
                 } else if (ldcInsnNode.cst instanceof Boolean) {
-                    append(stringBuilder, HtmlUtil.setColor(ldcInsnNode.cst.toString(), FontColor.bool));
+                    append(stringBuilder, HtmlUtil.setColor(ldcInsnNode.cst.toString(), ColorUtil.bool));
                 } else {
-                    append(stringBuilder, HtmlUtil.setColor(ldcInsnNode.cst.toString(), FontColor.base));
+                    append(stringBuilder, HtmlUtil.setColor(ldcInsnNode.cst.toString(), ColorUtil.base));
                 }
                 break;
             case AbstractInsnNode.IINC_INSN:
                 IincInsnNode iincInsnNode = (IincInsnNode) getWrapper();
-                append(stringBuilder, HtmlUtil.setColor(String.valueOf(iincInsnNode.var), FontColor.base));
-                append(stringBuilder, HtmlUtil.setColor(String.valueOf(iincInsnNode.incr), FontColor.base));
+                append(stringBuilder, HtmlUtil.setColor(String.valueOf(iincInsnNode.var), ColorUtil.base));
+                append(stringBuilder, HtmlUtil.setColor(String.valueOf(iincInsnNode.incr), ColorUtil.base));
                 break;
             case AbstractInsnNode.TABLESWITCH_INSN:
                 TableSwitchInsnNode tableSwitchInsnNode = (TableSwitchInsnNode) getWrapper();
-                append(stringBuilder, HtmlUtil.setColor(String.format("range[%s:%s]", tableSwitchInsnNode.min, tableSwitchInsnNode.max), FontColor.desc));
-                tableSwitchInsnNode.labels.stream().map(OpcodeUtil::getLabelIndex).forEach(it -> append(stringBuilder, HtmlUtil.setColor("L" + it, FontColor.base)));
+                append(stringBuilder, HtmlUtil.setColor(String.format("range[%s:%s]", tableSwitchInsnNode.min, tableSwitchInsnNode.max), ColorUtil.desc));
+                tableSwitchInsnNode.labels.stream().map(OpcodeUtil::getLabelIndex).forEach(it -> append(stringBuilder, HtmlUtil.setColor("L" + it, ColorUtil.base)));
                 if (tableSwitchInsnNode.dflt != null) {
-                    append(stringBuilder, HtmlUtil.setColor("default", FontColor.other) + ":" + HtmlUtil.setColor("L" + OpcodeUtil.getLabelIndex(tableSwitchInsnNode.dflt), FontColor.base));
+                    append(stringBuilder, HtmlUtil.setColor("default", ColorUtil.other) + ":" + HtmlUtil.setColor("L" + OpcodeUtil.getLabelIndex(tableSwitchInsnNode.dflt), ColorUtil.base));
                 }
                 break;
             case AbstractInsnNode.LOOKUPSWITCH_INSN:
                 LookupSwitchInsnNode lookupSwitchInsnNode = (LookupSwitchInsnNode) getWrapper();
                 for (int i = 0; i < lookupSwitchInsnNode.keys.size(); i++) {
-                    append(stringBuilder, HtmlUtil.setColor(String.valueOf(lookupSwitchInsnNode.keys.get(i)), FontColor.base) + ":" + HtmlUtil.setColor("L" + OpcodeUtil.getLabelIndex(lookupSwitchInsnNode.labels.get(i)), FontColor.base));
+                    append(stringBuilder, HtmlUtil.setColor(String.valueOf(lookupSwitchInsnNode.keys.get(i)), ColorUtil.base) + ":" + HtmlUtil.setColor("L" + OpcodeUtil.getLabelIndex(lookupSwitchInsnNode.labels.get(i)), ColorUtil.base));
                 }
                 if (lookupSwitchInsnNode.dflt != null) {
-                    append(stringBuilder, HtmlUtil.setColor("default", FontColor.other) + ":" + HtmlUtil.setColor("L" + OpcodeUtil.getLabelIndex(lookupSwitchInsnNode.dflt), FontColor.base));
+                    append(stringBuilder, HtmlUtil.setColor("default", ColorUtil.other) + ":" + HtmlUtil.setColor("L" + OpcodeUtil.getLabelIndex(lookupSwitchInsnNode.dflt), ColorUtil.base));
                 }
                 break;
             case AbstractInsnNode.MULTIANEWARRAY_INSN:
                 MultiANewArrayInsnNode multiANewArrayInsnNode = (MultiANewArrayInsnNode) getWrapper();
-                append(stringBuilder, HtmlUtil.setColor(multiANewArrayInsnNode.desc, FontColor.desc));
-                append(stringBuilder, HtmlUtil.setColor(String.valueOf(multiANewArrayInsnNode.dims), FontColor.base));
+                append(stringBuilder, HtmlUtil.setColor(multiANewArrayInsnNode.desc, ColorUtil.desc));
+                append(stringBuilder, HtmlUtil.setColor(String.valueOf(multiANewArrayInsnNode.dims), ColorUtil.base));
                 break;
             case AbstractInsnNode.FRAME:
                 FrameNode frameNode = (FrameNode) getWrapper();
-                append(stringBuilder, HtmlUtil.setColor(OpcodeUtil.FRAME.get(frameNode.type), FontColor.opcode));
-                append(stringBuilder, HtmlUtil.setColor(String.valueOf(frameNode.local), FontColor.desc));
-                append(stringBuilder, HtmlUtil.setColor(String.valueOf(frameNode.stack), FontColor.desc));
+                append(stringBuilder, HtmlUtil.setColor(OpcodeUtil.FRAME.get(frameNode.type), ColorUtil.opcode));
+                append(stringBuilder, HtmlUtil.setColor(String.valueOf(frameNode.local), ColorUtil.desc));
+                append(stringBuilder, HtmlUtil.setColor(String.valueOf(frameNode.stack), ColorUtil.desc));
                 break;
             case AbstractInsnNode.LINE:
                 LineNumberNode lineNumberNode = (LineNumberNode) getWrapper();
-                append(stringBuilder, HtmlUtil.setColor("LINE", FontColor.opcode));
-                append(stringBuilder, HtmlUtil.setColor(String.valueOf(lineNumberNode.line), FontColor.base));
-                append(stringBuilder, HtmlUtil.setColor("L" + OpcodeUtil.getLabelIndex(lineNumberNode.start), FontColor.base));
+                append(stringBuilder, HtmlUtil.setColor("LINE", ColorUtil.opcode));
+                append(stringBuilder, HtmlUtil.setColor(String.valueOf(lineNumberNode.line), ColorUtil.base));
+                append(stringBuilder, HtmlUtil.setColor("L" + OpcodeUtil.getLabelIndex(lineNumberNode.start), ColorUtil.base));
                 break;
         }
 
@@ -151,23 +152,12 @@ public class InstructionWrapper extends Wrapper<AbstractInsnNode> {
     }
 
     private String handle(Handle handle) {
-        return HtmlUtil.setColor("handle[", FontColor.other) +
-                HtmlUtil.setColor(OpcodeUtil.HANDLE.get(handle.getTag()), FontColor.opcode) + ":" +
-                HtmlUtil.setColor(handle.getOwner(), FontColor.desc) + "." +
-                HtmlUtil.setColor(handle.getName(), FontColor.name) +
-                HtmlUtil.setColor(handle.getDesc(), FontColor.desc) +
-                HtmlUtil.setColor(String.valueOf(handle.isInterface()), FontColor.bool) +
-                HtmlUtil.setColor("]", FontColor.other);
-    }
-
-
-    interface FontColor {
-        Color opcode = new Color(196, 118, 215);
-        Color name = new Color(222, 107, 116);
-        Color desc = new Color(227, 191, 122);
-        Color base = new Color(208, 153, 102);
-        Color string = new Color(150, 193, 115);
-        Color bool = new Color(196, 118, 215);
-        Color other = new Color(62, 137, 236);
+        return HtmlUtil.setColor("handle[", ColorUtil.other) +
+                HtmlUtil.setColor(OpcodeUtil.HANDLE.get(handle.getTag()), ColorUtil.opcode) + ":" +
+                HtmlUtil.setColor(handle.getOwner(), ColorUtil.desc) + "." +
+                HtmlUtil.setColor(handle.getName(), ColorUtil.name) +
+                HtmlUtil.setColor(handle.getDesc(), ColorUtil.desc) +
+                HtmlUtil.setColor(String.valueOf(handle.isInterface()), ColorUtil.bool) +
+                HtmlUtil.setColor("]", ColorUtil.other);
     }
 }
