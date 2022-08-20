@@ -47,7 +47,7 @@ public class SearchMethodDialog extends SearchDialog {
             add(new JLabel(LangUtil.i18n("search.description")));
             JTextField description = new JTextField();
             add(description);
-            JCheckBox anInterface = new JCheckBox("Interface");
+            JCheckBox anInterface = new JCheckBox(LangUtil.i18n("search.interface"));
             add(anInterface);
             add(new JButton(LangUtil.i18n("button.search")) {{
                 addActionListener(e -> {
@@ -57,7 +57,6 @@ public class SearchMethodDialog extends SearchDialog {
                         MessageUtil.warning("Please input");
                         return;
                     }
-
 
 
                     JavaOctetEditor.getInstance().task
