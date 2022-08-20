@@ -41,25 +41,4 @@ public class SearchDialog extends Dialog {
         setSize(700, 400);
         add(new JScrollPane(resultList), BorderLayout.CENTER);
     }
-
-    public void searchInstruction(BiConsumer<ClassNode, AbstractInsnNode> consumer) {
-        Jar jar = JavaOctetEditor.getInstance().jar;
-        float loaded = 0;
-        float total = 0;
-        for (Map.Entry<String, ClassNode> stringClassNodeEntry : jar.classes.entrySet()) {
-            for (MethodNode method : stringClassNodeEntry.getValue().methods) {
-                total += method.instructions.size();
-            }
-        }
-
-        for (Map.Entry<String, ClassNode> stringClassNodeEntry : jar.classes.entrySet()) {
-            for (MethodNode method : stringClassNodeEntry.getValue().methods) {
-                for (AbstractInsnNode instruction : method.instructions) {
-                    consumer.accept(stringClassNodeEntry.getValue(), instruction);
-//                    JavaOctetEditor.getInstance().bottomPanel.setProcess((int) ((loaded++ / total) * 100f));
-                }
-            }
-        }
-//        JavaOctetEditor.getInstance().bottomPanel.setProcess(0);
-    }
 }

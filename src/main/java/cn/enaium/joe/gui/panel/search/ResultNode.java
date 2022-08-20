@@ -16,6 +16,7 @@
 
 package cn.enaium.joe.gui.panel.search;
 
+import cn.enaium.joe.util.ColorUtil;
 import cn.enaium.joe.util.HtmlUtil;
 import org.objectweb.asm.tree.ClassNode;
 
@@ -26,7 +27,6 @@ import java.awt.*;
  */
 public class ResultNode {
     private ClassNode classNode;
-    private String result;
 
     private final String text;
 
@@ -36,16 +36,11 @@ public class ResultNode {
 
     public ResultNode(ClassNode classNode, String result) {
         this.classNode = classNode;
-        this.result = result;
-        text = HtmlUtil.toHtml(HtmlUtil.setColor(classNode.name, new Color(255, 255, 255)) + "#" + HtmlUtil.setColor(result, new Color(151, 194, 120)));
+        text = HtmlUtil.toHtml(HtmlUtil.setColor(classNode.name, Color.WHITE) + "#" + result);
     }
 
     public ClassNode getClassNode() {
         return classNode;
-    }
-
-    public String getResult() {
-        return result;
     }
 
     @Override

@@ -18,9 +18,12 @@ package cn.enaium.joe.task;
 
 import cn.enaium.joe.gui.panel.search.ResultNode;
 import cn.enaium.joe.jar.Jar;
+import cn.enaium.joe.util.ColorUtil;
+import cn.enaium.joe.util.HtmlUtil;
 import cn.enaium.joe.util.StringUtil;
 import org.objectweb.asm.tree.FieldInsnNode;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,11 +51,11 @@ public class SearchFieldTask extends SearchInstructionTask<List<ResultNode>> {
         searchInstruction((classNode, instruction) -> {
             if (instruction instanceof FieldInsnNode) {
                 FieldInsnNode fieldInsnNode = (FieldInsnNode) instruction;
-                if ((StringUtil.isBlank(owner) || fieldInsnNode.owner.contains(owner)) &&
-                        (StringUtil.isBlank(name) || fieldInsnNode.name.contains(name)) &&
-                        (StringUtil.isBlank(description) || fieldInsnNode.desc.contains(description))
+                if ((fieldInsnNode.owner.contains(owner) || StringUtil.isBlank(owner)) &&
+                        (fieldInsnNode.name.contains(name) || StringUtil.isBlank(name)) &&
+                        (fieldInsnNode.desc.contains(description) || StringUtil.isBlank(description))
                 ) {
-                    resultNodes.add(new ResultNode(classNode, fieldInsnNode.name + ":" + fieldInsnNode.desc));
+                    resultNodes.add(new ResultNode(classNode, HtmlUtil.setColor(fieldInsnNode.name, ColorUtil.name) + HtmlUtil.setColor(":", ColorUtil.opcode) + HtmlUtil.setColor(fieldInsnNode.desc, ColorUtil.desc)));
                 }
             }
         });

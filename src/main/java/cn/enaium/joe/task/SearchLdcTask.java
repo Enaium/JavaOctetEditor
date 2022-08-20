@@ -18,6 +18,8 @@ package cn.enaium.joe.task;
 
 import cn.enaium.joe.gui.panel.search.ResultNode;
 import cn.enaium.joe.jar.Jar;
+import cn.enaium.joe.util.ColorUtil;
+import cn.enaium.joe.util.HtmlUtil;
 import org.objectweb.asm.tree.LdcInsnNode;
 
 import javax.swing.*;
@@ -44,7 +46,7 @@ public class SearchLdcTask extends SearchInstructionTask<List<ResultNode>> {
             if (instruction instanceof LdcInsnNode) {
                 String ldc = ((LdcInsnNode) instruction).cst.toString();
                 if (ldc.contains(this.ldc.toString())) {
-                    resultNodes.add(new ResultNode(classNode, ldc));
+                    resultNodes.add(new ResultNode(classNode, HtmlUtil.setColor(ldc, ColorUtil.string)));
                 }
             }
         });

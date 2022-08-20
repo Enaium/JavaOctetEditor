@@ -40,9 +40,11 @@ public class SearchLdcDialog extends SearchDialog {
             add(new JButton(LangUtil.i18n("button.search")) {{
                 addActionListener(e -> {
                     if (!text.getText().isEmpty()) {
+                        ((DefaultListModel<ResultNode>) resultList.getModel()).clear();
                         JavaOctetEditor.getInstance().task
                                 .submit(new SearchLdcTask(JavaOctetEditor.getInstance().jar, text.getText()))
                                 .thenAccept(it -> {
+                                    resultList.removeAll();
                                     for (ResultNode resultNode : it) {
                                         ((DefaultListModel<ResultNode>) resultList.getModel()).addElement(resultNode);
                                     }
