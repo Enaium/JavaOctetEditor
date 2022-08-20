@@ -22,6 +22,7 @@ import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.util.Util;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
+import org.tinylog.Logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -45,6 +46,7 @@ public class InputJarTask extends AbstractTask<Jar> {
 
     @Override
     public Jar get() {
+        Logger.info("LOAD:{}", file.getAbsolutePath());
         Jar jar = new Jar();
         try {
             JarFile jarFile = new JarFile(file);

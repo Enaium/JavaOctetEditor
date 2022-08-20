@@ -17,13 +17,15 @@
 package cn.enaium.joe.gui.panel;
 
 import cn.enaium.joe.JavaOctetEditor;
+import cn.enaium.joe.dialog.TaskDialog;
 import cn.enaium.joe.task.AbstractTask;
-import cn.enaium.joe.util.ASyncUtil;
 import org.benf.cfr.reader.bytecode.analysis.parse.utils.Pair;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
@@ -34,14 +36,23 @@ import java.util.concurrent.TimeUnit;
  * @author Enaium
  */
 public class BottomPanel extends JPanel {
-    private final JProgressBar jProgressBar = new JProgressBar();
     private final JLabel scale = new JLabel();
 
     public BottomPanel() {
         super(new GridLayout(1, 4, 10, 10));
         this.setBorder(new EmptyBorder(5, 5, 5, 5));
-        add(jProgressBar);
 
+        JProgressBar jProgressBar = new JProgressBar() {{
+            addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    new TaskDialog().setVisible(true);
+                    super.mouseReleased(e);
+                }
+            });
+        }};
+
+        add(jProgressBar);
 
         ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
         scheduledExecutorService.scheduleAtFixedRate(() -> {
@@ -59,7 +70,7 @@ public class BottomPanel extends JPanel {
                     int progress = classCompletableFuturePair.getFirst().getProgress();
                     jProgressBar.setValue(progress);
                     jProgressBar.setStringPainted(true);
-                    jProgressBar.setString(progress + "%");
+                    jProgressBar.setString(String.format("%s:%s", classCompletableFuturePair.getFirst().getName(), progress) + "%");
                     jProgressBar.repaint();
                 });
             }
