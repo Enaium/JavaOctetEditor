@@ -42,7 +42,6 @@ public class LoadRecentMenu extends JMenuItem {
                 for (String s : loadRecent) {
                     jPopupMenu.add(new JMenuItem(s) {{
                         addActionListener(e -> {
-                            System.out.println(s);
                             File file = new File(s);
                             if (file.exists()) {
                                 JavaOctetEditor.getInstance().task.submit(new InputJarTask(file)).thenAccept(it -> JavaOctetEditor.getInstance().fileTreePanel.refresh(it));
