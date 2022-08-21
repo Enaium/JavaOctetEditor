@@ -20,12 +20,11 @@ import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.gui.panel.file.FileDropTarget;
 import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassTabPanel;
 import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.FieldInfoPanel;
-import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.method.MethodInfoTabPanel;
 import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.method.MethodTabPanel;
 import cn.enaium.joe.gui.panel.file.tabbed.tab.resources.HexTablePanel;
 import cn.enaium.joe.gui.panel.file.tree.node.*;
 import cn.enaium.joe.jar.Jar;
-import cn.enaium.joe.util.ASyncUtil;
+import cn.enaium.joe.task.InputJarTask;
 import cn.enaium.joe.util.JTreeUtil;
 import cn.enaium.joe.util.LangUtil;
 import org.objectweb.asm.tree.ClassNode;
@@ -39,7 +38,6 @@ import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.util.*;
 
 /**
@@ -90,12 +88,7 @@ public class FileTreePanel extends JTree {
 
         new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, new FileDropTarget(".jar", files -> {
             if (!files.isEmpty()) {
-                File file = files.get(0);
-                ASyncUtil.execute(() -> {
-                    Jar jar = new Jar();
-                    jar.load(file);
-                    refresh(jar);
-                });
+                JavaOctetEditor.getInstance().task.submit(new InputJarTask(files.get(0))).thenAccept(this::refresh);
             }
         }), true);
 

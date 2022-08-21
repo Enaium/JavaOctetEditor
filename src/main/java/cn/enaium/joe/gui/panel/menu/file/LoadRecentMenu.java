@@ -18,8 +18,7 @@ package cn.enaium.joe.gui.panel.menu.file;
 
 import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.config.extend.ApplicationConfig;
-import cn.enaium.joe.jar.Jar;
-import cn.enaium.joe.util.ASyncUtil;
+import cn.enaium.joe.task.InputJarTask;
 import cn.enaium.joe.util.LangUtil;
 
 import javax.swing.*;
@@ -39,18 +38,13 @@ public class LoadRecentMenu extends JMenuItem {
             @Override
             public void mouseReleased(MouseEvent e) {
                 JPopupMenu jPopupMenu = new JPopupMenu();
-                Set<String> loadRecent = JavaOctetEditor.getInstance().configManager.getByClass(ApplicationConfig.class).loadRecent.getValue();
+                Set<String> loadRecent = JavaOctetEditor.getInstance().config.getByClass(ApplicationConfig.class).loadRecent.getValue();
                 for (String s : loadRecent) {
                     jPopupMenu.add(new JMenuItem(s) {{
                         addActionListener(e -> {
-                            System.out.println(s);
                             File file = new File(s);
                             if (file.exists()) {
-                                ASyncUtil.execute(() -> {
-                                    Jar jar = new Jar();
-                                    jar.load(file);
-                                    JavaOctetEditor.getInstance().fileTreePanel.refresh(jar);
-                                });
+                                JavaOctetEditor.getInstance().task.submit(new InputJarTask(file)).thenAccept(it -> JavaOctetEditor.getInstance().fileTreePanel.refresh(it));
                             } else {
                                 loadRecent.remove(s);
                             }

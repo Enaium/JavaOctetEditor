@@ -100,6 +100,7 @@ public class ASMifierTablePanel extends ClassNodeTabPanel {
         codeAreaPanel.getTextArea().setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
         codeAreaPanel.getTextArea().setEditable(true);
         StringWriter stringWriter = new StringWriter();
+
         ASyncUtil.execute(() -> {
             classNode.accept(new TraceClassVisitor(null, new ASMifier(), new PrintWriter(stringWriter)));
         }, () -> {

@@ -17,6 +17,7 @@
 package cn.enaium.joe.gui.panel.file.tabbed.tab.resources;
 
 import cn.enaium.joe.gui.panel.file.tree.node.FileTreeNode;
+import cn.enaium.joe.util.ASyncUtil;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -41,19 +42,21 @@ public class HexTablePanel extends Panel {
         jTable.getTableHeader().setReorderingAllowed(false);
         add(new JScrollPane(jTable), BorderLayout.CENTER);
 
-        int row = 0;
-        Object[] array = new Object[16];
-        byte[] data = fileTreeNode.getData();
-        for (int i = 0; i < data.length; i++) {
-            byte b = data[i];
-            array[row] = String.format("%02X", b);
-            if (row == 15 || i == fileTreeNode.getData().length - 1) {
-                defaultTableModel.addRow(array);
-                row = 0;
-                array = new Object[16];
-                continue;
+        ASyncUtil.execute(() -> {
+            int row = 0;
+            Object[] array = new Object[16];
+            byte[] data = fileTreeNode.getData();
+            for (int i = 0; i < data.length; i++) {
+                byte b = data[i];
+                array[row] = String.format("%02X", b);
+                if (row == 15 || i == fileTreeNode.getData().length - 1) {
+                    defaultTableModel.addRow(array);
+                    row = 0;
+                    array = new Object[16];
+                    continue;
+                }
+                row++;
             }
-            row++;
-        }
+        });
     }
 }

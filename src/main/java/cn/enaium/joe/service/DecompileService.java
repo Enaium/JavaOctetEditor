@@ -30,7 +30,7 @@ import cn.enaium.joe.service.decompiler.ProcyonDecompiler;
  */
 public class DecompileService {
     public static IDecompiler getService() {
-        ModeValue decompilerMode = JavaOctetEditor.getInstance().configManager.getByClass(ApplicationConfig.class).decompilerMode;
+        ModeValue decompilerMode = JavaOctetEditor.getInstance().config.getByClass(ApplicationConfig.class).decompilerMode;
         switch (decompilerMode.getValue()) {
             case "CFR": return new CFRDecompiler();
             case "Procyon": return new ProcyonDecompiler();

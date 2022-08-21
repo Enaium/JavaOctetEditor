@@ -17,7 +17,6 @@
 package cn.enaium.joe;
 
 import cn.enaium.joe.config.ConfigManager;
-import cn.enaium.joe.config.extend.CFRConfig;
 import cn.enaium.joe.gui.panel.BottomPanel;
 import cn.enaium.joe.gui.panel.LeftPanel;
 import cn.enaium.joe.gui.panel.file.tabbed.FileTabbedPanel;
@@ -27,6 +26,7 @@ import cn.enaium.joe.gui.panel.menu.FileMenu;
 import cn.enaium.joe.gui.panel.menu.HelpMenu;
 import cn.enaium.joe.gui.panel.menu.SearchMenu;
 import cn.enaium.joe.jar.Jar;
+import cn.enaium.joe.task.TaskManager;
 import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.MessageUtil;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
@@ -55,13 +55,16 @@ public class JavaOctetEditor {
 
     public BottomPanel bottomPanel;
 
-    public ConfigManager configManager;
+    public ConfigManager config;
+
+    public TaskManager task;
 
     public JavaOctetEditor() {
         instance = this;
-        configManager = new ConfigManager();
-        configManager.load();
-        Runtime.getRuntime().addShutdownHook(new Thread(configManager::save));
+        config = new ConfigManager();
+        config.load();
+        task = new TaskManager();
+        Runtime.getRuntime().addShutdownHook(new Thread(config::save));
         fileTabbedPanel = new FileTabbedPanel();
         fileTreePanel = new FileTreePanel();
         bottomPanel = new BottomPanel();

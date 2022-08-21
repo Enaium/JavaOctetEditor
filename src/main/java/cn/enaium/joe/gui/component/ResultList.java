@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.search;
+package cn.enaium.joe.gui.component;
 
 import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.gui.panel.file.tree.FileTreePanel;
 import cn.enaium.joe.gui.panel.file.tree.node.*;
+import cn.enaium.joe.gui.panel.search.ResultNode;
 import cn.enaium.joe.util.ASyncUtil;
 import org.objectweb.asm.tree.ClassNode;
 
@@ -26,30 +27,39 @@ import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
  * @author Enaium
  */
-public class ResultPanel extends JPanel {
+public class ResultList extends JList<ResultNode> {
 
-    private final JList<ResultNode> list;
-
-    public ResultPanel() {
-        super(new BorderLayout());
-        list = new JList<>(new DefaultListModel<>());
-        add(new JScrollPane(list), BorderLayout.CENTER);
-
+    public ResultList() {
+        super(new DefaultListModel<>());
+        //avoid repeat updateFixedCellSize
+        setPrototypeCellValue(new ResultNode());
+        //fix auto wrap
+        setCellRenderer((list, value, index, isSelected, cellHasFocus) -> new JPanel(new BorderLayout()) {{
+            if (isSelected) {
+                setBackground(list.getSelectionBackground());
+            } else {
+                setBackground(list.getBackground());
+            }
+            JLabel comp = new JLabel(value.toString());
+            add(comp, BorderLayout.CENTER);
+        }});
         JPopupMenu jPopupMenu = new JPopupMenu();
         JMenuItem jMenuItem = new JMenuItem("Jump to Node");
         jMenuItem.addActionListener(e -> {
-            if (list.getSelectedValue() != null) {
+            if (getSelectedValue() != null) {
                 ASyncUtil.execute(() -> {
                     SwingUtilities.invokeLater(() -> {
                         FileTreePanel fileTreePanel = JavaOctetEditor.getInstance().fileTreePanel;
                         DefaultTreeModel model = (DefaultTreeModel) fileTreePanel.getModel();
-                        if (selectEntry(fileTreePanel, list.getSelectedValue().getClassNode(), model, FileTreePanel.classesRoot)) {
+                        if (selectEntry(fileTreePanel, getSelectedValue().getClassNode(), model, FileTreePanel.classesRoot)) {
                             fileTreePanel.repaint();
                         }
                     });
@@ -57,13 +67,13 @@ public class ResultPanel extends JPanel {
             }
         });
         jPopupMenu.add(jMenuItem);
-
-        list.addMouseListener(new MouseAdapter() {
+        ResultList resultList = this;
+        addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (SwingUtilities.isRightMouseButton(e)) {
-                    if (list.getSelectedValue() != null) {
-                        jPopupMenu.show(list, e.getX(), e.getY());
+                    if (getSelectedValue() != null) {
+                        jPopupMenu.show(resultList, e.getX(), e.getY());
                     }
                 }
             }
@@ -92,9 +102,5 @@ public class ResultPanel extends JPanel {
             }
         }
         return false;
-    }
-
-    public JList<ResultNode> getList() {
-        return list;
     }
 }

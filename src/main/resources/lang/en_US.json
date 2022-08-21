@@ -5,6 +5,7 @@
   "search.owner": "Owner:",
   "search.name": "Name:",
   "search.description": "Description:",
+  "search.interface": "Interface:",
   "about.system": "System",
   "about.system.description": "Information about the OS",
   "about.system.name": "Name",

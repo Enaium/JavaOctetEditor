@@ -30,7 +30,7 @@ import javax.swing.*;
 public class ConfigMenu extends JMenu {
     public ConfigMenu() {
         super(LangUtil.i18n("menu.config"));
-        for (Config value : JavaOctetEditor.getInstance().configManager.getConfig().values()) {
+        for (Config value : JavaOctetEditor.getInstance().config.getConfig().values()) {
             add(new JMenuItem(value.getName()) {{
                 addActionListener(e -> {
                     new ConfigDialog(value).setVisible(true);

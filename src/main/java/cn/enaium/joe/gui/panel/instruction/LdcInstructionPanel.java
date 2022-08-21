@@ -126,7 +126,6 @@ public class LdcInstructionPanel extends AbstractInstructionPanel {
 
             @Override
             public void contentsChanged(ListDataEvent e) {
-                System.out.println("Change");
                 handleLabel.setVisible(Objects.equals(jComboBox.getSelectedItem(), "Handle"));
                 handleButton.setVisible(Objects.equals(jComboBox.getSelectedItem(), "Handle"));
                 verLabel.setVisible(!Objects.equals(jComboBox.getSelectedItem(), "Handle"));

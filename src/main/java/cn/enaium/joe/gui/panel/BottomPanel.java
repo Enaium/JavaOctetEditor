@@ -16,34 +16,67 @@
 
 package cn.enaium.joe.gui.panel;
 
+import cn.enaium.joe.JavaOctetEditor;
+import cn.enaium.joe.annotation.Indeterminate;
+import cn.enaium.joe.task.AbstractTask;
+import cn.enaium.joe.task.DecompileTask;
+import org.benf.cfr.reader.bytecode.analysis.parse.utils.Pair;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Enaium
  */
 public class BottomPanel extends JPanel {
-    private final JProgressBar jProgressBar = new JProgressBar();
-    private final JLabel scale = new JLabel();
 
     public BottomPanel() {
         super(new GridLayout(1, 4, 10, 10));
         this.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+        JProgressBar jProgressBar = new JProgressBar();
+
         add(jProgressBar);
 
+        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
+        scheduledExecutorService.scheduleAtFixedRate(() -> {
+            List<Pair<AbstractTask<?>, CompletableFuture<?>>> task = JavaOctetEditor.getInstance().task.getTask();
+            if (task.isEmpty()) {
+                SwingUtilities.invokeLater(() -> {
+                    jProgressBar.setValue(0);
+                    jProgressBar.setStringPainted(true);
+                    jProgressBar.setIndeterminate(false);
+                    jProgressBar.setString("");
+                    jProgressBar.repaint();
+                });
+            } else {
+                Pair<AbstractTask<?>, CompletableFuture<?>> classCompletableFuturePair = task.get(task.size() - 1);
+                SwingUtilities.invokeLater(() -> {
+                    int progress = classCompletableFuturePair.getFirst().getProgress();
+                    if (!classCompletableFuturePair.getFirst().getClass().isAnnotationPresent(Indeterminate.class)) {
+                        jProgressBar.setValue(progress);
+                        jProgressBar.setStringPainted(true);
+                        jProgressBar.setIndeterminate(false);
+                        jProgressBar.setString(String.format("%s:%s", classCompletableFuturePair.getFirst().getName(), progress) + "%");
+                    } else {
+                        jProgressBar.setString(classCompletableFuturePair.getFirst().getName());
+                        jProgressBar.setIndeterminate(true);
+                    }
+                    jProgressBar.repaint();
+                });
+            }
+        }, 1, 1, TimeUnit.MILLISECONDS);
 
-        add(scale);
         JLabel label = new JLabel("\u00A9 Enaium 2022");
         label.setHorizontalAlignment(SwingConstants.RIGHT);
         add(label);
-    }
-
-    public void setProcess(int n) {
-        SwingUtilities.invokeLater(() -> {
-            jProgressBar.setValue(n);
-            scale.setText(n == 0 ? "" : n + "%");
-            jProgressBar.repaint();
-        });
     }
 }

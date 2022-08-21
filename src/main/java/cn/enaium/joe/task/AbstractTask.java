@@ -14,37 +14,33 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.search;
+package cn.enaium.joe.task;
 
-import cn.enaium.joe.util.ColorUtil;
-import cn.enaium.joe.util.HtmlUtil;
-import org.objectweb.asm.tree.ClassNode;
-
-import java.awt.*;
+import java.util.concurrent.Callable;
+import java.util.function.Supplier;
 
 /**
  * @author Enaium
+ * @since 0.10.0
  */
-public class ResultNode {
-    private ClassNode classNode;
+public abstract class AbstractTask<T> implements Supplier<T> {
+    private final String name;
 
-    private final String text;
+    private int progress;
 
-    public ResultNode() {
-        text = " ";
+    public AbstractTask(String name) {
+        this.name = name;
     }
 
-    public ResultNode(ClassNode classNode, String result) {
-        this.classNode = classNode;
-        text = HtmlUtil.toHtml(HtmlUtil.setColor(classNode.name, Color.WHITE) + "#" + result);
+    public String getName() {
+        return name;
     }
 
-    public ClassNode getClassNode() {
-        return classNode;
+    public int getProgress() {
+        return progress;
     }
 
-    @Override
-    public String toString() {
-        return text;
+    public void setProgress(int progress) {
+        this.progress = progress;
     }
 }

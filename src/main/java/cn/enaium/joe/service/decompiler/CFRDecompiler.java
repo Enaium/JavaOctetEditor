@@ -26,7 +26,6 @@ import org.objectweb.asm.tree.ClassNode;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashMap;
 
 /**
  * @author Enaium
@@ -61,6 +60,6 @@ public class CFRDecompiler implements IDecompiler {
                 throw new RuntimeException();
             }
         };
-        return new PluginRunner(JavaOctetEditor.getInstance().configManager.getConfigMap(CFRConfig.class), cfs).getDecompilationFor(classNode.name);
+        return new PluginRunner(JavaOctetEditor.getInstance().config.getConfigMap(CFRConfig.class), cfs).getDecompilationFor(classNode.name);
     }
 }

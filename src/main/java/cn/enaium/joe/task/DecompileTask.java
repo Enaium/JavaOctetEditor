@@ -14,37 +14,30 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.search;
+package cn.enaium.joe.task;
 
-import cn.enaium.joe.util.ColorUtil;
-import cn.enaium.joe.util.HtmlUtil;
+import cn.enaium.joe.annotation.Repeatable;
+import cn.enaium.joe.service.DecompileService;
 import org.objectweb.asm.tree.ClassNode;
-
-import java.awt.*;
+import org.tinylog.Logger;
 
 /**
  * @author Enaium
+ * @since 0.10.0
  */
-public class ResultNode {
-    private ClassNode classNode;
+@Repeatable
+public class DecompileTask extends AbstractTask<String> {
 
-    private final String text;
+    private final ClassNode classNode;
 
-    public ResultNode() {
-        text = " ";
-    }
-
-    public ResultNode(ClassNode classNode, String result) {
+    public DecompileTask(ClassNode classNode) {
+        super("Decompile");
         this.classNode = classNode;
-        text = HtmlUtil.toHtml(HtmlUtil.setColor(classNode.name, Color.WHITE) + "#" + result);
-    }
-
-    public ClassNode getClassNode() {
-        return classNode;
     }
 
     @Override
-    public String toString() {
-        return text;
+    public String get() {
+        Logger.info("DECOMPILE:{}", classNode.name);
+        return DecompileService.getService().decompile(classNode);
     }
 }

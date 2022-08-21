@@ -19,6 +19,8 @@ package cn.enaium.joe.gui.panel.menu.file;
 import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.service.decompiler.ProcyonDecompiler;
 import cn.enaium.joe.jar.Jar;
+import cn.enaium.joe.task.OutputJarTask;
+import cn.enaium.joe.task.SaveAllSourceTask;
 import cn.enaium.joe.util.ASyncUtil;
 import cn.enaium.joe.util.JFileChooserUtil;
 import cn.enaium.joe.util.LangUtil;
@@ -48,35 +50,7 @@ public class SaveAllSourceMenuItem extends JMenuItem {
 
             File show = JFileChooserUtil.show(JFileChooserUtil.Type.SAVE);
             if (show != null) {
-                ASyncUtil.execute(() -> {
-                    float loaded = 0;
-                    float files = jar.classes.size() + jar.resources.size();
-                    try {
-                        ZipOutputStream zipOutputStream = new ZipOutputStream(Files.newOutputStream(show.toPath()));
-
-                        for (Map.Entry<String, ClassNode> stringClassNodeEntry : jar.classes.entrySet()) {
-                            String name = stringClassNodeEntry.getKey().substring(0, stringClassNodeEntry.getKey().lastIndexOf(".")) + ".java";
-                            name = "src/main/java/" + name;
-                            zipOutputStream.putNextEntry(new ZipEntry(name));
-                            zipOutputStream.write(new ProcyonDecompiler().decompile(stringClassNodeEntry.getValue()).getBytes(StandardCharsets.UTF_8));
-                            JavaOctetEditor.getInstance().bottomPanel.setProcess((int) ((loaded++ / files) * 100f));
-                        }
-
-                        for (Map.Entry<String, byte[]> stringEntry : jar.resources.entrySet()) {
-                            String name = stringEntry.getKey();
-                            name = "src/main/resources/" + name;
-                            zipOutputStream.putNextEntry(new JarEntry(name));
-                            zipOutputStream.write(stringEntry.getValue());
-                            JavaOctetEditor.getInstance().bottomPanel.setProcess((int) ((loaded++ / files) * 100f));
-                        }
-                        zipOutputStream.closeEntry();
-                        zipOutputStream.close();
-                        JavaOctetEditor.getInstance().bottomPanel.setProcess(0);
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                });
-
+                JavaOctetEditor.getInstance().task.submit(new SaveAllSourceTask(jar, show));
             }
         });
     }
