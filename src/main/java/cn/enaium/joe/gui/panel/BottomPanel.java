@@ -17,8 +17,9 @@
 package cn.enaium.joe.gui.panel;
 
 import cn.enaium.joe.JavaOctetEditor;
-import cn.enaium.joe.dialog.TaskDialog;
+import cn.enaium.joe.annotation.Indeterminate;
 import cn.enaium.joe.task.AbstractTask;
+import cn.enaium.joe.task.DecompileTask;
 import org.benf.cfr.reader.bytecode.analysis.parse.utils.Pair;
 
 import javax.swing.*;
@@ -36,21 +37,12 @@ import java.util.concurrent.TimeUnit;
  * @author Enaium
  */
 public class BottomPanel extends JPanel {
-    private final JLabel scale = new JLabel();
 
     public BottomPanel() {
         super(new GridLayout(1, 4, 10, 10));
         this.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-        JProgressBar jProgressBar = new JProgressBar() {{
-            addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseReleased(MouseEvent e) {
-                    new TaskDialog().setVisible(true);
-                    super.mouseReleased(e);
-                }
-            });
-        }};
+        JProgressBar jProgressBar = new JProgressBar();
 
         add(jProgressBar);
 
@@ -61,22 +53,28 @@ public class BottomPanel extends JPanel {
                 SwingUtilities.invokeLater(() -> {
                     jProgressBar.setValue(0);
                     jProgressBar.setStringPainted(true);
+                    jProgressBar.setIndeterminate(false);
                     jProgressBar.setString("");
                     jProgressBar.repaint();
                 });
             } else {
-                Pair<AbstractTask<?>, CompletableFuture<?>> classCompletableFuturePair = task.get(0);
+                Pair<AbstractTask<?>, CompletableFuture<?>> classCompletableFuturePair = task.get(task.size() - 1);
                 SwingUtilities.invokeLater(() -> {
                     int progress = classCompletableFuturePair.getFirst().getProgress();
-                    jProgressBar.setValue(progress);
-                    jProgressBar.setStringPainted(true);
-                    jProgressBar.setString(String.format("%s:%s", classCompletableFuturePair.getFirst().getName(), progress) + "%");
+                    if (!classCompletableFuturePair.getFirst().getClass().isAnnotationPresent(Indeterminate.class)) {
+                        jProgressBar.setValue(progress);
+                        jProgressBar.setStringPainted(true);
+                        jProgressBar.setIndeterminate(false);
+                        jProgressBar.setString(String.format("%s:%s", classCompletableFuturePair.getFirst().getName(), progress) + "%");
+                    } else {
+                        jProgressBar.setString(classCompletableFuturePair.getFirst().getName());
+                        jProgressBar.setIndeterminate(true);
+                    }
                     jProgressBar.repaint();
                 });
             }
         }, 1, 1, TimeUnit.MILLISECONDS);
 
-        add(scale);
         JLabel label = new JLabel("\u00A9 Enaium 2022");
         label.setHorizontalAlignment(SwingConstants.RIGHT);
         add(label);

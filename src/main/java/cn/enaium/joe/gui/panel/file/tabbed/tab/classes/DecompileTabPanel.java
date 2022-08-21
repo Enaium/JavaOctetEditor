@@ -16,8 +16,10 @@
 
 package cn.enaium.joe.gui.panel.file.tabbed.tab.classes;
 
+import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.service.DecompileService;
 import cn.enaium.joe.gui.panel.CodeAreaPanel;
+import cn.enaium.joe.task.DecompileTask;
 import cn.enaium.joe.util.ASyncUtil;
 import org.objectweb.asm.tree.ClassNode;
 
@@ -32,8 +34,8 @@ public class DecompileTabPanel extends ClassNodeTabPanel {
         setLayout(new BorderLayout());
         CodeAreaPanel codeAreaPanel = new CodeAreaPanel();
         codeAreaPanel.getTextArea().setSyntaxEditingStyle("text/java");
-        ASyncUtil.execute(() -> {
-            codeAreaPanel.getTextArea().setText(DecompileService.getService().decompile(classNode));
+        JavaOctetEditor.getInstance().task.submit(new DecompileTask(classNode)).thenAccept(it -> {
+            codeAreaPanel.getTextArea().setText(it);
         });
         codeAreaPanel.getTextArea().setCaretPosition(0);
         add(codeAreaPanel);
