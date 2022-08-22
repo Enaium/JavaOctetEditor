@@ -40,15 +40,4 @@ public class IOUtil {
         inputStream.close();
         return byteOutputStream.toByteArray();
     }
-
-    public static byte[] remove0x00(InputStream inputStream) throws IOException {
-        ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
-        byte[] bytes = getBytes(inputStream);
-        for (byte aByte : bytes) {
-            if (aByte != 0x00) {
-                byteOutputStream.write(aByte);
-            }
-        }
-        return byteOutputStream.toByteArray();
-    }
 }
