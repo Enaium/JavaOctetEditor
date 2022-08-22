@@ -19,10 +19,7 @@ package cn.enaium.joe.service;
 import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.config.extend.ApplicationConfig;
 import cn.enaium.joe.config.value.ModeValue;
-import cn.enaium.joe.service.decompiler.CFRDecompiler;
-import cn.enaium.joe.service.decompiler.IDecompiler;
-import cn.enaium.joe.service.decompiler.JDCoreDecompiler;
-import cn.enaium.joe.service.decompiler.ProcyonDecompiler;
+import cn.enaium.joe.service.decompiler.*;
 
 /**
  * @author Enaium
@@ -34,7 +31,7 @@ public class DecompileService {
         switch (decompilerMode.getValue()) {
             case "CFR": return new CFRDecompiler();
             case "Procyon": return new ProcyonDecompiler();
-            case "JD-Core": return new JDCoreDecompiler();
+            case "FernFlower": return new FernFlowerDecompiler();
         }
         throw new NullPointerException("Not found decompiler");
     }
