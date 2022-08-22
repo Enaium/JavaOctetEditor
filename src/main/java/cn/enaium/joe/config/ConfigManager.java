@@ -20,9 +20,9 @@ import cn.enaium.joe.config.extend.ApplicationConfig;
 import cn.enaium.joe.config.extend.CFRConfig;
 import cn.enaium.joe.config.value.Value;
 import cn.enaium.joe.util.MessageUtil;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import org.tinylog.Logger;
+import cn.enaium.joe.util.ReflectUtil;
+import com.google.gson.*;
+import com.google.gson.annotations.Expose;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,6 +44,7 @@ public class ConfigManager {
         setByClass(new CFRConfig());
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T getByClass(Class<T> klass) {
         if (configMap.containsKey(klass)) {
             return (T) configMap.get(klass);
@@ -79,15 +80,49 @@ public class ConfigManager {
         return map;
     }
 
+    private Gson gson() {
+        return new GsonBuilder().setPrettyPrinting().create();
+    }
+
     public void load() {
-        for (Config value : configMap.values()) {
+        for (Map.Entry<Class<? extends Config>, Config> classConfigEntry : configMap.entrySet()) {
+
+            Class<? extends Config> klass = classConfigEntry.getKey();
+            Config config = classConfigEntry.getValue();
             try {
-                Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                File file = new File(System.getProperty("."), value.getName() + ".json");
+                File file = new File(System.getProperty("."), config.getName() + ".json");
                 if (file.exists()) {
-                    configMap.put(value.getClass(), gson.fromJson(new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8), value.getClass()));
+                    //Step.1 get json object
+                    JsonObject jsonObject = gson().fromJson(new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8), JsonObject.class);
+
+                    //Step.2 get all field of the config
+                    for (Field configField : klass.getDeclaredFields()) {
+                        configField.setAccessible(true);
+                        if (!jsonObject.has(configField.getName())) {
+                            continue;
+                        }
+
+                        //Step.3 deserialize
+                        Object setting = gson().fromJson(jsonObject.get(configField.getName()).toString(), configField.getType());
+
+                        //Step.3.1 get all field of the setting
+                        for (Field settingField : setting.getClass().getDeclaredFields()) {
+                            settingField.setAccessible(true);
+
+                            if (settingField.isAnnotationPresent(Expose.class)) {
+                                if (!settingField.getAnnotation(Expose.class).deserialize()) {
+                                    Field declaredField = ReflectUtil.getField(setting.getClass(), settingField.getName());
+                                    //Step.3.2 use the value from config to set the value of setting
+                                    declaredField.set(setting, ReflectUtil.getFieldValue(ReflectUtil.getFieldValue(config, configField.getName()), settingField.getName()));
+                                }
+                            }
+                        }
+
+                        //Step.4 use the value from step 3 to set the value of config
+                        configField.set(config, setting);
+                    }
                 }
-            } catch (IOException e) {
+            } catch (Throwable e) {
                 MessageUtil.error(e);
             }
         }
@@ -96,8 +131,7 @@ public class ConfigManager {
     public void save() {
         for (Config value : configMap.values()) {
             try {
-                Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                Files.write(new File(System.getProperty("."), value.getName() + ".json").toPath(), gson.toJson(value).getBytes(StandardCharsets.UTF_8));
+                Files.write(new File(System.getProperty("."), value.getName() + ".json").toPath(), gson().toJson(value).getBytes(StandardCharsets.UTF_8));
             } catch (IOException e) {
                 MessageUtil.error(e);
             }
