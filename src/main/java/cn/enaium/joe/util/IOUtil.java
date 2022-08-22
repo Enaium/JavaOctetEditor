@@ -16,10 +16,9 @@
 
 package cn.enaium.joe.util;
 
-import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -28,14 +27,28 @@ import java.nio.charset.StandardCharsets;
  */
 public class IOUtil {
     public static String getString(InputStream inputStream) throws IOException {
-        StringBuilder stringBuilder = new StringBuilder();
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        String line;
-        while ((line = bufferedReader.readLine()) != null) {
-            stringBuilder.append(line).append("\n");
+        return new String(getBytes(inputStream), StandardCharsets.UTF_8);
+    }
+
+    public static byte[] getBytes(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024 * 4];
+        int n;
+        while (-1 != (n = inputStream.read(buffer))) {
+            byteOutputStream.write(buffer, 0, n);
         }
-        String text = stringBuilder.toString();
         inputStream.close();
-        return stringBuilder.toString();
+        return byteOutputStream.toByteArray();
+    }
+
+    public static byte[] remove0x00(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
+        byte[] bytes = getBytes(inputStream);
+        for (byte aByte : bytes) {
+            if (aByte != 0x00) {
+                byteOutputStream.write(aByte);
+            }
+        }
+        return byteOutputStream.toByteArray();
     }
 }
