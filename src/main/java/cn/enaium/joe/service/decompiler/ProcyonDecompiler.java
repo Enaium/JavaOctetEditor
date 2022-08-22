@@ -37,7 +37,7 @@ public class ProcyonDecompiler implements IDecompiler {
     public String decompile(ClassNode classNode) {
         DecompilerSettings decompilerSettings = new DecompilerSettings();
         MetadataSystem metadataSystem = new MetadataSystem(new ITypeLoader() {
-            private InputTypeLoader backLoader = new InputTypeLoader();
+            private final InputTypeLoader backLoader = new InputTypeLoader();
 
             @Override
             public boolean tryLoadType(String s, Buffer buffer) {
