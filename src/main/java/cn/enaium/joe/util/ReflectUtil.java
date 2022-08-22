@@ -23,12 +23,22 @@ import java.lang.reflect.Field;
  * @since 1.0.0
  */
 public class ReflectUtil {
-    public static <T> T setAll(T old, T t) throws NoSuchFieldException, IllegalAccessException {
+    public static <T> void setAll(T old, T t) throws NoSuchFieldException, IllegalAccessException {
         for (Field oldField : old.getClass().getDeclaredFields()) {
             oldField.setAccessible(true);
             Field declaredField = t.getClass().getDeclaredField(oldField.getName());
             oldField.set(old, declaredField.get(t));
         }
-        return old;
+    }
+
+    public static Field getField(Class<?> klass, String name) throws NoSuchFieldException {
+        Field declaredField = klass.getDeclaredField(name);
+        declaredField.setAccessible(true);
+        return declaredField;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T getFieldValue(Object o, String name) throws IllegalAccessException, NoSuchFieldException {
+        return (T) getField(o.getClass(), name).get(o);
     }
 }
