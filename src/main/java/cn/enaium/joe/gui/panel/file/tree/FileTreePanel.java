@@ -88,7 +88,7 @@ public class FileTreePanel extends JTree {
 
         new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, new FileDropTarget(".jar", files -> {
             if (!files.isEmpty()) {
-                JavaOctetEditor.getInstance().task.submit(new InputJarTask(files.get(0))).thenAccept(this::refresh);
+                JavaOctetEditor.getInstance().task.submit(new InputJarTask(files.get(0)));
             }
         }), true);
 

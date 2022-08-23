@@ -40,7 +40,7 @@ public class SaveMenuItem extends JMenuItem {
     public SaveMenuItem() {
         super(LangUtil.i18n("menu.file.save"));
         addActionListener(e -> {
-            Jar jar = JavaOctetEditor.getInstance().jar;
+            Jar jar = JavaOctetEditor.getInstance().getJar();
             if (jar == null) {
                 return;
             }

@@ -33,7 +33,7 @@ public class LoadMenuItem extends JMenuItem {
         addActionListener(e -> {
             File show = JFileChooserUtil.show(JFileChooserUtil.Type.OPEN);
             if (show != null) {
-                JavaOctetEditor.getInstance().task.submit(new InputJarTask(show)).thenAccept(it -> JavaOctetEditor.getInstance().fileTreePanel.refresh(it));
+                JavaOctetEditor.getInstance().task.submit(new InputJarTask(show));
             }
         });
     }

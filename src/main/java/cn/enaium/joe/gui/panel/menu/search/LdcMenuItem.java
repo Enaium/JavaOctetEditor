@@ -30,7 +30,7 @@ public class LdcMenuItem extends JMenuItem {
     public LdcMenuItem() {
         super(LangUtil.i18n("menu.search.ldc"));
         addActionListener(e -> {
-            Jar jar = JavaOctetEditor.getInstance().jar;
+            Jar jar = JavaOctetEditor.getInstance().getJar();
             if (jar == null) {
                 return;
             }

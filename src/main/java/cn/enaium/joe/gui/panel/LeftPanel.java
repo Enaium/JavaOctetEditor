@@ -64,7 +64,7 @@ public class LeftPanel extends JPanel {
                     @Override
                     public void keyPressed(KeyEvent e) {
                         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                            Jar jar = JavaOctetEditor.getInstance().jar;
+                            Jar jar = JavaOctetEditor.getInstance().getJar();
                             if (jar != null) {
                                 if (!jTextField.getText().replace(" ", "").isEmpty()) {
                                     Jar searchedJar = jar.copy();

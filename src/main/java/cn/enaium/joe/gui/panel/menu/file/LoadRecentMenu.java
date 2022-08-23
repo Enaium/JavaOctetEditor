@@ -44,7 +44,7 @@ public class LoadRecentMenu extends JMenuItem {
                         addActionListener(e -> {
                             File file = new File(s);
                             if (file.exists()) {
-                                JavaOctetEditor.getInstance().task.submit(new InputJarTask(file)).thenAccept(it -> JavaOctetEditor.getInstance().fileTreePanel.refresh(it));
+                                JavaOctetEditor.getInstance().task.submit(new InputJarTask(file));
                             } else {
                                 loadRecent.remove(s);
                             }

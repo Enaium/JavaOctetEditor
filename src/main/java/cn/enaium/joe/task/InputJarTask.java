@@ -83,7 +83,7 @@ public class InputJarTask extends AbstractTask<Jar> {
         }
 
         JavaOctetEditor.getInstance().config.getByClass(ApplicationConfig.class).loadRecent.getValue().add(file.getAbsolutePath());
-        JavaOctetEditor.getInstance().jar = jar;
+        JavaOctetEditor.getInstance().setJar(jar);
         JavaOctetEditor.getInstance().window.setTitle(JavaOctetEditor.TITLE + "-" + file.getName());
         return jar;
     }

@@ -43,7 +43,7 @@ public class SaveAllSourceMenuItem extends JMenuItem {
     public SaveAllSourceMenuItem() {
         super(LangUtil.i18n("menu.file.saveAllSource"));
         addActionListener(e -> {
-            Jar jar = JavaOctetEditor.getInstance().jar;
+            Jar jar = JavaOctetEditor.getInstance().getJar();
             if (jar == null) {
                 return;
             }

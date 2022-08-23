@@ -32,7 +32,7 @@ public class MethodMenuItem extends JMenuItem {
     public MethodMenuItem() {
         super(LangUtil.i18n("menu.search.method"));
         addActionListener(e -> {
-            Jar jar = JavaOctetEditor.getInstance().jar;
+            Jar jar = JavaOctetEditor.getInstance().getJar();
             if (jar == null) {
                 return;
             }
