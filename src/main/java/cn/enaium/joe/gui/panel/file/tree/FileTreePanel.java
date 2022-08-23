@@ -118,8 +118,6 @@ public class FileTreePanel extends JTree {
         classesRoot.removeAllChildren();
         resourceRoot.removeAllChildren();
 
-        JavaOctetEditor.getInstance().fileTabbedPanel.removeAll();
-
         Map<String, DefaultTreeNode> hasMap = new HashMap<>();
 
 
@@ -200,6 +198,9 @@ public class FileTreePanel extends JTree {
             }
         }
         sort(model, resourceRoot);
+
+        JavaOctetEditor.getInstance().fileTabbedPanel.removeAll();
+
         repaint();
     }
 
