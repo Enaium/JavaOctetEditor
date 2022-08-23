@@ -22,23 +22,20 @@ import net.fabricmc.mappingio.MappingReader;
 import net.fabricmc.mappingio.MappingVisitor;
 import net.fabricmc.mappingio.format.MappingFormat;
 import org.objectweb.asm.Type;
-import org.tinylog.Logger;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.List;
 
 /**
  * @author Enaium
  * @since 1.0.0
  */
-public class MappingRead {
+public class MappingParser {
 
     public static Mapping read(Path path, MappingFormat mappingFormat) throws IOException {
         Mapping mapping = new Mapping();
         MappingReader.read(path, mappingFormat, new MappingVisitor() {
-
             String klass;
 
             @Override
@@ -75,7 +72,11 @@ public class MappingRead {
             @Override
             public void visitDstName(MappedElementKind targetKind, int namespace, String name) throws IOException {
                 if (targetKind == MappedElementKind.CLASS) {
-                    mapping.CLEAN.put(klass, name);
+                    if (isProGuard(mappingFormat)) {
+                        mapping.CLEAN.put(klass, name);
+                    } else {
+                        mapping.CLEAN.put(name, klass);
+                    }
                 }
             }
 
@@ -92,7 +93,6 @@ public class MappingRead {
             final Pair<String, String> method = new Pair<>("", "");
 
             @Override
-
             public void visitNamespaces(String srcNamespace, List<String> dstNamespaces) throws IOException {
 
             }
@@ -130,10 +130,18 @@ public class MappingRead {
             public void visitDstName(MappedElementKind targetKind, int namespace, String name) throws IOException {
                 switch (targetKind) {
                     case CLASS:
-                        mapping.MAP.put(name, klass);
+                        if (isProGuard(mappingFormat)) {
+                            mapping.MAP.put(name, klass);
+                        } else {
+                            mapping.MAP.put(klass, name);
+                        }
                         break;
                     case FIELD:
-                        mapping.MAP.put(String.format("%s.%s", mapping.CLEAN.getOrDefault(klass, klass), name), field);
+                        if (isProGuard(mappingFormat)) {
+                            mapping.MAP.put(String.format("%s.%s", mapping.CLEAN.getOrDefault(klass, klass), name), field);
+                        } else {
+                            mapping.MAP.put(String.format("%s.%s", mapping.CLEAN.getOrDefault(klass, klass), field), name);
+                        }
                         break;
                     case METHOD:
                         String cleanName = method.getKey();
@@ -155,7 +163,11 @@ public class MappingRead {
                             ret = Type.getObjectType(mapping.CLEAN.get(methodType.getReturnType().getInternalName())).getDescriptor();
                         }
 
-                        mapping.MAP.put(String.format("%s.%s%s%s", mapping.CLEAN.getOrDefault(klass, klass), name, argumentBuilder, ret), cleanName);
+                        if (isProGuard(mappingFormat)) {
+                            mapping.MAP.put(String.format("%s.%s%s%s", mapping.CLEAN.getOrDefault(klass, klass), name, argumentBuilder, ret), cleanName);
+                        } else {
+                            mapping.MAP.put(String.format("%s.%s%s%s", mapping.CLEAN.getOrDefault(klass, klass), cleanName, argumentBuilder, ret), name);
+                        }
                         break;
                 }
             }
@@ -166,5 +178,9 @@ public class MappingRead {
             }
         });
         return mapping;
+    }
+
+    private static boolean isProGuard(MappingFormat mappingFormat) {
+        return mappingFormat == MappingFormat.PROGUARD;
     }
 }

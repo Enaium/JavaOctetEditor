@@ -20,7 +20,7 @@ import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.annotation.Indeterminate;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.mapping.Mapping;
-import cn.enaium.joe.mapping.MappingRead;
+import cn.enaium.joe.mapping.MappingParser;
 import net.fabricmc.mappingio.format.MappingFormat;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.Opcodes;
@@ -54,7 +54,7 @@ public class RemappingTask extends AbstractTask<Boolean> {
     @Override
     public Boolean get() {
         try {
-            Mapping read = MappingRead.read(mapping.toPath(), mappingFormat);
+            Mapping read = MappingParser.read(mapping.toPath(), mappingFormat);
             Jar oldJar = JavaOctetEditor.getInstance().getJar();
             Jar jar = new Jar();
             jar.resources.putAll(oldJar.resources);
@@ -105,8 +105,7 @@ public class RemappingTask extends AbstractTask<Boolean> {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
-
-        return null;
+        return true;
     }
 
     public void analyze(ClassNode classNode) {

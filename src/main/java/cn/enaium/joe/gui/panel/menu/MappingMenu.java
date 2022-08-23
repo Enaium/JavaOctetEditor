@@ -16,10 +16,15 @@
 
 package cn.enaium.joe.gui.panel.menu;
 
-import cn.enaium.joe.gui.panel.menu.mapping.ProGuardMenuItem;
+import cn.enaium.joe.JavaOctetEditor;
+import cn.enaium.joe.task.RemappingTask;
+import cn.enaium.joe.util.JFileChooserUtil;
 import cn.enaium.joe.util.LangUtil;
+import net.fabricmc.mappingio.format.MappingFormat;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import java.io.File;
 
 /**
  * @author Enaium
@@ -28,6 +33,25 @@ import javax.swing.*;
 public class MappingMenu extends JMenu {
     public MappingMenu() {
         super(LangUtil.i18n("menu.mapping"));
-        add(new ProGuardMenuItem());
+        for (MappingFormat value : MappingFormat.values()) {
+            add(new JMenuItem(value.name) {{
+                addActionListener(e -> {
+                    File show = JFileChooserUtil.show(JFileChooserUtil.Type.OPEN, new FileFilter() {
+                        @Override
+                        public boolean accept(File f) {
+                            return f.getName().matches(".+(txt|map|mapping|pro|srg|tsrg|tiny|tiyv2)") || f.isDirectory();
+                        }
+
+                        @Override
+                        public String getDescription() {
+                            return "Mapping file(*.txt,*.map,*.mapping,*.pro,*.srg)";
+                        }
+                    });
+                    if (JavaOctetEditor.getInstance().getJar() != null) {
+                        JavaOctetEditor.getInstance().task.submit(new RemappingTask(show, value));
+                    }
+                });
+            }});
+        }
     }
 }
