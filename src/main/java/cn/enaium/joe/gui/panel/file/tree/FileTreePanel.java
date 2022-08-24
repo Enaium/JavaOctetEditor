@@ -17,6 +17,7 @@
 package cn.enaium.joe.gui.panel.file.tree;
 
 import cn.enaium.joe.JavaOctetEditor;
+import cn.enaium.joe.config.extend.ApplicationConfig;
 import cn.enaium.joe.gui.panel.file.FileDropTarget;
 import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassTabPanel;
 import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.FieldInfoPanel;
@@ -118,86 +119,151 @@ public class FileTreePanel extends JTree {
         classesRoot.removeAllChildren();
         resourceRoot.removeAllChildren();
 
-        Map<String, DefaultTreeNode> hasMap = new HashMap<>();
+        ApplicationConfig config = JavaOctetEditor.getInstance().config.getByClass(ApplicationConfig.class);
 
 
-        for (ClassNode classNode : jar.classes.values()) {
-            String[] split = classNode.name.split("/");
-            DefaultTreeNode prev = null;
-            StringBuilder stringBuilder = new StringBuilder();
-            int i = 0;
-            for (String s : split) {
-                stringBuilder.append(s);
-                PackageTreeNode packageTreeNode = new PackageTreeNode(s);
+        String packagePresentationValue = config.packagePresentation.getValue();
 
-                if (split.length == i + 1) {
-                    packageTreeNode = new ClassTreeNode(classNode);
-                    for (MethodNode methodNode : classNode.methods) {
-                        packageTreeNode.add(new MethodTreeNode(classNode, methodNode));
+        if (packagePresentationValue.equals("Hierarchical")) {
+            Map<String, DefaultTreeNode> hasMap = new HashMap<>();
+
+            for (ClassNode classNode : jar.classes.values()) {
+                String[] split = classNode.name.split("/");
+                DefaultTreeNode prev = null;
+                StringBuilder stringBuilder = new StringBuilder();
+                int i = 0;
+                for (String s : split) {
+                    stringBuilder.append(s);
+                    PackageTreeNode packageTreeNode = new PackageTreeNode(s);
+
+                    if (split.length == i + 1) {
+                        packageTreeNode = new ClassTreeNode(classNode);
+                        for (MethodNode methodNode : classNode.methods) {
+                            packageTreeNode.add(new MethodTreeNode(classNode, methodNode));
+                        }
+                        for (FieldNode field : classNode.fields) {
+                            packageTreeNode.add(new FieldTreeNode(classNode, field));
+                        }
                     }
-                    for (FieldNode field : classNode.fields) {
-                        packageTreeNode.add(new FieldTreeNode(classNode, field));
-                    }
-                }
 
-                if (prev == null) {
-                    if (!hasMap.containsKey(stringBuilder.toString())) {
-                        classesRoot.add(packageTreeNode);
-                        hasMap.put(stringBuilder.toString(), packageTreeNode);
-                        prev = packageTreeNode;
+                    if (prev == null) {
+                        if (!hasMap.containsKey(stringBuilder.toString())) {
+                            classesRoot.add(packageTreeNode);
+                            hasMap.put(stringBuilder.toString(), packageTreeNode);
+                            prev = packageTreeNode;
+                        } else {
+                            prev = hasMap.get(stringBuilder.toString());
+                        }
                     } else {
-                        prev = hasMap.get(stringBuilder.toString());
+                        if (!hasMap.containsKey(stringBuilder.toString())) {
+                            prev.add(packageTreeNode);
+                            hasMap.put(stringBuilder.toString(), packageTreeNode);
+                            prev = packageTreeNode;
+                        } else {
+                            prev = hasMap.get(stringBuilder.toString());
+                        }
                     }
-                } else {
-                    if (!hasMap.containsKey(stringBuilder.toString())) {
-                        prev.add(packageTreeNode);
-                        hasMap.put(stringBuilder.toString(), packageTreeNode);
-                        prev = packageTreeNode;
-                    } else {
-                        prev = hasMap.get(stringBuilder.toString());
-                    }
+                    i++;
                 }
-                i++;
             }
-        }
-        sort(model, classesRoot);
+            sort(model, classesRoot);
 
-        hasMap.clear();
+            hasMap.clear();
 
-        for (Map.Entry<String, byte[]> stringEntry : jar.resources.entrySet()) {
-            String[] split = stringEntry.getKey().split("/");
-            DefaultTreeNode prev = null;
-            StringBuilder stringBuilder = new StringBuilder();
-            int i = 0;
-            for (String s : split) {
-                stringBuilder.append(s);
-                FolderTreeNode folderTreeNode = new FolderTreeNode(s);
+            for (Map.Entry<String, byte[]> stringEntry : jar.resources.entrySet()) {
+                String[] split = stringEntry.getKey().split("/");
+                DefaultTreeNode prev = null;
+                StringBuilder stringBuilder = new StringBuilder();
+                int i = 0;
+                for (String s : split) {
+                    stringBuilder.append(s);
+                    FolderTreeNode folderTreeNode = new FolderTreeNode(s);
 
-                if (split.length == i + 1) {
-                    folderTreeNode = new FileTreeNode(s, stringEntry.getValue());
-                }
-
-                if (prev == null) {
-                    if (!hasMap.containsKey(stringBuilder.toString())) {
-                        resourceRoot.add(folderTreeNode);
-                        hasMap.put(stringBuilder.toString(), folderTreeNode);
-                        prev = folderTreeNode;
-                    } else {
-                        prev = hasMap.get(stringBuilder.toString());
+                    if (split.length == i + 1) {
+                        folderTreeNode = new FileTreeNode(s, stringEntry.getValue());
                     }
-                } else {
-                    if (!hasMap.containsKey(stringBuilder.toString())) {
-                        prev.add(folderTreeNode);
-                        hasMap.put(stringBuilder.toString(), folderTreeNode);
-                        prev = folderTreeNode;
+
+                    if (prev == null) {
+                        if (!hasMap.containsKey(stringBuilder.toString())) {
+                            resourceRoot.add(folderTreeNode);
+                            hasMap.put(stringBuilder.toString(), folderTreeNode);
+                            prev = folderTreeNode;
+                        } else {
+                            prev = hasMap.get(stringBuilder.toString());
+                        }
                     } else {
-                        prev = hasMap.get(stringBuilder.toString());
+                        if (!hasMap.containsKey(stringBuilder.toString())) {
+                            prev.add(folderTreeNode);
+                            hasMap.put(stringBuilder.toString(), folderTreeNode);
+                            prev = folderTreeNode;
+                        } else {
+                            prev = hasMap.get(stringBuilder.toString());
+                        }
                     }
+                    i++;
                 }
-                i++;
             }
+            sort(model, resourceRoot);
+        } else if (packagePresentationValue.equals("Flat")) {
+            Map<String, DefaultTreeNode> hasMap = new HashMap<>();
+            for (ClassNode value : jar.classes.values()) {
+                String packageName = "";
+                if (value.name.contains("/")) {
+                    packageName = value.name.substring(0, value.name.lastIndexOf("/")).replace("/", ".");
+                }
+
+                ClassTreeNode classTreeNode = new ClassTreeNode(value);
+
+                for (FieldNode field : value.fields) {
+                    classTreeNode.add(new FieldTreeNode(value, field));
+                }
+
+                for (MethodNode method : value.methods) {
+                    classTreeNode.add(new MethodTreeNode(value, method));
+                }
+
+                if (packageName.isEmpty()) {
+                    classesRoot.add(classTreeNode);
+                } else {
+                    DefaultTreeNode defaultTreeNode;
+                    if (hasMap.containsKey(packageName)) {
+                        defaultTreeNode = hasMap.get(packageName);
+                    } else {
+                        defaultTreeNode = new PackageTreeNode(packageName);
+                        hasMap.put(packageName, defaultTreeNode);
+                    }
+                    defaultTreeNode.add(classTreeNode);
+                    classesRoot.add(defaultTreeNode);
+                }
+            }
+            hasMap.clear();
+
+            for (Map.Entry<String, byte[]> stringEntry : jar.resources.entrySet()) {
+                String folderName = "";
+                String name = stringEntry.getKey();
+                if (stringEntry.getKey().contains("/")) {
+                    folderName = stringEntry.getKey().substring(0, stringEntry.getKey().lastIndexOf("/")).replace("/", ".");
+                    name = name.substring(name.lastIndexOf("/") + 1);
+                }
+
+                FileTreeNode classTreeNode = new FileTreeNode(name, stringEntry.getValue());
+
+                if (folderName.isEmpty()) {
+                    resourceRoot.add(classTreeNode);
+                } else {
+                    DefaultTreeNode defaultTreeNode;
+                    if (hasMap.containsKey(folderName)) {
+                        defaultTreeNode = hasMap.get(folderName);
+                    } else {
+                        defaultTreeNode = new FolderTreeNode(folderName);
+                        hasMap.put(folderName, defaultTreeNode);
+                    }
+                    defaultTreeNode.add(classTreeNode);
+                    resourceRoot.add(defaultTreeNode);
+                }
+            }
+            sort(model, resourceRoot);
         }
-        sort(model, resourceRoot);
 
         JavaOctetEditor.getInstance().fileTabbedPanel.removeAll();
 
