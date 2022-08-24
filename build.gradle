@@ -65,7 +65,7 @@ shadowJar {
         include(dependency('com.google.code.gson:gson'))
         include(dependency('org.tinylog:.*'))
         include(dependency('org.quiltmc:quiltflower'))
-        include(dependency('net.fabricmc:mapping-io'))
+        include(dependency('com.github.FabricMC:mapping-io'))
     }
     archiveClassifier.set('')
 }

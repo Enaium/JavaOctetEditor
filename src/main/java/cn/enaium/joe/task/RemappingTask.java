@@ -21,6 +21,7 @@ import cn.enaium.joe.annotation.Indeterminate;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.mapping.Mapping;
 import cn.enaium.joe.mapping.MappingParser;
+import cn.enaium.joe.util.MessageUtil;
 import net.fabricmc.mappingio.format.MappingFormat;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.Opcodes;
@@ -53,6 +54,13 @@ public class RemappingTask extends AbstractTask<Boolean> {
 
     @Override
     public Boolean get() {
+
+        if (mappingFormat == MappingFormat.ENIGMA) {
+            if (!mapping.getName().endsWith(".mapping")) {
+                MessageUtil.warning("File suffix must be mapping");
+            }
+        }
+
         try {
             Mapping read = MappingParser.read(mapping.toPath(), mappingFormat);
             Jar oldJar = JavaOctetEditor.getInstance().getJar();
