@@ -47,7 +47,7 @@ public class MappingMenu extends JMenu {
                             return "Mapping file(*.txt,*.map,*.mapping,*.pro,*.srg)";
                         }
                     });
-                    if (JavaOctetEditor.getInstance().getJar() != null) {
+                    if (JavaOctetEditor.getInstance().getJar() != null && show != null) {
                         JavaOctetEditor.getInstance().task.submit(new RemappingTask(show, value));
                     }
                 });
