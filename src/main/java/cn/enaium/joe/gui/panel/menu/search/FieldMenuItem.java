@@ -31,7 +31,7 @@ public class FieldMenuItem extends JMenuItem {
     public FieldMenuItem() {
         super(LangUtil.i18n("menu.search.field"));
         addActionListener(e -> {
-            Jar jar = JavaOctetEditor.getInstance().jar;
+            Jar jar = JavaOctetEditor.getInstance().getJar();
             if (jar == null) {
                 return;
             }

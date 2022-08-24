@@ -60,7 +60,7 @@ public class SearchMethodDialog extends SearchDialog {
 
 
                     JavaOctetEditor.getInstance().task
-                            .submit(new SearchMethodTask(JavaOctetEditor.getInstance().jar, owner.getText(), name.getText(), description.getText(), anInterface.isSelected()))
+                            .submit(new SearchMethodTask(JavaOctetEditor.getInstance().getJar(), owner.getText(), name.getText(), description.getText(), anInterface.isSelected()))
                             .thenAccept(it -> {
                                 ((DefaultListModel<ResultNode>) resultList.getModel()).clear();
                                 for (ResultNode resultNode : it) {

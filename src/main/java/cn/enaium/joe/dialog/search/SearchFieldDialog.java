@@ -55,7 +55,7 @@ public class SearchFieldDialog extends SearchDialog {
                     ((DefaultListModel<ResultNode>) resultList.getModel()).clear();
 
                     JavaOctetEditor.getInstance().task
-                            .submit(new SearchFieldTask(JavaOctetEditor.getInstance().jar, owner.getText(), name.getText(), description.getText()))
+                            .submit(new SearchFieldTask(JavaOctetEditor.getInstance().getJar(), owner.getText(), name.getText(), description.getText()))
                             .thenAccept(it -> {
                                 for (ResultNode resultNode : it) {
                                     ((DefaultListModel<ResultNode>) resultList.getModel()).addElement(resultNode);

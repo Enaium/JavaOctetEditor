@@ -21,10 +21,7 @@ import cn.enaium.joe.gui.panel.BottomPanel;
 import cn.enaium.joe.gui.panel.LeftPanel;
 import cn.enaium.joe.gui.panel.file.tabbed.FileTabbedPanel;
 import cn.enaium.joe.gui.panel.file.tree.FileTreePanel;
-import cn.enaium.joe.gui.panel.menu.ConfigMenu;
-import cn.enaium.joe.gui.panel.menu.FileMenu;
-import cn.enaium.joe.gui.panel.menu.HelpMenu;
-import cn.enaium.joe.gui.panel.menu.SearchMenu;
+import cn.enaium.joe.gui.panel.menu.*;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.task.TaskManager;
 import cn.enaium.joe.util.LangUtil;
@@ -47,7 +44,7 @@ public class JavaOctetEditor {
 
     public JFrame window = new JFrame(TITLE);
 
-    public Jar jar;
+    private Jar jar;
 
     public FileTabbedPanel fileTabbedPanel;
 
@@ -80,6 +77,7 @@ public class JavaOctetEditor {
         window.setJMenuBar(new JMenuBar() {{
             add(new FileMenu());
             add(new SearchMenu());
+            add(new MappingMenu());
             add(new ConfigMenu());
             add(new HelpMenu());
         }});
@@ -108,6 +106,15 @@ public class JavaOctetEditor {
         window.setSize(800, 500);
         window.setLocationRelativeTo(null);
         window.setVisible(true);
+    }
+
+    public Jar getJar() {
+        return jar;
+    }
+
+    public void setJar(Jar jar) {
+        this.jar = jar;
+        fileTreePanel.refresh(jar);
     }
 
     public static JavaOctetEditor getInstance() {

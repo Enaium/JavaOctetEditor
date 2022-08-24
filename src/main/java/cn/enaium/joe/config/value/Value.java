@@ -21,9 +21,9 @@ package cn.enaium.joe.config.value;
  * @since 0.7.0
  */
 public class Value<T> {
-    private final String name;
+    private String name;
     private T value;
-    private final String description;
+    private String description;
 
     public Value(String name, T value, String description) {
         this.name = name;

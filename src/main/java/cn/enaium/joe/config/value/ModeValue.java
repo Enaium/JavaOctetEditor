@@ -16,6 +16,8 @@
 
 package cn.enaium.joe.config.value;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.List;
 
 /**
@@ -24,7 +26,8 @@ import java.util.List;
  */
 public class ModeValue extends Value<String> {
 
-    private final List<String> mode;
+    @Expose(deserialize = false)
+    private List<String> mode;
 
     public ModeValue(String name, String value, String description, List<String> mode) {
         super(name, value, description);
@@ -33,5 +36,9 @@ public class ModeValue extends Value<String> {
 
     public List<String> getMode() {
         return mode;
+    }
+
+    public void setMode(List<String> mode) {
+        this.mode = mode;
     }
 }

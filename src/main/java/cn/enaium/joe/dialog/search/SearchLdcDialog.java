@@ -42,7 +42,7 @@ public class SearchLdcDialog extends SearchDialog {
                     if (!text.getText().isEmpty()) {
                         ((DefaultListModel<ResultNode>) resultList.getModel()).clear();
                         JavaOctetEditor.getInstance().task
-                                .submit(new SearchLdcTask(JavaOctetEditor.getInstance().jar, text.getText()))
+                                .submit(new SearchLdcTask(JavaOctetEditor.getInstance().getJar(), text.getText()))
                                 .thenAccept(it -> {
                                     resultList.removeAll();
                                     for (ResultNode resultNode : it) {

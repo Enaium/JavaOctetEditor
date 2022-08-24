@@ -19,14 +19,11 @@ package cn.enaium.joe.gui.panel;
 import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.annotation.Indeterminate;
 import cn.enaium.joe.task.AbstractTask;
-import cn.enaium.joe.task.DecompileTask;
-import org.benf.cfr.reader.bytecode.analysis.parse.utils.Pair;
+import cn.enaium.joe.util.Pair;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
@@ -60,14 +57,14 @@ public class BottomPanel extends JPanel {
             } else {
                 Pair<AbstractTask<?>, CompletableFuture<?>> classCompletableFuturePair = task.get(task.size() - 1);
                 SwingUtilities.invokeLater(() -> {
-                    int progress = classCompletableFuturePair.getFirst().getProgress();
-                    if (!classCompletableFuturePair.getFirst().getClass().isAnnotationPresent(Indeterminate.class)) {
+                    int progress = classCompletableFuturePair.getKey().getProgress();
+                    if (!classCompletableFuturePair.getKey().getClass().isAnnotationPresent(Indeterminate.class)) {
                         jProgressBar.setValue(progress);
                         jProgressBar.setStringPainted(true);
                         jProgressBar.setIndeterminate(false);
-                        jProgressBar.setString(String.format("%s:%s", classCompletableFuturePair.getFirst().getName(), progress) + "%");
+                        jProgressBar.setString(String.format("%s:%s", classCompletableFuturePair.getKey().getName(), progress) + "%");
                     } else {
-                        jProgressBar.setString(classCompletableFuturePair.getFirst().getName());
+                        jProgressBar.setString(classCompletableFuturePair.getKey().getName());
                         jProgressBar.setIndeterminate(true);
                     }
                     jProgressBar.repaint();

@@ -88,7 +88,7 @@ public class FileTreePanel extends JTree {
 
         new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, new FileDropTarget(".jar", files -> {
             if (!files.isEmpty()) {
-                JavaOctetEditor.getInstance().task.submit(new InputJarTask(files.get(0))).thenAccept(this::refresh);
+                JavaOctetEditor.getInstance().task.submit(new InputJarTask(files.get(0)));
             }
         }), true);
 
@@ -117,8 +117,6 @@ public class FileTreePanel extends JTree {
         model.reload();
         classesRoot.removeAllChildren();
         resourceRoot.removeAllChildren();
-
-        JavaOctetEditor.getInstance().fileTabbedPanel.removeAll();
 
         Map<String, DefaultTreeNode> hasMap = new HashMap<>();
 
@@ -200,6 +198,9 @@ public class FileTreePanel extends JTree {
             }
         }
         sort(model, resourceRoot);
+
+        JavaOctetEditor.getInstance().fileTabbedPanel.removeAll();
+
         repaint();
     }
 

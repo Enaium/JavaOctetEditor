@@ -18,8 +18,7 @@ package cn.enaium.joe.gui.panel.file.tabbed.tab.classes;
 
 import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.gui.panel.CodeAreaPanel;
-import cn.enaium.joe.util.ASyncUtil;
-import cn.enaium.joe.util.LangUtil;
+import cn.enaium.joe.util.*;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
@@ -32,6 +31,8 @@ import org.objectweb.asm.util.TraceClassVisitor;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.PrintWriter;
@@ -44,56 +45,37 @@ public class ASMifierTablePanel extends ClassNodeTabPanel {
     public ASMifierTablePanel(ClassNode classNode) {
         super(classNode);
         setLayout(new BorderLayout());
-        CodeAreaPanel codeAreaPanel = new CodeAreaPanel(){{
-            getTextArea().addKeyListener(new KeyAdapter() {
-
-                boolean control = false;
-
-                @Override
-                public void keyPressed(KeyEvent e) {
-                    if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
-                        control = true;
-                    } else if (e.getKeyCode() == KeyEvent.VK_S) {
-                        if (control) {
-                            try {
-                                StringWriter stringWriter = new StringWriter();
-                                ClassReader classReader = new ClassReader(this.getClass().getName());
-                                classReader.accept(new TraceClassVisitor(null, new ASMifier(), new PrintWriter(stringWriter)), 0);
-                                ClassPool classPool = new ClassPool();
-                                classPool.appendSystemPath();
-                                classPool.importPackage("org.objectweb.asm.AnnotationVisitor");
-                                classPool.importPackage("org.objectweb.asm.Attribute");
-                                classPool.importPackage("org.objectweb.asm.ClassReader");
-                                classPool.importPackage("org.objectweb.asm.ClassWriter");
-                                classPool.importPackage("org.objectweb.asm.ConstantDynamic");
-                                classPool.importPackage("org.objectweb.asm.FieldVisitor");
-                                classPool.importPackage("org.objectweb.asm.Handle");
-                                classPool.importPackage("org.objectweb.asm.Label");
-                                classPool.importPackage("org.objectweb.asm.MethodVisitor");
-                                classPool.importPackage("org.objectweb.asm.Opcodes");
-                                classPool.importPackage("org.objectweb.asm.RecordComponentVisitor");
-                                classPool.importPackage("org.objectweb.asm.Type");
-                                classPool.importPackage("org.objectweb.asm.TypePath");
-                                CtClass ctClass = classPool.makeClass(ASMifier.class.getSimpleName());
-                                ctClass.addInterface(classPool.get("org.objectweb.asm.Opcodes"));
-                                ctClass.addMethod(CtMethod.make("public static byte[] dump() throws Exception {" + getTextArea().getText() + "return classWriter.toByteArray();}", ctClass));
-                                byte[] dumps = (byte[]) new Loader(classPool).loadClass(ASMifier.class.getSimpleName()).getMethod("dump").invoke(null);
-                                ClassNode newClassNode = new ClassNode();
-                                new ClassReader(dumps).accept(newClassNode, ClassReader.EXPAND_FRAMES);
-                                JavaOctetEditor.getInstance().jar.classes.put(newClassNode.name + ".class", newClassNode);
-                                JOptionPane.showMessageDialog(null,  LangUtil.i18n("success"));
-                            } catch (Throwable ex) {
-                                throw new RuntimeException(ex);
-                            }
-                        }
-                    }
-                }
-
-                @Override
-                public void keyReleased(KeyEvent e) {
-                    if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
-                        control = false;
-                    }
+        CodeAreaPanel codeAreaPanel = new CodeAreaPanel() {{
+            KeyStrokeUtil.register(getTextArea(), KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK), () -> {
+                try {
+                    StringWriter stringWriter = new StringWriter();
+                    ClassReader classReader = new ClassReader(this.getClass().getName());
+                    classReader.accept(new TraceClassVisitor(null, new ASMifier(), new PrintWriter(stringWriter)), 0);
+                    ClassPool classPool = new ClassPool();
+                    classPool.appendSystemPath();
+                    classPool.importPackage("org.objectweb.asm.AnnotationVisitor");
+                    classPool.importPackage("org.objectweb.asm.Attribute");
+                    classPool.importPackage("org.objectweb.asm.ClassReader");
+                    classPool.importPackage("org.objectweb.asm.ClassWriter");
+                    classPool.importPackage("org.objectweb.asm.ConstantDynamic");
+                    classPool.importPackage("org.objectweb.asm.FieldVisitor");
+                    classPool.importPackage("org.objectweb.asm.Handle");
+                    classPool.importPackage("org.objectweb.asm.Label");
+                    classPool.importPackage("org.objectweb.asm.MethodVisitor");
+                    classPool.importPackage("org.objectweb.asm.Opcodes");
+                    classPool.importPackage("org.objectweb.asm.RecordComponentVisitor");
+                    classPool.importPackage("org.objectweb.asm.Type");
+                    classPool.importPackage("org.objectweb.asm.TypePath");
+                    CtClass ctClass = classPool.makeClass(ASMifier.class.getSimpleName());
+                    ctClass.addInterface(classPool.get("org.objectweb.asm.Opcodes"));
+                    ctClass.addMethod(CtMethod.make("public static byte[] dump() throws Exception {" + getTextArea().getText() + "return classWriter.toByteArray();}", ctClass));
+                    byte[] dumps = (byte[]) new Loader(classPool).loadClass(ASMifier.class.getSimpleName()).getMethod("dump").invoke(null);
+                    ClassNode newClassNode = new ClassNode();
+                    new ClassReader(dumps).accept(newClassNode, ClassReader.EXPAND_FRAMES);
+                    ReflectUtil.setAll(classNode, newClassNode);
+                    JOptionPane.showMessageDialog(null, LangUtil.i18n("success"));
+                } catch (Throwable e) {
+                    MessageUtil.error(e);
                 }
             });
         }};

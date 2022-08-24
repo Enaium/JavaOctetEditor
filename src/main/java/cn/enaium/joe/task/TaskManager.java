@@ -18,7 +18,7 @@ package cn.enaium.joe.task;
 
 import cn.enaium.joe.annotation.Repeatable;
 import cn.enaium.joe.util.MessageUtil;
-import org.benf.cfr.reader.bytecode.analysis.parse.utils.Pair;
+import cn.enaium.joe.util.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,14 +39,14 @@ public class TaskManager {
 
     public <T> CompletableFuture<T> submit(AbstractTask<T> abstractTask) {
         for (Pair<AbstractTask<?>, CompletableFuture<?>> classCompletableFuturePair : task) {
-            if (classCompletableFuturePair.getFirst().getClass().equals(abstractTask.getClass()) && !classCompletableFuturePair.getFirst().getClass().isAnnotationPresent(Repeatable.class)) {
+            if (classCompletableFuturePair.getKey().getClass().equals(abstractTask.getClass()) && !classCompletableFuturePair.getKey().getClass().isAnnotationPresent(Repeatable.class)) {
                 MessageUtil.warning("task already exists");
                 throw new RuntimeException("task already exists");
             }
         }
         CompletableFuture<T> completableFuture = CompletableFuture.supplyAsync(abstractTask, executorService);
         completableFuture.whenComplete((t, throwable) -> {
-            task.removeIf(it -> it.getSecond().isDone());
+            task.removeIf(it -> it.getValue().isDone());
             if (throwable != null) {
                 MessageUtil.error(throwable);
             }

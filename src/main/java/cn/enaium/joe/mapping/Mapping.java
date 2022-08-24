@@ -14,28 +14,21 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.menu.search;
+package cn.enaium.joe.mapping;
 
-import cn.enaium.joe.JavaOctetEditor;
-import cn.enaium.joe.dialog.search.SearchLdcDialog;
-import cn.enaium.joe.jar.Jar;
-import cn.enaium.joe.util.LangUtil;
+import net.fabricmc.mappingio.MappedElementKind;
+import net.fabricmc.mappingio.MappingVisitor;
 
-import javax.swing.*;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Enaium
+ * @since 1.0.0
  */
-public class LdcMenuItem extends JMenuItem {
-    public LdcMenuItem() {
-        super(LangUtil.i18n("menu.search.ldc"));
-        addActionListener(e -> {
-            Jar jar = JavaOctetEditor.getInstance().getJar();
-            if (jar == null) {
-                return;
-            }
-
-            new SearchLdcDialog().setVisible(true);
-        });
-    }
+public class Mapping {
+    public final Map<String, String> MAP = new HashMap<>();
+    public final Map<String, String> CLEAN = new HashMap<>();
 }

@@ -30,8 +30,8 @@ import java.util.HashSet;
  * @since 0.7.0
  */
 public class ApplicationConfig extends Config {
-    public final ModeValue decompilerMode = new ModeValue("Decompiler", "CFR", "Java Decompiler", Arrays.asList("CFR", "Procyon", "JD-Core"));
-    public final ModeValue language = new ModeValue("Language", "System", "UI language", Arrays.asList("System", "zh_CN", "en_US"));
+    public ModeValue decompilerMode = new ModeValue("Decompiler", "CFR", "Java Decompiler", Arrays.asList("CFR", "Procyon", "FernFlower"));
+    public ModeValue language = new ModeValue("Language", "System", "UI language", Arrays.asList("System", "zh_CN", "en_US"));
     @NoUI
     public final StringSetValue loadRecent = new StringSetValue("Load Recent", new HashSet<>(), "");
 
