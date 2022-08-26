@@ -16,8 +16,23 @@
 
 package cn.enaium.joe;
 
+import cn.enaium.joe.util.MessageUtil;
+import cn.enaium.joe.util.ReflectUtil;
 import com.formdev.flatlaf.FlatDarkLaf;
 import org.tinylog.Logger;
+
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Enaium
@@ -26,6 +41,27 @@ public final class Main {
     public static void main(String[] args) {
         Logger.info("DIR:{}", System.getProperty("user.dir"));
         FlatDarkLaf.setup();
+        loadTools();
         new JavaOctetEditor().run();
+    }
+
+    private static void loadTools() {
+        if (!ReflectUtil.classHas("com.sun.tools.attach.VirtualMachine")) {
+            Path toolsPath = Paths.get("lib", "tools.jar");
+            Path jrePath = Paths.get(System.getProperty("java.home"));
+            Path tool = jrePath.getParent().resolve(toolsPath);
+            if (Files.notExists(tool)) {
+                Logger.warn("Please use jdk to run");
+                return;
+            }
+            try {
+                Method addURL = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+                addURL.setAccessible(true);
+                addURL.invoke(Main.class.getClassLoader(), tool.toUri().toURL());
+            } catch (NoSuchMethodException | MalformedURLException | InvocationTargetException |
+                     IllegalAccessException e) {
+                MessageUtil.error(e);
+            }
+        }
     }
 }
