@@ -18,7 +18,7 @@ package cn.enaium.joe.config;
 
 import cn.enaium.joe.config.extend.ApplicationConfig;
 import cn.enaium.joe.config.extend.CFRConfig;
-import cn.enaium.joe.config.value.Value;
+import cn.enaium.joe.config.value.*;
 import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.util.ReflectUtil;
 import com.google.gson.*;
@@ -30,7 +30,9 @@ import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Enaium
@@ -92,34 +94,48 @@ public class ConfigManager {
             try {
                 File file = new File(System.getProperty("."), config.getName() + ".json");
                 if (file.exists()) {
-                    //Step.1 get json object
                     JsonObject jsonObject = gson().fromJson(new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8), JsonObject.class);
 
-                    //Step.2 get all field of the config
                     for (Field configField : klass.getDeclaredFields()) {
                         configField.setAccessible(true);
                         if (!jsonObject.has(configField.getName())) {
                             continue;
                         }
 
-                        //Step.3 deserialize
-                        Object setting = gson().fromJson(jsonObject.get(configField.getName()).toString(), configField.getType());
-
-                        //Step.3.1 get all field of the setting
-                        for (Field settingField : setting.getClass().getDeclaredFields()) {
-                            settingField.setAccessible(true);
-
-                            if (settingField.isAnnotationPresent(Expose.class)) {
-                                if (!settingField.getAnnotation(Expose.class).deserialize()) {
-                                    Field declaredField = ReflectUtil.getField(setting.getClass(), settingField.getName());
-                                    //Step.3.2 use the value from config to set the value of setting
-                                    declaredField.set(setting, ReflectUtil.getFieldValue(ReflectUtil.getFieldValue(config, configField.getName()), settingField.getName()));
-                                }
-                            }
+                        if (!jsonObject.has(configField.getName())) {
+                            continue;
                         }
 
-                        //Step.4 use the value from step 3 to set the value of config
-                        configField.set(config, setting);
+                        if (!jsonObject.get(configField.getName()).getAsJsonObject().has("value")) {
+                            continue;
+                        }
+
+                        JsonElement valueJsonElement = jsonObject.get(configField.getName()).getAsJsonObject().get("value");
+
+                        Object valueObject = configField.get(config);
+                        if (valueObject instanceof Value<?>) {
+                            Value<?> value = (Value<?>) valueObject;
+                            if (value instanceof EnableValue) {
+                                ((EnableValue) value).setValue(valueJsonElement.getAsBoolean());
+                            } else if (value instanceof IntegerValue) {
+                                ((IntegerValue) value).setValue(valueJsonElement.getAsInt());
+                            } else if (value instanceof ModeValue) {
+                                ModeValue modeValue = (ModeValue) value;
+                                if (modeValue.getMode().contains(valueJsonElement.getAsString())) {
+                                    modeValue.setValue(valueJsonElement.getAsString());
+                                } else {
+                                    modeValue.setValue(modeValue.getMode().get(0));
+                                }
+                            } else if (value instanceof StringSetValue) {
+                                Set<String> strings = new HashSet<>();
+                                for (JsonElement jsonElement : valueJsonElement.getAsJsonArray()) {
+                                    strings.add(jsonElement.getAsString());
+                                }
+                                ((StringSetValue) value).setValue(strings);
+                            } else if (value instanceof StringValue) {
+                                ((StringValue) value).setValue(valueJsonElement.getAsString());
+                            }
+                        }
                     }
                 }
             } catch (Throwable e) {
