@@ -1,4 +1,5 @@
 import java.text.SimpleDateFormat
+import org.gradle.internal.jvm.Jvm
 
 plugins {
     id 'java'
@@ -18,7 +19,11 @@ jar {
             "Implementation-Title": "${project.name}",
             "Implementation-Version": "${project.version}",
             "Implementation-Vendor": "${project.group}",
-            "Implementation-Timestamp": new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())
+            "Implementation-Timestamp": new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()),
+            "Premain-Class": "cn.enaium.joe.Agent",
+            "Agent-Class": "cn.enaium.joe.Agent",
+            "Can-Redefine-Classes": true,
+            "Can-Retransform-Classes": true
     )
 }
 
@@ -48,6 +53,8 @@ dependencies {
     implementation 'org.tinylog:tinylog-api:2.5.0'
     implementation 'org.tinylog:tinylog-impl:2.5.0'
     implementation 'com.github.FabricMC:mapping-io:597f0722d6'
+
+    compileOnly files(Jvm.current().getToolsJar())
 }
 
 test {
