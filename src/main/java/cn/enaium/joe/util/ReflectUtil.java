@@ -41,4 +41,13 @@ public class ReflectUtil {
     public static <T> T getFieldValue(Object o, String name) throws IllegalAccessException, NoSuchFieldException {
         return (T) getField(o.getClass(), name).get(o);
     }
+
+    public static boolean classHas(String name) {
+        try {
+            Class.forName(name);
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+        return true;
+    }
 }
