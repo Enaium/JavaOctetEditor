@@ -17,11 +17,16 @@
 package cn.enaium.joe;
 
 import cn.enaium.joe.jar.Jar;
+import cn.enaium.joe.util.ReflectUtil;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
 
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
 
 /**
  * @author Enaium
@@ -36,7 +41,10 @@ public class Agent {
         agent(agentArgs, inst);
     }
 
-    private static void agent(String agentArgs, Instrumentation inst) {
-
+    private static void agent(String agentArgs, Instrumentation inst) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        URLClassLoader loader = new URLClassLoader(new URL[]{Agent.class.getProtectionDomain().getCodeSource().getLocation()}, ClassLoader.getSystemClassLoader().getParent());
+        Class<?> main = loader.loadClass("cn.enaium.joe.Main");
+        Method agent = ReflectUtil.getMethod(main, "agent", Instrumentation.class);
+        agent.invoke(null, inst);
     }
 }

@@ -16,12 +16,18 @@
 
 package cn.enaium.joe;
 
+import cn.enaium.joe.jar.Jar;
+import cn.enaium.joe.util.IOUtil;
 import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.util.ReflectUtil;
 import com.formdev.flatlaf.FlatDarkLaf;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.tree.ClassNode;
 import org.tinylog.Logger;
 
 import java.io.File;
+import java.io.IOException;
+import java.lang.instrument.Instrumentation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -33,15 +39,39 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Enaium
  */
 public final class Main {
     public static void main(String[] args) {
+        loadTools();
+        launch();
+    }
+
+
+    private static void agent(Instrumentation inst) throws IOException {
+        launch();
+        Jar jar = new Jar();
+        for (Class<?> allLoadedClass : inst.getAllLoadedClasses()) {
+            String name = allLoadedClass.getName().replace('.', '/');
+            if (name.contains("$$") || name.contains("[") || !inst.isModifiableClass(allLoadedClass)
+            || name.matches("(cn.enaium.joe|java|sun|javax|com.sun|jdk|javafx).+")) {
+                continue;
+            }
+
+            ClassNode classNode = new ClassNode();
+            ClassReader classReader = new ClassReader(IOUtil.getBytes(ClassLoader.getSystemClassLoader().getResourceAsStream(name + ".class")));
+            classReader.accept(classNode, 0);
+            jar.classes.put(allLoadedClass.getName(), classNode);
+        }
+        JavaOctetEditor.getInstance().setJar(jar);
+    }
+
+    private static void launch() {
         Logger.info("DIR:{}", System.getProperty("user.dir"));
         FlatDarkLaf.setup();
-        loadTools();
         new JavaOctetEditor().run();
     }
 

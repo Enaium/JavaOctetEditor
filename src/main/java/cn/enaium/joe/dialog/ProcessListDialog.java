@@ -104,10 +104,13 @@ public class ProcessListDialog extends Dialog {
                     jPopupMenu.add(new JMenuItem(LangUtil.i18n("menu.attach")) {{
                         addActionListener(e -> {
                             try {
-                                jList.getSelectedValue().getVirtualMachine().loadAgent(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getFile()).getAbsolutePath());
+                                VirtualMachine virtualMachine = jList.getSelectedValue().getVirtualMachine();
+                                virtualMachine.loadAgent(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getFile()).getAbsolutePath());
+                                virtualMachine.detach();
                             } catch (AgentLoadException | AgentInitializationException | IOException exception) {
                                 MessageUtil.error(exception);
                             }
+                            System.exit(0);
                         });
                     }});
                     jPopupMenu.show(jList, e.getX(), e.getY());
