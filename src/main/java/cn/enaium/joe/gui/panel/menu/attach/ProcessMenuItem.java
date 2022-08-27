@@ -17,6 +17,7 @@
 package cn.enaium.joe.gui.panel.menu.attach;
 
 import cn.enaium.joe.dialog.ProcessListDialog;
+import cn.enaium.joe.util.LangUtil;
 
 import javax.swing.*;
 
@@ -26,7 +27,7 @@ import javax.swing.*;
  */
 public class ProcessMenuItem extends JMenuItem {
     public ProcessMenuItem() {
-        super("Process");
+        super(LangUtil.i18n("menu.attach.process"));
         addActionListener(e -> {
             new ProcessListDialog().setVisible(true);
         });

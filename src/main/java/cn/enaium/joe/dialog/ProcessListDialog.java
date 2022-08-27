@@ -85,7 +85,7 @@ public class ProcessListDialog extends Dialog {
             public void mousePressed(MouseEvent e) {
                 if (SwingUtilities.isRightMouseButton(e) && jList.getSelectedValue() != null) {
                     JPopupMenu jPopupMenu = new JPopupMenu();
-                    jPopupMenu.add(new JMenuItem("Properties") {{
+                    jPopupMenu.add(new JMenuItem(LangUtil.i18n("popup.attach.properties")) {{
                         addActionListener(e -> {
                             try {
                                 new Dialog(jList.getSelectedValue().getVirtualMachineDescriptor().displayName()) {{
