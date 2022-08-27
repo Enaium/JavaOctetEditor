@@ -19,7 +19,7 @@ package cn.enaium.joe.task;
 import cn.enaium.joe.annotation.Repeatable;
 import cn.enaium.joe.service.DecompileService;
 import org.objectweb.asm.tree.ClassNode;
-import org.tinylog.Logger;
+import org.pmw.tinylog.Logger;
 
 /**
  * @author Enaium

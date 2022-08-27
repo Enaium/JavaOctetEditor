@@ -23,7 +23,10 @@ import cn.enaium.joe.util.ReflectUtil;
 import com.formdev.flatlaf.FlatDarkLaf;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
-import org.tinylog.Logger;
+import org.pmw.tinylog.Configurator;
+import org.pmw.tinylog.Logger;
+import org.pmw.tinylog.writers.ConsoleWriter;
+import org.pmw.tinylog.writers.FileWriter;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,9 +39,6 @@ import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -71,6 +71,8 @@ public final class Main {
     }
 
     private static void launch() {
+        Configurator.currentConfig().writer(new ConsoleWriter(), "[{date: HH:mm:ss.SSS}] {level} > {message}").addWriter(new FileWriter("latest.log"), "[{date: HH:mm:ss.SSS}] {level} > {message}").activate();
+
         Logger.info("DIR:{}", System.getProperty("user.dir"));
         FlatDarkLaf.setup();
         new JavaOctetEditor().run();

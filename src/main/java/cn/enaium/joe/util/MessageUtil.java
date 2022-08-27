@@ -17,7 +17,7 @@
 package cn.enaium.joe.util;
 
 import cn.enaium.joe.gui.panel.confirm.ConfirmPanel;
-import org.tinylog.Logger;
+import org.pmw.tinylog.Logger;
 
 import javax.swing.*;
 

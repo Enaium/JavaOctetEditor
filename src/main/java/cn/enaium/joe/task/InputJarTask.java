@@ -24,7 +24,7 @@ import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.util.Util;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
-import org.tinylog.Logger;
+import org.pmw.tinylog.Logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
