@@ -57,12 +57,13 @@ public final class Main {
         for (Class<?> allLoadedClass : inst.getAllLoadedClasses()) {
             String name = allLoadedClass.getName().replace('.', '/');
             if (name.contains("$$") || name.contains("[") || !inst.isModifiableClass(allLoadedClass)
-            || name.matches("(cn.enaium.joe|java|sun|javax|com.sun|jdk|javafx).+")) {
+                    || allLoadedClass.getClassLoader() == Main.class.getClassLoader()
+                    || name.matches("(java|sun|javax|com.sun|jdk|javafx).+")) {
                 continue;
             }
 
             ClassNode classNode = new ClassNode();
-            ClassReader classReader = new ClassReader(IOUtil.getBytes(ClassLoader.getSystemClassLoader().getResourceAsStream(name + ".class")));
+            ClassReader classReader = new ClassReader(IOUtil.getBytes(Objects.requireNonNull(ClassLoader.getSystemClassLoader().getResourceAsStream(name + ".class"))));
             classReader.accept(classNode, 0);
             jar.classes.put(allLoadedClass.getName(), classNode);
         }
