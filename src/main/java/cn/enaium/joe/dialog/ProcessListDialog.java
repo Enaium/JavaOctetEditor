@@ -17,6 +17,7 @@
 package cn.enaium.joe.dialog;
 
 import cn.enaium.joe.Main;
+import cn.enaium.joe.util.JFileChooserUtil;
 import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.MessageUtil;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
@@ -103,14 +104,32 @@ public class ProcessListDialog extends Dialog {
                     }});
                     jPopupMenu.add(new JMenuItem(LangUtil.i18n("menu.attach")) {{
                         addActionListener(e -> {
-                            try {
-                                VirtualMachine virtualMachine = jList.getSelectedValue().getVirtualMachine();
-                                virtualMachine.loadAgent(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getFile()).getAbsolutePath());
-                                virtualMachine.detach();
-                            } catch (AgentLoadException | AgentInitializationException | IOException exception) {
-                                MessageUtil.error(exception);
+                            MessageUtil.confirm("", LangUtil.i18n("menu.attach"), () -> {
+                                try {
+                                    VirtualMachine virtualMachine = jList.getSelectedValue().getVirtualMachine();
+                                    virtualMachine.loadAgent(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getFile()).getAbsolutePath());
+                                    virtualMachine.detach();
+                                } catch (AgentLoadException | AgentInitializationException | IOException exception) {
+                                    MessageUtil.error(exception);
+                                }
+                                System.exit(0);
+                            });
+                        });
+                    }});
+                    jPopupMenu.add(new JMenuItem(LangUtil.i18n("popup.attach.external")) {{
+                        addActionListener(e -> {
+                            File show = JFileChooserUtil.show(JFileChooserUtil.Type.OPEN);
+                            if (show != null) {
+                                try {
+                                    VirtualMachine virtualMachine = jList.getSelectedValue().getVirtualMachine();
+                                    virtualMachine.loadAgent(show.getAbsolutePath());
+                                    virtualMachine.detach();
+                                } catch (AgentLoadException | AgentInitializationException |
+                                         IOException exception) {
+                                    MessageUtil.error(exception);
+                                }
+                                System.exit(0);
                             }
-                            System.exit(0);
                         });
                     }});
                     jPopupMenu.show(jList, e.getX(), e.getY());

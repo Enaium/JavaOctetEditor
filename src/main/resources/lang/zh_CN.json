@@ -34,6 +34,7 @@
   "menu.help": "帮助",
   "menu.help.about": "关于",
   "menu.help.contact": "联系",
+  "popup.attach.external": "外部",
   "popup.attach.properties": "属性",
   "popup.instruction.edit": "编辑",
   "popup.instruction.clone": "克隆",

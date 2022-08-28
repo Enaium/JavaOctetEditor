@@ -35,6 +35,7 @@
   "menu.help.about": "About",
   "menu.help.contact": "Contact",
   "popup.attach.properties": "Properties",
+  "popup.attach.external": "External",
   "popup.instruction.edit": "Edit",
   "popup.instruction.clone": "Clone",
   "popup.instructions.remove": "Remove",
