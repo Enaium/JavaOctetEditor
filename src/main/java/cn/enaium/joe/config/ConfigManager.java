@@ -31,17 +31,14 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Enaium
  * @since 0.7.0
  */
 public class ConfigManager {
-    private final Map<Class<? extends Config>, Config> configMap = new HashMap<>();
+    private final Map<Class<? extends Config>, Config> configMap = new LinkedHashMap<>();
 
     public ConfigManager() {
         setByClass(new ApplicationConfig());
