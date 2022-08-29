@@ -19,6 +19,7 @@ package cn.enaium.joe.config;
 import cn.enaium.joe.config.extend.ApplicationConfig;
 import cn.enaium.joe.config.extend.CFRConfig;
 import cn.enaium.joe.config.extend.FernFlowerConfig;
+import cn.enaium.joe.config.extend.ProcyonConfig;
 import cn.enaium.joe.config.value.*;
 import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.util.ReflectUtil;
@@ -46,6 +47,7 @@ public class ConfigManager {
         setByClass(new ApplicationConfig());
         setByClass(new CFRConfig());
         setByClass(new FernFlowerConfig());
+        setByClass(new ProcyonConfig());
     }
 
     @SuppressWarnings("unchecked")
