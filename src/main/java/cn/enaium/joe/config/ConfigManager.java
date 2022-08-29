@@ -18,6 +18,7 @@ package cn.enaium.joe.config;
 
 import cn.enaium.joe.config.extend.ApplicationConfig;
 import cn.enaium.joe.config.extend.CFRConfig;
+import cn.enaium.joe.config.extend.FernFlowerConfig;
 import cn.enaium.joe.config.value.*;
 import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.util.ReflectUtil;
@@ -44,6 +45,7 @@ public class ConfigManager {
     public ConfigManager() {
         setByClass(new ApplicationConfig());
         setByClass(new CFRConfig());
+        setByClass(new FernFlowerConfig());
     }
 
     @SuppressWarnings("unchecked")
@@ -72,7 +74,7 @@ public class ConfigManager {
                 if (o instanceof Value<?>) {
                     Object value = ((Value<?>) o).getValue();
                     if (value != null) {
-                        map.put(((Value<?>) o).getName(), value.toString());
+                        map.put(declaredField.getName(), value.toString());
                     }
                 }
             } catch (IllegalAccessException e) {

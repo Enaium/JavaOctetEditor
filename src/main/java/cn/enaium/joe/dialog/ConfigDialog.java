@@ -24,6 +24,7 @@ import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.MessageUtil;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
@@ -38,13 +39,11 @@ import java.lang.reflect.Field;
 public class ConfigDialog extends Dialog {
     public ConfigDialog(Config config) {
         super(LangUtil.i18n("menu.config"));
-        setSize(new Dimension(400, getHeight()));
         JPanel names = new JPanel(new GridLayout(0, 1));
         JPanel components = new JPanel(new GridLayout(0, 1));
         try {
             for (Field declaredField : config.getClass().getDeclaredFields()) {
                 declaredField.setAccessible(true);
-
 
                 if (declaredField.isAnnotationPresent(NoUI.class)) {
                     continue;
@@ -62,8 +61,9 @@ public class ConfigDialog extends Dialog {
 
                 if (o instanceof StringValue) {
                     StringValue stringValue = (StringValue) o;
-                    components.add(new JTextField(stringValue.getValue()) {{
+                    components.add(new JTextField(25) {{
                         JTextField jTextField = this;
+                        jTextField.setText(stringValue.getValue());
                         getDocument().addDocumentListener(new DocumentListener() {
                             @Override
                             public void insertUpdate(DocumentEvent e) {
