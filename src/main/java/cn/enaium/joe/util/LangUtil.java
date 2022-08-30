@@ -21,7 +21,7 @@ import cn.enaium.joe.config.extend.ApplicationConfig;
 import cn.enaium.joe.config.value.ModeValue;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import org.tinylog.Logger;
+import org.pmw.tinylog.Logger;
 
 import java.io.IOException;
 import java.net.URL;

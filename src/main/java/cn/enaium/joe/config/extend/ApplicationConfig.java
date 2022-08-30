@@ -32,6 +32,7 @@ import java.util.HashSet;
 public class ApplicationConfig extends Config {
     public ModeValue decompilerMode = new ModeValue("Decompiler", "CFR", "Java Decompiler", Arrays.asList("CFR", "Procyon", "FernFlower"));
     public ModeValue language = new ModeValue("Language", "System", "UI language", Arrays.asList("System", "zh_CN", "en_US"));
+    public ModeValue packagePresentation = new ModeValue("Package Presentation", "Hierarchical", "Package Mode", Arrays.asList("Flat", "Hierarchical"));
     @NoUI
     public final StringSetValue loadRecent = new StringSetValue("Load Recent", new HashSet<>(), "");
 

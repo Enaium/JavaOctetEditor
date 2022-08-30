@@ -17,9 +17,11 @@
 package cn.enaium.joe.dialog;
 
 import cn.enaium.joe.util.LangUtil;
+import cn.enaium.joe.util.ReflectUtil;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.tools.ToolProvider;
 import java.awt.*;
 
 /**
@@ -43,7 +45,7 @@ public class AboutDialog extends Dialog {
                 }});
                 add(new JSeparator());
             }});
-            add(new JPanel(new GridLayout(6, 0)) {{
+            add(new JPanel(new GridLayout(8, 0)) {{
                 add(new JLabel(LangUtil.i18n("about.java")));
                 add(new JLabel(LangUtil.i18n("about.java.description")));
                 add(new JPanel(new BorderLayout()) {{
@@ -61,6 +63,14 @@ public class AboutDialog extends Dialog {
                 add(new JPanel(new BorderLayout()) {{
                     add(new JLabel(LangUtil.i18n("about.java.home")), BorderLayout.WEST);
                     add(new JLabel(System.getProperty("java.home")), BorderLayout.EAST);
+                }});
+                add(new JPanel(new BorderLayout()) {{
+                    add(new JLabel(LangUtil.i18n("about.java.supportCompiler")), BorderLayout.WEST);
+                    add(new JLabel(String.valueOf(ToolProvider.getSystemJavaCompiler() != null)), BorderLayout.EAST);
+                }});
+                add(new JPanel(new BorderLayout()) {{
+                    add(new JLabel(LangUtil.i18n("about.java.supportAttach")), BorderLayout.WEST);
+                    add(new JLabel(String.valueOf(ReflectUtil.classHas("com.sun.tools.attach.VirtualMachine"))), BorderLayout.EAST);
                 }});
             }});
         }});

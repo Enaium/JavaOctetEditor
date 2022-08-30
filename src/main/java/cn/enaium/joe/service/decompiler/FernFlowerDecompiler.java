@@ -16,6 +16,8 @@
 
 package cn.enaium.joe.service.decompiler;
 
+import cn.enaium.joe.JavaOctetEditor;
+import cn.enaium.joe.config.extend.FernFlowerConfig;
 import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.util.ReflectUtil;
 import org.jetbrains.java.decompiler.main.Fernflower;
@@ -50,7 +52,9 @@ public class FernFlowerDecompiler implements IDecompiler, IBytecodeProvider, IRe
         classNode.accept(classWriter);
         bytes = classWriter.toByteArray();
 
-        Fernflower fernflower = new Fernflower(this, this, new HashMap<>(), new IFernflowerLogger() {
+        Fernflower fernflower = new Fernflower(this, this, new HashMap<String, Object>() {{
+            this.putAll(JavaOctetEditor.getInstance().config.getConfigMap(FernFlowerConfig.class));
+        }}, new IFernflowerLogger() {
             @Override
             public void writeMessage(String message, Severity severity) {
 

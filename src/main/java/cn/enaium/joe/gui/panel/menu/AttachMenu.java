@@ -14,30 +14,20 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.task;
+package cn.enaium.joe.gui.panel.menu;
 
-import cn.enaium.joe.annotation.Repeatable;
-import cn.enaium.joe.service.DecompileService;
-import org.objectweb.asm.tree.ClassNode;
-import org.pmw.tinylog.Logger;
+import cn.enaium.joe.gui.panel.menu.attach.ProcessMenuItem;
+import cn.enaium.joe.util.LangUtil;
+
+import javax.swing.*;
 
 /**
  * @author Enaium
- * @since 0.10.0
+ * @since 1.1.0
  */
-@Repeatable
-public class DecompileTask extends AbstractTask<String> {
-
-    private final ClassNode classNode;
-
-    public DecompileTask(ClassNode classNode) {
-        super("Decompile");
-        this.classNode = classNode;
-    }
-
-    @Override
-    public String get() {
-        Logger.info("DECOMPILE:{}", classNode.name);
-        return DecompileService.getService().decompile(classNode);
+public class AttachMenu extends JMenu {
+    public AttachMenu() {
+        super(LangUtil.i18n("menu.attach"));
+        add(new ProcessMenuItem());
     }
 }

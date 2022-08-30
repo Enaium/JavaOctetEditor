@@ -26,8 +26,11 @@ import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.task.TaskManager;
 import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.MessageUtil;
+import cn.enaium.joe.util.ReflectUtil;
+import com.sun.tools.attach.VirtualMachine;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
+import org.pmw.tinylog.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -77,6 +80,13 @@ public class JavaOctetEditor {
         window.setJMenuBar(new JMenuBar() {{
             add(new FileMenu());
             add(new SearchMenu());
+
+            AttachMenu attachMenu = new AttachMenu() {{
+                if (!ReflectUtil.classHas("com.sun.tools.attach.VirtualMachine")) {
+                    setEnabled(false);
+                }
+            }};
+            add(attachMenu);
             add(new MappingMenu());
             add(new ConfigMenu());
             add(new HelpMenu());

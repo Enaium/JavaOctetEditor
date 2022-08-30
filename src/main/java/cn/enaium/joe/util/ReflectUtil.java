@@ -17,6 +17,7 @@
 package cn.enaium.joe.util;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 /**
  * @author Enaium
@@ -37,8 +38,23 @@ public class ReflectUtil {
         return declaredField;
     }
 
+    public static Method getMethod(Class<?> klass, String name, Class<?>... parameterTypes) throws NoSuchMethodException {
+        Method declaredMethod = klass.getDeclaredMethod(name, parameterTypes);
+        declaredMethod.setAccessible(true);
+        return declaredMethod;
+    }
+
     @SuppressWarnings("unchecked")
     public static <T> T getFieldValue(Object o, String name) throws IllegalAccessException, NoSuchFieldException {
         return (T) getField(o.getClass(), name).get(o);
+    }
+
+    public static boolean classHas(String name) {
+        try {
+            Class.forName(name);
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+        return true;
     }
 }
