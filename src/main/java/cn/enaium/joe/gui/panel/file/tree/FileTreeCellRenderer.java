@@ -31,6 +31,7 @@ import java.awt.*;
 public class FileTreeCellRenderer extends DefaultTreeCellRenderer {
     @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+        FileTreeCellRenderer self = this;
         super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
         final DefaultTreeNode defaultTreeNode = (DefaultTreeNode) value;
 
@@ -69,6 +70,15 @@ public class FileTreeCellRenderer extends DefaultTreeCellRenderer {
                 setIcon(new FlatSVGIcon("icons/file.svg"));
             }
         }
-        return this;
+        return new JPanel(new BorderLayout()) {{
+            if (sel) {
+                setBackground(self.getBackgroundSelectionColor());
+            } else {
+                setBackground(self.getBackground());
+            }
+            add(new JLabel(value.toString()) {{
+                setIcon(self.getIcon());
+            }}, BorderLayout.CENTER);
+        }};
     }
 }

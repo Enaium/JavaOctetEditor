@@ -45,6 +45,16 @@ public class MethodInstructionPanel extends JPanel {
         super(new BorderLayout());
         DefaultListModel<InstructionWrapper> instructionDefaultListModel = new DefaultListModel<>();
         JList<InstructionWrapper> instructionJList = new JList<>(instructionDefaultListModel);
+        instructionJList.setPrototypeCellValue(new InstructionWrapper(null));
+        instructionJList.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> new JPanel(new BorderLayout()) {{
+            if (isSelected) {
+                setBackground(list.getSelectionBackground());
+            } else {
+                setBackground(list.getBackground());
+            }
+            JLabel comp = new JLabel(value.toString());
+            add(comp, BorderLayout.CENTER);
+        }});
         for (AbstractInsnNode instruction : methodNode.instructions) {
             instructionDefaultListModel.addElement(new InstructionWrapper(instruction));
         }
