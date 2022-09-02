@@ -52,8 +52,8 @@ public class MethodInstructionPanel extends JPanel {
             } else {
                 setBackground(list.getBackground());
             }
-            JLabel comp = new JLabel(value.toString());
-            add(comp, BorderLayout.CENTER);
+            add(new JLabel(String.format("%04d", index)), BorderLayout.WEST);
+            add(new JLabel(value.toString()), BorderLayout.CENTER);
         }});
         for (AbstractInsnNode instruction : methodNode.instructions) {
             instructionDefaultListModel.addElement(new InstructionWrapper(instruction));
@@ -142,16 +142,6 @@ public class MethodInstructionPanel extends JPanel {
             }
         });
         add(new JScrollPane(instructionJList), BorderLayout.CENTER);
-        JLabel comp = new JLabel();
-        instructionJList.addListSelectionListener(e -> {
-            if (instructionJList.getSelectedIndex() != -1) {
-                comp.setText(String.format("Index:%d", instructionJList.getSelectedIndex()));
-                comp.setVisible(true);
-            } else {
-                comp.setVisible(false);
-            }
-        });
-        add(comp, BorderLayout.SOUTH);
     }
 
     private static void moveInstruction(JList<InstructionWrapper> instructionJList, MethodNode methodNode, boolean up) {
