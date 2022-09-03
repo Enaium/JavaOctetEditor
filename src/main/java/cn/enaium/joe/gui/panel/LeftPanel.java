@@ -17,21 +17,19 @@
 package cn.enaium.joe.gui.panel;
 
 import cn.enaium.joe.JavaOctetEditor;
-import cn.enaium.joe.gui.panel.file.tree.FileTreePanel;
+import cn.enaium.joe.event.Listener;
+import cn.enaium.joe.gui.layout.HalfLayout;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.util.JTreeUtil;
 import cn.enaium.joe.util.LangUtil;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.tree.TreePath;
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.util.Locale;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -82,11 +80,52 @@ public class LeftPanel extends JPanel {
                 });
             }}, BorderLayout.CENTER);
         }}, BorderLayout.NORTH);
-        JSplitPane comp = new JSplitPane();
-        comp.setOrientation(JSplitPane.VERTICAL_SPLIT);
-        comp.setLeftComponent(new JScrollPane(JavaOctetEditor.getInstance().fileTreePanel));
-        comp.getRightComponent().setVisible(false);
-        comp.setDividerSize(0);
-        add(comp, BorderLayout.CENTER);
+        JPanel jPanel = new JPanel(new HalfLayout(HalfLayout.TOP_AND_BOTTOM));
+        jPanel.add(new JScrollPane(JavaOctetEditor.getInstance().fileTreePanel), HalfLayout.TOP);
+        jPanel.add(new JScrollPane(new JLabel("No Member", SwingConstants.CENTER)) {{
+            JavaOctetEditor.getInstance().event.register(BottomToggleButton.class, (Consumer<BottomToggleButton>) listener -> {
+                if (listener.type == BottomToggleButton.Type.MEMBER) {
+                    setVisible(listener.select);
+                    jPanel.validate();
+                }
+            });
+            setVisible(false);
+        }}, HalfLayout.BOTTOM);
+        add(new JPanel(new BorderLayout()) {{
+            add(new JPanel(new HalfLayout(HalfLayout.TOP_AND_BOTTOM)) {{
+                add(new JPanel(), HalfLayout.TOP);
+                add(new JPanel(new BorderLayout()) {{
+                    add(new JToggleButton("M") {{
+                        addActionListener(e -> {
+                            JavaOctetEditor.getInstance().event.call(new BottomToggleButton(isSelected(), BottomToggleButton.Type.MEMBER));
+                        });
+                    }}, BorderLayout.SOUTH);
+                }}, HalfLayout.BOTTOM);
+            }}, BorderLayout.WEST);
+            add(jPanel, BorderLayout.CENTER);
+        }}, BorderLayout.CENTER);
+    }
+
+    private static class BottomToggleButton implements Listener {
+        private final boolean select;
+
+        private final Type type;
+
+        public BottomToggleButton(boolean select, Type type) {
+            this.select = select;
+            this.type = type;
+        }
+
+        public boolean isSelect() {
+            return select;
+        }
+
+        public Type getType() {
+            return type;
+        }
+
+        enum Type {
+            MEMBER
+        }
     }
 }

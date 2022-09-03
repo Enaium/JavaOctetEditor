@@ -17,6 +17,7 @@
 package cn.enaium.joe;
 
 import cn.enaium.joe.config.ConfigManager;
+import cn.enaium.joe.event.EventManager;
 import cn.enaium.joe.gui.panel.BottomPanel;
 import cn.enaium.joe.gui.panel.LeftPanel;
 import cn.enaium.joe.gui.panel.file.tabbed.FileTabbedPanel;
@@ -59,11 +60,14 @@ public class JavaOctetEditor {
 
     public TaskManager task;
 
+    public EventManager event;
+
     public JavaOctetEditor() {
         instance = this;
         config = new ConfigManager();
         config.load();
         task = new TaskManager();
+        event = new EventManager();
         Runtime.getRuntime().addShutdownHook(new Thread(config::save));
         fileTabbedPanel = new FileTabbedPanel();
         fileTreePanel = new FileTreePanel();
