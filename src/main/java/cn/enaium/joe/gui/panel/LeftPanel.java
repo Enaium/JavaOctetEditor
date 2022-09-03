@@ -20,6 +20,7 @@ import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.gui.panel.file.tree.FileTreePanel;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.util.JTreeUtil;
+import cn.enaium.joe.util.LangUtil;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -42,24 +43,8 @@ public class LeftPanel extends JPanel {
         add(new JPanel(new BorderLayout()) {{
             setBorder(new EmptyBorder(5, 0, 5, 0));
             add(new JTextField() {{
+                putClientProperty("JTextField.placeholderText", LangUtil.i18n("menu.search"));
                 JTextField jTextField = this;
-                addFocusListener(new FocusListener() {
-                    @Override
-                    public void focusGained(FocusEvent e) {
-                        if (jTextField.getText().equals("Search...")) {
-                            jTextField.setText("");
-                            jTextField.setForeground(Color.WHITE);
-                        }
-                    }
-
-                    @Override
-                    public void focusLost(FocusEvent e) {
-                        if (jTextField.getText().isEmpty()) {
-                            jTextField.setForeground(Color.GRAY);
-                            jTextField.setText("Search...");
-                        }
-                    }
-                });
                 addKeyListener(new KeyAdapter() {
                     @Override
                     public void keyPressed(KeyEvent e) {
@@ -97,6 +82,11 @@ public class LeftPanel extends JPanel {
                 });
             }}, BorderLayout.CENTER);
         }}, BorderLayout.NORTH);
-        add(new JScrollPane(JavaOctetEditor.getInstance().fileTreePanel), BorderLayout.CENTER);
+        JSplitPane comp = new JSplitPane();
+        comp.setOrientation(JSplitPane.VERTICAL_SPLIT);
+        comp.setLeftComponent(new JScrollPane(JavaOctetEditor.getInstance().fileTreePanel));
+        comp.getRightComponent().setVisible(false);
+        comp.setDividerSize(0);
+        add(comp, BorderLayout.CENTER);
     }
 }
