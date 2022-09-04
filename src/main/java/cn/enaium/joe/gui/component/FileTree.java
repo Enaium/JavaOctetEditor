@@ -20,6 +20,7 @@ import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.config.extend.ApplicationConfig;
 import cn.enaium.joe.gui.panel.file.FileDropTarget;
 import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassTabPanel;
+import cn.enaium.joe.gui.panel.file.tabbed.tab.resources.FileTablePane;
 import cn.enaium.joe.gui.panel.file.tabbed.tab.resources.HexTablePanel;
 import cn.enaium.joe.gui.panel.file.tree.FileTreeCellRenderer;
 import cn.enaium.joe.gui.panel.file.tree.node.*;
@@ -69,7 +70,7 @@ public class FileTree extends JTree {
                     FolderTreeNode folderTreeNode = (FolderTreeNode) lastPathComponent;
                     if (folderTreeNode instanceof FileTreeNode) {
                         FileTreeNode fileTreeNode = (FileTreeNode) folderTreeNode;
-                        JavaOctetEditor.getInstance().fileTabbedPanel.addTab(fileTreeNode.toString().substring(fileTreeNode.toString().lastIndexOf("/") + 1), new HexTablePanel(fileTreeNode));
+                        JavaOctetEditor.getInstance().fileTabbedPanel.addTab(fileTreeNode.toString().substring(fileTreeNode.toString().lastIndexOf("/") + 1), new FileTablePane(fileTreeNode));
                     }
                 }
                 JavaOctetEditor.getInstance().fileTabbedPanel.setSelectedIndex(JavaOctetEditor.getInstance().fileTabbedPanel.getTabCount() - 1);

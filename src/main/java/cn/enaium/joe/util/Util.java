@@ -33,4 +33,17 @@ public class Util {
         }
         return c;
     }
+
+    public static boolean isText(byte[] bytes) {
+        int total = bytes.length;
+        if (total >= 8000) {
+            total = 8000;
+        }
+        for (int i = 0; i < total; i++) {
+            if (((char) bytes[i]) == '\0') {
+                return false;
+            }
+        }
+        return true;
+    }
 }
