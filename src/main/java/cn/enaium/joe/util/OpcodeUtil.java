@@ -24,6 +24,8 @@ import org.objectweb.asm.tree.LabelNode;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.objectweb.asm.Opcodes.*;
+
 /**
  * @author Enaium
  * @since 0.8.0
@@ -298,5 +300,29 @@ public class OpcodeUtil {
             reverseMap.put(kvEntry.getValue(), kvEntry.getKey());
         }
         return reverseMap;
+    }
+
+    public static boolean isPublic(int access) {
+        return (access & ACC_PUBLIC) != 0;
+    }
+
+    public static boolean isPrivate(int access) {
+        return (access & ACC_PRIVATE) != 0;
+    }
+
+    public static boolean isProtected(int access) {
+        return (access & ACC_PROTECTED) != 0;
+    }
+
+    public static boolean isStatic(int access) {
+        return (access & ACC_STATIC) != 0;
+    }
+
+    public static boolean isFinal(int access) {
+        return (access & ACC_FINAL) != 0;
+    }
+
+    public static boolean isSynchronized(int access) {
+        return (access & ACC_SYNCHRONIZED) != 0;
     }
 }
