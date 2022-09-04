@@ -20,6 +20,7 @@ import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.gui.panel.file.tree.node.*;
 import cn.enaium.joe.gui.panel.search.ResultNode;
 import cn.enaium.joe.util.ASyncUtil;
+import cn.enaium.joe.util.JMenuUtil;
 import org.objectweb.asm.tree.ClassNode;
 
 import javax.swing.*;
@@ -64,17 +65,7 @@ public class ResultList extends JList<ResultNode> {
             }
         });
         jPopupMenu.add(jMenuItem);
-        ResultList resultList = this;
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if (SwingUtilities.isRightMouseButton(e)) {
-                    if (getSelectedValue() != null) {
-                        jPopupMenu.show(resultList, e.getX(), e.getY());
-                    }
-                }
-            }
-        });
+        JMenuUtil.addPopupMenu(this, jPopupMenu, () -> this.getSelectedValue() != null);
     }
 
     public boolean selectEntry(JTree jTree, ClassNode classNode, DefaultTreeModel defaultTreeModel, DefaultTreeNode defaultTreeNode) {

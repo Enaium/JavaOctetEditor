@@ -18,10 +18,7 @@ package cn.enaium.joe.gui.panel.method;
 
 import cn.enaium.joe.gui.component.InstructionComboBox;
 import cn.enaium.joe.gui.panel.confirm.InstructionEditPanel;
-import cn.enaium.joe.util.HtmlUtil;
-import cn.enaium.joe.util.LangUtil;
-import cn.enaium.joe.util.MessageUtil;
-import cn.enaium.joe.util.OpcodeUtil;
+import cn.enaium.joe.util.*;
 import cn.enaium.joe.wrapper.InstructionWrapper;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Opcodes;
@@ -131,16 +128,7 @@ public class MethodInstructionPanel extends JPanel {
             });
         }});
 
-        instructionJList.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                if (SwingUtilities.isRightMouseButton(e)) {
-                    if (instructionJList.getSelectedValue() != null) {
-                        jPopupMenu.show(instructionJList, e.getX(), e.getY());
-                    }
-                }
-            }
-        });
+        JMenuUtil.addPopupMenu(instructionJList, jPopupMenu, () -> instructionJList.getSelectedValue() != null);
         add(new JScrollPane(instructionJList), BorderLayout.CENTER);
     }
 

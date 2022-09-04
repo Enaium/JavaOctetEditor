@@ -26,6 +26,7 @@ import cn.enaium.joe.gui.panel.file.tree.FileTreeCellRenderer;
 import cn.enaium.joe.gui.panel.file.tree.node.*;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.task.InputJarTask;
+import cn.enaium.joe.util.JMenuUtil;
 import cn.enaium.joe.util.JTreeUtil;
 import cn.enaium.joe.util.LangUtil;
 import org.objectweb.asm.tree.ClassNode;
@@ -91,16 +92,7 @@ public class FileTree extends JTree {
                 JTreeUtil.setNodeExpandedState(FileTree.this, ((DefaultMutableTreeNode) Objects.requireNonNull(getSelectionPath()).getLastPathComponent()), true);
             });
         }});
-
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if (SwingUtilities.isRightMouseButton(e) && getSelectionPath() != null) {
-                    jPopupMenu.show(FileTree.this, e.getX(), e.getY());
-                }
-            }
-        });
-
+        JMenuUtil.addPopupMenu(this, jPopupMenu, () -> getSelectionPath() != null);
     }
 
     public void refresh(Jar jar) {

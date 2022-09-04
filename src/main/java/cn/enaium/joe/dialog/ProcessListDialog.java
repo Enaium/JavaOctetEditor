@@ -18,6 +18,7 @@ package cn.enaium.joe.dialog;
 
 import cn.enaium.joe.Main;
 import cn.enaium.joe.util.JFileChooserUtil;
+import cn.enaium.joe.util.JMenuUtil;
 import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.MessageUtil;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
@@ -81,62 +82,54 @@ public class ProcessListDialog extends Dialog {
             }
         }
 
-        jList.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if (SwingUtilities.isRightMouseButton(e) && jList.getSelectedValue() != null) {
-                    JPopupMenu jPopupMenu = new JPopupMenu();
-                    jPopupMenu.add(new JMenuItem(LangUtil.i18n("popup.attach.properties")) {{
-                        addActionListener(e -> {
-                            try {
-                                new Dialog(jList.getSelectedValue().getVirtualMachineDescriptor().displayName()) {{
-                                    setLayout(new BorderLayout());
-                                    DefaultTableModel defaultTableModel = new DefaultTableModel(new Object[][]{}, new String[]{"Key", "Value"});
-                                    add(new JScrollPane(new JTable(defaultTableModel)), BorderLayout.CENTER);
-                                    for (Map.Entry<Object, Object> objectObjectEntry : jList.getSelectedValue().getVirtualMachine().getSystemProperties().entrySet()) {
-                                        defaultTableModel.addRow(new Object[]{objectObjectEntry.getKey(), objectObjectEntry.getValue()});
-                                    }
-                                }}.setVisible(true);
-                            } catch (IOException ignore) {
+        JPopupMenu jPopupMenu = new JPopupMenu();
+        jPopupMenu.add(new JMenuItem(LangUtil.i18n("popup.attach.properties")) {{
+            addActionListener(e -> {
+                try {
+                    new Dialog(jList.getSelectedValue().getVirtualMachineDescriptor().displayName()) {{
+                        setLayout(new BorderLayout());
+                        DefaultTableModel defaultTableModel = new DefaultTableModel(new Object[][]{}, new String[]{"Key", "Value"});
+                        add(new JScrollPane(new JTable(defaultTableModel)), BorderLayout.CENTER);
+                        for (Map.Entry<Object, Object> objectObjectEntry : jList.getSelectedValue().getVirtualMachine().getSystemProperties().entrySet()) {
+                            defaultTableModel.addRow(new Object[]{objectObjectEntry.getKey(), objectObjectEntry.getValue()});
+                        }
+                    }}.setVisible(true);
+                } catch (IOException ignore) {
 
-                            }
-                        });
-                    }});
-                    jPopupMenu.add(new JMenuItem(LangUtil.i18n("menu.attach")) {{
-                        addActionListener(e -> {
-                            MessageUtil.confirm("", LangUtil.i18n("menu.attach"), () -> {
-                                try {
-                                    VirtualMachine virtualMachine = jList.getSelectedValue().getVirtualMachine();
-                                    virtualMachine.loadAgent(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getFile()).getAbsolutePath());
-                                    virtualMachine.detach();
-                                } catch (AgentLoadException | AgentInitializationException | IOException exception) {
-                                    MessageUtil.error(exception);
-                                }
-                                System.exit(0);
-                            });
-                        });
-                    }});
-                    jPopupMenu.add(new JMenuItem(LangUtil.i18n("popup.attach.external")) {{
-                        addActionListener(e -> {
-                            File show = JFileChooserUtil.show(JFileChooserUtil.Type.OPEN);
-                            if (show != null) {
-                                try {
-                                    VirtualMachine virtualMachine = jList.getSelectedValue().getVirtualMachine();
-                                    virtualMachine.loadAgent(show.getAbsolutePath());
-                                    virtualMachine.detach();
-                                } catch (AgentLoadException | AgentInitializationException |
-                                         IOException exception) {
-                                    MessageUtil.error(exception);
-                                }
-                                System.exit(0);
-                            }
-                        });
-                    }});
-                    jPopupMenu.show(jList, e.getX(), e.getY());
                 }
-                super.mousePressed(e);
-            }
-        });
+            });
+        }});
+        jPopupMenu.add(new JMenuItem(LangUtil.i18n("menu.attach")) {{
+            addActionListener(e -> {
+                MessageUtil.confirm("", LangUtil.i18n("menu.attach"), () -> {
+                    try {
+                        VirtualMachine virtualMachine = jList.getSelectedValue().getVirtualMachine();
+                        virtualMachine.loadAgent(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getFile()).getAbsolutePath());
+                        virtualMachine.detach();
+                    } catch (AgentLoadException | AgentInitializationException | IOException exception) {
+                        MessageUtil.error(exception);
+                    }
+                    System.exit(0);
+                });
+            });
+        }});
+        jPopupMenu.add(new JMenuItem(LangUtil.i18n("popup.attach.external")) {{
+            addActionListener(e -> {
+                File show = JFileChooserUtil.show(JFileChooserUtil.Type.OPEN);
+                if (show != null) {
+                    try {
+                        VirtualMachine virtualMachine = jList.getSelectedValue().getVirtualMachine();
+                        virtualMachine.loadAgent(show.getAbsolutePath());
+                        virtualMachine.detach();
+                    } catch (AgentLoadException | AgentInitializationException |
+                             IOException exception) {
+                        MessageUtil.error(exception);
+                    }
+                    System.exit(0);
+                }
+            });
+        }});
+        JMenuUtil.addPopupMenu(jList, jPopupMenu, () -> jList.getSelectedValue() != null);
 
         add(new JScrollPane(jList), BorderLayout.CENTER);
     }
