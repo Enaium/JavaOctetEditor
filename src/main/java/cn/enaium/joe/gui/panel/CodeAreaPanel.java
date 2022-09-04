@@ -44,9 +44,9 @@ public class CodeAreaPanel extends JPanel implements ActionListener {
         textArea = new RSyntaxTextArea();
         textArea.setCodeFoldingEnabled(true);
         textArea.setEditable(false);
-        Theme theme = null;
+        Theme theme;
         try {
-            theme = Theme.load(getClass().getResourceAsStream("/org/fife/ui/rsyntaxtextarea/themes/dark.xml"));
+            theme = Theme.load(getClass().getResourceAsStream("/org/fife/ui/rsyntaxtextarea/themes/monokai.xml"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
