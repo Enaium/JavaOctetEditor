@@ -17,11 +17,22 @@
 package cn.enaium.joe.gui.panel;
 
 import cn.enaium.joe.JavaOctetEditor;
+import cn.enaium.joe.dialog.FieldDialog;
+import cn.enaium.joe.dialog.MethodDialog;
 import cn.enaium.joe.event.Listener;
+import cn.enaium.joe.event.listener.FileTabbedSelectListener;
 import cn.enaium.joe.gui.layout.HalfLayout;
+import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassTabPanel;
+import cn.enaium.joe.gui.panel.file.tree.FileTreePanel;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.util.JTreeUtil;
 import cn.enaium.joe.util.LangUtil;
+import cn.enaium.joe.util.OpcodeUtil;
+import cn.enaium.joe.util.Pair;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldNode;
+import org.objectweb.asm.tree.MethodNode;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -39,79 +50,22 @@ public class LeftPanel extends JPanel {
     public LeftPanel() {
         super(new BorderLayout());
         add(new JPanel(new BorderLayout()) {{
-            setBorder(new EmptyBorder(5, 0, 5, 0));
-            add(new JTextField() {{
-                putClientProperty("JTextField.placeholderText", LangUtil.i18n("menu.search"));
-                JTextField jTextField = this;
-                addKeyListener(new KeyAdapter() {
-                    @Override
-                    public void keyPressed(KeyEvent e) {
-                        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                            Jar jar = JavaOctetEditor.getInstance().getJar();
-                            if (jar != null) {
-                                if (!jTextField.getText().replace(" ", "").isEmpty()) {
-                                    Jar searchedJar = jar.copy();
-
-                                    searchedJar.classes = searchedJar.classes.entrySet().stream().filter(stringClassNodeEntry -> {
-                                        String key = stringClassNodeEntry.getKey();
-
-                                        if (!key.contains("/")) {
-                                            key = key.substring(key.lastIndexOf("/") + 1);
-                                        }
-
-                                        return key.toLowerCase(Locale.ROOT).contains(jTextField.getText().toLowerCase(Locale.ROOT));
-                                    }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-                                    searchedJar.resources = searchedJar.resources.entrySet().stream().filter(stringEntry -> {
-                                        String key = stringEntry.getKey();
-                                        if (!key.contains("/")) {
-                                            key = key.substring(key.lastIndexOf("/") + 1);
-                                        }
-                                        return key.toLowerCase(Locale.ROOT).contains(jTextField.getText().toLowerCase(Locale.ROOT));
-                                    }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
-                                    JavaOctetEditor.getInstance().fileTreePanel.refresh(searchedJar);
-                                    JTreeUtil.setTreeExpandedState(JavaOctetEditor.getInstance().fileTreePanel, true);
-                                } else {
-                                    JavaOctetEditor.getInstance().fileTreePanel.refresh(jar);
-                                }
-                            }
-                        }
-                    }
-                });
-            }}, BorderLayout.CENTER);
-        }}, BorderLayout.NORTH);
-        JPanel jPanel = new JPanel(new HalfLayout(HalfLayout.TOP_AND_BOTTOM));
-        jPanel.add(new JScrollPane(JavaOctetEditor.getInstance().fileTreePanel), HalfLayout.TOP);
-        jPanel.add(new JScrollPane(new JLabel("No Member", SwingConstants.CENTER)) {{
-            JavaOctetEditor.getInstance().event.register(BottomToggleButton.class, (Consumer<BottomToggleButton>) listener -> {
-                if (listener.type == BottomToggleButton.Type.MEMBER) {
-                    setVisible(listener.select);
-                    jPanel.validate();
-                }
-            });
-            setVisible(false);
-        }}, HalfLayout.BOTTOM);
-        add(new JPanel(new BorderLayout()) {{
-            add(new JPanel(new HalfLayout(HalfLayout.TOP_AND_BOTTOM)) {{
-                add(new JPanel(), HalfLayout.TOP);
-                add(new JPanel(new BorderLayout()) {{
-                    add(new JToggleButton("M") {{
-                        addActionListener(e -> {
-                            JavaOctetEditor.getInstance().event.call(new BottomToggleButton(isSelected(), BottomToggleButton.Type.MEMBER));
-                        });
-                    }}, BorderLayout.SOUTH);
-                }}, HalfLayout.BOTTOM);
+            add(new JPanel(new BorderLayout()) {{
+                add(new JToggleButton("M") {{
+                    addActionListener(e -> {
+                        JavaOctetEditor.getInstance().event.call(new BottomToggleButtonListener(isSelected(), BottomToggleButtonListener.Type.MEMBER));
+                    });
+                }}, BorderLayout.SOUTH);
             }}, BorderLayout.WEST);
-            add(jPanel, BorderLayout.CENTER);
         }}, BorderLayout.CENTER);
     }
 
-    private static class BottomToggleButton implements Listener {
+    public static class BottomToggleButtonListener implements Listener {
         private final boolean select;
 
         private final Type type;
 
-        public BottomToggleButton(boolean select, Type type) {
+        public BottomToggleButtonListener(boolean select, Type type) {
             this.select = select;
             this.type = type;
         }
@@ -124,7 +78,7 @@ public class LeftPanel extends JPanel {
             return type;
         }
 
-        enum Type {
+        public enum Type {
             MEMBER
         }
     }

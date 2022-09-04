@@ -19,19 +19,18 @@ package cn.enaium.joe;
 import cn.enaium.joe.config.ConfigManager;
 import cn.enaium.joe.event.EventManager;
 import cn.enaium.joe.gui.panel.BottomPanel;
+import cn.enaium.joe.gui.panel.file.tree.FileTreePanel;
 import cn.enaium.joe.gui.panel.LeftPanel;
 import cn.enaium.joe.gui.panel.file.tabbed.FileTabbedPanel;
-import cn.enaium.joe.gui.panel.file.tree.FileTreePanel;
+import cn.enaium.joe.gui.component.FileTree;
 import cn.enaium.joe.gui.panel.menu.*;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.task.TaskManager;
 import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.util.ReflectUtil;
-import com.sun.tools.attach.VirtualMachine;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
-import org.pmw.tinylog.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -52,25 +51,26 @@ public class JavaOctetEditor {
 
     public FileTabbedPanel fileTabbedPanel;
 
-    public FileTreePanel fileTreePanel;
+    public FileTree fileTree;
 
     public BottomPanel bottomPanel;
+
+    public EventManager event;
 
     public ConfigManager config;
 
     public TaskManager task;
 
-    public EventManager event;
 
     public JavaOctetEditor() {
         instance = this;
+        event = new EventManager();
         config = new ConfigManager();
         config.load();
         task = new TaskManager();
-        event = new EventManager();
         Runtime.getRuntime().addShutdownHook(new Thread(config::save));
         fileTabbedPanel = new FileTabbedPanel();
-        fileTreePanel = new FileTreePanel();
+        fileTree = new FileTree();
         bottomPanel = new BottomPanel();
     }
 
@@ -96,16 +96,14 @@ public class JavaOctetEditor {
             add(new HelpMenu());
         }});
 
-        window.setContentPane(new JPanel(new BorderLayout()) {
-            {
-                add(new JSplitPane() {{
-                    setDividerLocation(150);
-                    setLeftComponent(new LeftPanel());
-                    setRightComponent(fileTabbedPanel);
-                }}, BorderLayout.CENTER);
-                add(bottomPanel, BorderLayout.SOUTH);
-            }
-        });
+        window.setContentPane(new JPanel(new BorderLayout()) {{
+            add(new LeftPanel(), BorderLayout.WEST);
+            add(new JSplitPane() {{
+                setLeftComponent(new FileTreePanel());
+                setRightComponent(fileTabbedPanel);
+            }}, BorderLayout.CENTER);
+            add(bottomPanel, BorderLayout.SOUTH);
+        }});
         window.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         window.addWindowListener(new WindowAdapter() {
             @Override
@@ -128,7 +126,7 @@ public class JavaOctetEditor {
 
     public void setJar(Jar jar) {
         this.jar = jar;
-        fileTreePanel.refresh(jar);
+        fileTree.refresh(jar);
     }
 
     public static JavaOctetEditor getInstance() {

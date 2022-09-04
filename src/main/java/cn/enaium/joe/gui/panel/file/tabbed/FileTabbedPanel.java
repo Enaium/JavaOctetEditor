@@ -16,7 +16,11 @@
 
 package cn.enaium.joe.gui.panel.file.tabbed;
 
+import cn.enaium.joe.JavaOctetEditor;
+import cn.enaium.joe.event.listener.FileTabbedSelectListener;
+
 import javax.swing.*;
+import java.awt.*;
 import java.util.function.BiConsumer;
 
 /**
@@ -27,5 +31,9 @@ public class FileTabbedPanel extends JTabbedPane {
         setTabLayoutPolicy(SCROLL_TAB_LAYOUT);
         putClientProperty("JTabbedPane.tabClosable", true);
         putClientProperty("JTabbedPane.tabCloseCallback", (BiConsumer<JTabbedPane, Integer>) JTabbedPane::remove);
+        addChangeListener(e -> {
+            Component selectedComponent = ((FileTabbedPanel) e.getSource()).getSelectedComponent();
+            JavaOctetEditor.getInstance().event.call(new FileTabbedSelectListener(selectedComponent));
+        });
     }
 }

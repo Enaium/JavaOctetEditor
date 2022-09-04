@@ -25,8 +25,12 @@ import java.awt.*;
  * @author Enaium
  */
 public class ClassTabPanel extends JPanel {
+
+    private final ClassNode classNode;
+
     public ClassTabPanel(ClassNode classNode) {
         super(new BorderLayout());
+        this.classNode = classNode;
         JTabbedPane jTabbedPane = new JTabbedPane();
         jTabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
         jTabbedPane.addTab("BytecodeView", new TraceBytecodeTabPanel(classNode));
@@ -34,5 +38,9 @@ public class ClassTabPanel extends JPanel {
         jTabbedPane.addTab("VisitorEdit", new ASMifierTablePanel(classNode));
         jTabbedPane.addTab("InfoEdit", new ClassInfoTabPanel(classNode));
         add(jTabbedPane);
+    }
+
+    public ClassNode getClassNode() {
+        return classNode;
     }
 }

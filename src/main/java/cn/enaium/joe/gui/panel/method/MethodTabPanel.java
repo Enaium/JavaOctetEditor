@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.file.tabbed.tab.classes.method;
+package cn.enaium.joe.gui.panel.method;
 
 import org.objectweb.asm.tree.MethodNode;
 

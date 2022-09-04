@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.file.tabbed.tab.classes.method;
+package cn.enaium.joe.gui.panel.method;
 
 import cn.enaium.joe.gui.component.InstructionComboBox;
 import cn.enaium.joe.gui.panel.confirm.InstructionEditPanel;

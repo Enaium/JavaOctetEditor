@@ -14,21 +14,22 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.file.tree.node;
+package cn.enaium.joe.dialog;
 
+import cn.enaium.joe.gui.panel.FieldInfoPanel;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
 
+import java.awt.*;
+
 /**
  * @author Enaium
+ * @since 1.2.0
  */
-public class FieldTreeNode extends PackageTreeNode {
-    public ClassNode classNode;
-    public FieldNode fieldNode;
-
-    public FieldTreeNode(ClassNode classNode, FieldNode fieldNode) {
-        super(fieldNode.name);
-        this.classNode = classNode;
-        this.fieldNode = fieldNode;
+public class FieldDialog extends Dialog {
+    public FieldDialog(ClassNode classNode, FieldNode fieldNode) {
+        super(classNode.name + "#" + fieldNode.name);
+        setLayout(new BorderLayout());
+        add(new FieldInfoPanel(fieldNode), BorderLayout.CENTER);
     }
 }

@@ -17,7 +17,6 @@
 package cn.enaium.joe.gui.component;
 
 import cn.enaium.joe.JavaOctetEditor;
-import cn.enaium.joe.gui.panel.file.tree.FileTreePanel;
 import cn.enaium.joe.gui.panel.file.tree.node.*;
 import cn.enaium.joe.gui.panel.search.ResultNode;
 import cn.enaium.joe.util.ASyncUtil;
@@ -27,8 +26,6 @@ import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -57,10 +54,10 @@ public class ResultList extends JList<ResultNode> {
             if (getSelectedValue() != null) {
                 ASyncUtil.execute(() -> {
                     SwingUtilities.invokeLater(() -> {
-                        FileTreePanel fileTreePanel = JavaOctetEditor.getInstance().fileTreePanel;
-                        DefaultTreeModel model = (DefaultTreeModel) fileTreePanel.getModel();
-                        if (selectEntry(fileTreePanel, getSelectedValue().getClassNode(), model, FileTreePanel.classesRoot)) {
-                            fileTreePanel.repaint();
+                        FileTree fileTree = JavaOctetEditor.getInstance().fileTree;
+                        DefaultTreeModel model = (DefaultTreeModel) fileTree.getModel();
+                        if (selectEntry(fileTree, getSelectedValue().getClassNode(), model, FileTree.classesRoot)) {
+                            fileTree.repaint();
                         }
                     });
                 });
