@@ -52,7 +52,7 @@ public class MethodInstructionPanel extends JPanel {
             } else {
                 setBackground(list.getBackground());
             }
-            add(new JLabel(String.format("%04d", index)), BorderLayout.WEST);
+            add(new JLabel(String.format("%04d ", index)), BorderLayout.WEST);
             add(new JLabel(value.toString()), BorderLayout.CENTER);
         }});
         for (AbstractInsnNode instruction : methodNode.instructions) {
