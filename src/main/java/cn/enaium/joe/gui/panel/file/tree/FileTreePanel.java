@@ -20,6 +20,7 @@ import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.dialog.FieldDialog;
 import cn.enaium.joe.dialog.MethodDialog;
 import cn.enaium.joe.event.listener.FileTabbedSelectListener;
+import cn.enaium.joe.gui.component.MemberList;
 import cn.enaium.joe.gui.layout.HalfLayout;
 import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassTabPanel;
 import cn.enaium.joe.gui.panel.LeftPanel;
@@ -111,72 +112,9 @@ public class FileTreePanel extends JPanel {
 
             JavaOctetEditor.getInstance().event.register(FileTabbedSelectListener.class, (Consumer<FileTabbedSelectListener>) listener -> {
                 Component select = listener.getSelect();
-                if (select != null) {
-                    DefaultListModel<Pair<ClassNode, Object>> objectDefaultListModel = new DefaultListModel<>();
-                    if (select instanceof ClassTabPanel) {
-                        ClassNode classNode = ((ClassTabPanel) select).getClassNode();
-                        for (FieldNode field : classNode.fields) {
-                            objectDefaultListModel.addElement(new Pair<>(classNode, field));
-                        }
-
-                        for (MethodNode method : classNode.methods) {
-                            objectDefaultListModel.addElement(new Pair<>(classNode, method));
-                        }
-                    }
-                    JList<Pair<ClassNode, Object>> view = new JList<>(objectDefaultListModel);
-                    view.addMouseListener(new MouseAdapter() {
-                        @Override
-                        public void mouseClicked(MouseEvent e) {
-
-                            int selectedIndex = view.getSelectedIndex();
-                            if (e.getClickCount() == 2 && selectedIndex != -1) {
-                                Pair<ClassNode, Object> value = objectDefaultListModel.get(selectedIndex);
-                                if (value.getValue() instanceof MethodNode) {
-                                    new MethodDialog(value.getKey(), ((MethodNode) value.getValue())).setVisible(true);
-                                } else if (value.getValue() instanceof FieldNode) {
-                                    new FieldDialog(value.getKey(), ((FieldNode) value.getValue())).setVisible(true);
-                                }
-                            }
-                        }
-                    });
-                    view.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0)) {{
-                        if (isSelected) {
-                            setBackground(list.getSelectionBackground());
-                        } else {
-                            setBackground(list.getBackground());
-                        }
-                        String name = null;
-                        Icon icon = null;
-                        int access = 0;
-                        if (value.getValue() instanceof FieldNode) {
-                            name = ((FieldNode) value.getValue()).name;
-                            icon = new FlatSVGIcon("icons/field.svg");
-                            access = ((FieldNode) value.getValue()).access;
-                        } else if (value.getValue() instanceof MethodNode) {
-                            name = ((MethodNode) value.getValue()).name;
-                            icon = new FlatSVGIcon("icons/method.svg");
-                            access = ((MethodNode) value.getValue()).access;
-                        }
-                        Icon accessIcon = null;
-                        if (OpcodeUtil.isPublic(access)) {
-                            accessIcon = new FlatSVGIcon("icons/public.svg");
-                        } else if (OpcodeUtil.isPrivate(access)) {
-                            accessIcon = new FlatSVGIcon("icons/private.svg");
-                        } else if (OpcodeUtil.isProtected(access)) {
-                            accessIcon = new FlatSVGIcon("icons/protected.svg");
-                        } else if (OpcodeUtil.isStatic(access) && "<clinit>".equals(name)) {
-                            accessIcon = new FlatSVGIcon("icons/static.svg");
-                        } else {
-                            accessIcon = new FlatSVGIcon("icons/cyan_dot.svg");
-                        }
-
-
-                        add(new JLabel(icon));
-                        add(new JLabel(accessIcon));
-                        add(new JLabel(name));
-                    }});
-                    setViewportView(view);
-                } else {
+                if (select instanceof ClassTabPanel) {
+                    setViewportView(new MemberList(((ClassTabPanel) select).getClassNode()));
+                }else {
                     setViewportView(noMember);
                 }
             });
