@@ -58,6 +58,7 @@
   "class.info.outerMethodDescription": "外部方法描述:",
   "class.info.description": "描述:",
   "class.info.exceptions": "异常:",
+  "class.info.noMember": "无成员",
   "button.search": "搜索",
   "button.findNext": "查找下一个",
   "button.findPrevious": "查找上一个",

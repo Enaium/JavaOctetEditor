@@ -58,6 +58,7 @@
   "class.info.outerMethodDescription": "Outer Method Description:",
   "class.info.description": "Description:",
   "class.info.exceptions": "Exceptions:",
+  "class.info.noMember": "No Member",
   "button.search": "Search",
   "button.findNext": "Find Next",
   "button.findPrevious": "Find Previous",
