@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.popup;
+package cn.enaium.joe.gui.panel.popup;
 
 import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.task.AbstractTask;

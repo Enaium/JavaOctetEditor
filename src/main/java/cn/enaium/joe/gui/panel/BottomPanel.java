@@ -18,7 +18,7 @@ package cn.enaium.joe.gui.panel;
 
 import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.annotation.Indeterminate;
-import cn.enaium.joe.popup.TaskListPopup;
+import cn.enaium.joe.gui.panel.popup.TaskListPopup;
 import cn.enaium.joe.task.AbstractTask;
 import cn.enaium.joe.util.Pair;
 

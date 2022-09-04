@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.popup;
+package cn.enaium.joe.gui.panel.popup;
 
 import cn.enaium.joe.JavaOctetEditor;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -34,10 +36,19 @@ public abstract class AbstractPopup extends JPanel {
 
     protected AbstractPopup(String name) {
         super(new BorderLayout());
-        add(new JButton(name) {{
-            addActionListener(e -> {
-                destroy();
-            });
+        add(new JPanel(new BorderLayout()) {{
+            setBorder(new EmptyBorder(5, 5, 5, 5));
+            setBackground(new JButton().getBackground());
+            add(new JLabel(name), BorderLayout.CENTER);
+            add(new JLabel(new FlatSVGIcon("icons/minimize.svg") {{
+                addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        destroy();
+                    }
+                });
+            }}), BorderLayout.EAST);
+
         }}, BorderLayout.NORTH);
     }
 
