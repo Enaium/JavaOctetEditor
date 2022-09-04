@@ -18,6 +18,7 @@ package cn.enaium.joe.gui.panel.file.tabbed.tab.resources;
 
 import cn.enaium.joe.gui.panel.file.tree.node.FileTreeNode;
 import cn.enaium.joe.util.IOUtil;
+import cn.enaium.joe.util.MessageUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,7 +36,7 @@ public class ImageTablePanel extends JPanel {
                 setHorizontalAlignment(SwingUtilities.CENTER);
                 setIcon(IOUtil.getIcon(fileTreeNode.getData()));
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                MessageUtil.error(e);
             }
         }}));
     }
