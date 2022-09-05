@@ -50,14 +50,12 @@ public class LeftPanel extends JPanel {
     public LeftPanel() {
         super(new BorderLayout());
         add(new JPanel(new BorderLayout()) {{
-            add(new JPanel(new BorderLayout()) {{
-                add(new JToggleButton("M") {{
-                    addActionListener(e -> {
-                        JavaOctetEditor.getInstance().event.call(new BottomToggleButtonListener(isSelected(), BottomToggleButtonListener.Type.MEMBER));
-                    });
-                }}, BorderLayout.SOUTH);
-            }}, BorderLayout.WEST);
-        }}, BorderLayout.CENTER);
+            add(new JToggleButton("M") {{
+                addActionListener(e -> {
+                    JavaOctetEditor.getInstance().event.call(new BottomToggleButtonListener(isSelected(), BottomToggleButtonListener.Type.MEMBER));
+                });
+            }}, BorderLayout.SOUTH);
+        }}, BorderLayout.WEST);
     }
 
     public static class BottomToggleButtonListener implements Listener {
