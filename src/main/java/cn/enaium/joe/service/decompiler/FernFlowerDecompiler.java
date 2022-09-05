@@ -53,7 +53,14 @@ public class FernFlowerDecompiler implements IDecompiler, IBytecodeProvider, IRe
         bytes = classWriter.toByteArray();
 
         Fernflower fernflower = new Fernflower(this, this, new HashMap<String, Object>() {{
-            this.putAll(JavaOctetEditor.getInstance().config.getConfigMap(FernFlowerConfig.class));
+            JavaOctetEditor.getInstance().config.getConfigMap(FernFlowerConfig.class).forEach((k, v) -> {
+                if (v.equals("true")) {
+                    v = "1";
+                } else if (v.equals("false")) {
+                    v = "0";
+                }
+                this.put(k, v);
+            });
         }}, new IFernflowerLogger() {
             @Override
             public void writeMessage(String message, Severity severity) {
