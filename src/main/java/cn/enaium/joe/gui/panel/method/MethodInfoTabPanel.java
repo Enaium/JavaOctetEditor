@@ -16,6 +16,7 @@
 
 package cn.enaium.joe.gui.panel.method;
 
+import cn.enaium.joe.dialog.AnnotationListDialog;
 import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.StringUtil;
 import org.benf.cfr.reader.util.StringUtils;
@@ -84,5 +85,22 @@ public class MethodInfoTabPanel extends JPanel {
                 JOptionPane.showMessageDialog(MethodInfoTabPanel.this, LangUtil.i18n("success"));
             });
         }}, BorderLayout.SOUTH);
+
+        labels.add(new JLabel("Visible Annotation:"));
+        rights.add(new JButton(LangUtil.i18n("button.edit")) {{
+            addActionListener(e -> {
+                if (methodNode.visibleAnnotations != null) {
+                    new AnnotationListDialog(methodNode.visibleAnnotations).setVisible(true);
+                }
+            });
+        }});
+        labels.add(new JLabel("Invisible Annotation:"));
+        rights.add(new JButton(LangUtil.i18n("button.edit")) {{
+            addActionListener(e -> {
+                if (methodNode.invisibleAnnotations != null) {
+                    new AnnotationListDialog(methodNode.invisibleAnnotations).setVisible(true);
+                }
+            });
+        }});
     }
 }

@@ -16,6 +16,7 @@
 
 package cn.enaium.joe.gui.panel;
 
+import cn.enaium.joe.dialog.AnnotationListDialog;
 import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.StringUtil;
 import org.objectweb.asm.tree.FieldNode;
@@ -73,5 +74,21 @@ public class FieldInfoPanel extends JPanel {
                 JOptionPane.showMessageDialog(FieldInfoPanel.this,  LangUtil.i18n("success"));
             });
         }}, BorderLayout.SOUTH);
+        labels.add(new JLabel("Visible Annotation:"));
+        rights.add(new JButton(LangUtil.i18n("button.edit")) {{
+            addActionListener(e -> {
+                if (fieldNode.visibleAnnotations != null) {
+                    new AnnotationListDialog(fieldNode.visibleAnnotations).setVisible(true);
+                }
+            });
+        }});
+        labels.add(new JLabel("Invisible Annotation:"));
+        rights.add(new JButton(LangUtil.i18n("button.edit")) {{
+            addActionListener(e -> {
+                if (fieldNode.invisibleAnnotations != null) {
+                    new AnnotationListDialog(fieldNode.invisibleAnnotations).setVisible(true);
+                }
+            });
+        }});
     }
 }

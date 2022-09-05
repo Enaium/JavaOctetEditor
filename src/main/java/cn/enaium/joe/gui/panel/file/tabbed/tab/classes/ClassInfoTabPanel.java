@@ -17,6 +17,7 @@
 package cn.enaium.joe.gui.panel.file.tabbed.tab.classes;
 
 
+import cn.enaium.joe.dialog.AnnotationListDialog;
 import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.StringUtil;
 import org.benf.cfr.reader.util.StringUtils;
@@ -132,5 +133,21 @@ public class ClassInfoTabPanel extends ClassNodeTabPanel {
                 JOptionPane.showMessageDialog(ClassInfoTabPanel.this,  LangUtil.i18n("success"));
             });
         }}, BorderLayout.SOUTH);
+        labels.add(new JLabel("Visible Annotation:"));
+        rights.add(new JButton(LangUtil.i18n("button.edit")) {{
+            addActionListener(e -> {
+                if (classNode.visibleAnnotations != null) {
+                    new AnnotationListDialog(classNode.visibleAnnotations).setVisible(true);
+                }
+            });
+        }});
+        labels.add(new JLabel("Invisible Annotation:"));
+        rights.add(new JButton(LangUtil.i18n("button.edit")) {{
+            addActionListener(e -> {
+                if (classNode.invisibleAnnotations != null) {
+                    new AnnotationListDialog(classNode.invisibleAnnotations).setVisible(true);
+                }
+            });
+        }});
     }
 }
