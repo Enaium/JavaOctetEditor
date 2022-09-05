@@ -105,21 +105,19 @@ public class JavaOctetEditor {
             add(bottomPanel, BorderLayout.SOUTH);
         }});
 
-        Runnable warning = () -> MessageUtil.confirm(LangUtil.i18n("dialog.wantCloseWindow"), LangUtil.i18n("warning"), () -> {
-            window.dispose();
-            System.exit(0);
-        }, () -> {
-        });
 
         window.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         window.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                warning.run();
+                MessageUtil.confirm(LangUtil.i18n("dialog.wantCloseWindow"), LangUtil.i18n("warning"), () -> {
+                    window.dispose();
+                    System.exit(0);
+                }, () -> {
+                });
             }
         });
-        KeyStrokeUtil.register(window.getRootPane(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), warning);
-        window.setSize(800, 500);
+        window.setSize(1000, 600);
         window.setLocationRelativeTo(null);
         window.setVisible(true);
     }
