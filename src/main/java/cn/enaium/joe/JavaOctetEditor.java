@@ -26,6 +26,7 @@ import cn.enaium.joe.gui.component.FileTree;
 import cn.enaium.joe.gui.panel.menu.*;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.task.TaskManager;
+import cn.enaium.joe.util.KeyStrokeUtil;
 import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.util.ReflectUtil;
@@ -34,8 +35,7 @@ import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 
 /**
  * @author Enaium
@@ -104,17 +104,21 @@ public class JavaOctetEditor {
             }}, BorderLayout.CENTER);
             add(bottomPanel, BorderLayout.SOUTH);
         }});
+
+        Runnable warning = () -> MessageUtil.confirm(LangUtil.i18n("dialog.wantCloseWindow"), LangUtil.i18n("warning"), () -> {
+            window.dispose();
+            System.exit(0);
+        }, () -> {
+        });
+
         window.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         window.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                MessageUtil.confirm(LangUtil.i18n("dialog.wantCloseWindow"), LangUtil.i18n("warning"), () -> {
-                    window.dispose();
-                    System.exit(0);
-                }, () -> {
-                });
+                warning.run();
             }
         });
+        KeyStrokeUtil.register(window.getRootPane(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), warning);
         window.setSize(800, 500);
         window.setLocationRelativeTo(null);
         window.setVisible(true);
