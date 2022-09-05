@@ -87,7 +87,7 @@ public class FileTree extends JTree {
         JPopupMenu jPopupMenu = new JPopupMenu();
 
 
-        jPopupMenu.add(new JMenuItem(LangUtil.i18n("popup.expandAll")) {{
+        jPopupMenu.add(new JMenuItem(LangUtil.i18n("popup.fileTree.expandAll")) {{
             addActionListener(e -> {
                 JTreeUtil.setNodeExpandedState(FileTree.this, ((DefaultMutableTreeNode) Objects.requireNonNull(getSelectionPath()).getLastPathComponent()), true);
             });
