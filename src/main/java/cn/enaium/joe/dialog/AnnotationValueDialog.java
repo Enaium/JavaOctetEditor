@@ -71,16 +71,18 @@ public class AnnotationValueDialog extends Dialog {
                         int index = (jTable.getSelectedRow() + 1) * 2 - 1;
                         if (valueAt.getWrapper().getClass().isArray()) {
                             ArrayList<Object> newList = new ArrayList<>(Arrays.asList(((Object[]) valueAt.getWrapper())));
-                            MessageUtil.confirm(new ListValueEditPanel(newList), "List");
-                            String[] strings = newList.stream().map(Object::toString).toArray(String[]::new);
-                            valueAt.setWrapper(strings);
-                            objects.set(index, strings);
+                            MessageUtil.confirm(new ListValueEditPanel(newList), "List", () -> {
+                                String[] strings = newList.stream().map(Object::toString).toArray(String[]::new);
+                                valueAt.setWrapper(strings);
+                                objects.set(index, strings);
+                            });
                         } else {
                             ObjectWrapper objectWrapper = new ObjectWrapper(valueAt.getWrapper());
                             ValueEditPanel confirmPanel = new ValueEditPanel(objectWrapper);
-                            MessageUtil.confirm(confirmPanel, LangUtil.i18n("button.edit"));
-                            valueAt.setWrapper(objectWrapper.getWrapper());
-                            objects.set(index, objectWrapper.getWrapper());
+                            MessageUtil.confirm(confirmPanel, LangUtil.i18n("button.edit"), () -> {
+                                valueAt.setWrapper(objectWrapper.getWrapper());
+                                objects.set(index, objectWrapper.getWrapper());
+                            });
                         }
                     }
                 });

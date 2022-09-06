@@ -16,6 +16,9 @@
 
 package cn.enaium.joe.gui.panel.confirm;
 
+import cn.enaium.joe.util.ASMUtil;
+import cn.enaium.joe.util.ListUtil;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
@@ -29,6 +32,9 @@ import java.util.List;
 public class ListValueEditPanel extends ConfirmPanel {
     public ListValueEditPanel(List<Object> objects) {
         setLayout(new BorderLayout());
+
+        Class<?> type = ListUtil.getType(objects);
+
         JTextArea jTextArea = new JTextArea();
         int index = 0;
         for (Object object : objects) {
@@ -41,7 +47,9 @@ public class ListValueEditPanel extends ConfirmPanel {
         add(new JScrollPane(jTextArea), BorderLayout.CENTER);
         setConfirm(() -> {
             objects.clear();
-            Collections.addAll(objects, jTextArea.getText().replaceAll("^\\s+", "").split("\n"));
+            for (String s : jTextArea.getText().replaceAll("^\\s+", "").split("\n")) {
+                objects.add(ASMUtil.toType(type, s));
+            }
         });
     }
 }
