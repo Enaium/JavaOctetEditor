@@ -21,8 +21,6 @@ import cn.enaium.joe.util.ListUtil;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
