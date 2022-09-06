@@ -46,6 +46,36 @@ public class FileTabbedPanel extends JTabbedPane {
                     FileTabbedPanel.this.removeAll();
                 });
             }});
+            add(new JMenuItem(LangUtil.i18n("popup.tabbed.closeOther")) {{
+                addActionListener(e -> {
+                    int tabCount = getTabCount();
+                    while (tabCount-- > 0) {
+                        if (tabCount != getSelectedIndex()) {
+                            removeTabAt(tabCount);
+                        }
+                    }
+                });
+            }});
+            add(new JMenuItem(LangUtil.i18n("popup.tabbed.closeAllLeft")) {{
+                addActionListener(e -> {
+                    int tabCount = getTabCount();
+                    while (tabCount-- > 0) {
+                        if (tabCount < getSelectedIndex()) {
+                            removeTabAt(tabCount);
+                        }
+                    }
+                });
+            }});
+            add(new JMenuItem(LangUtil.i18n("popup.tabbed.closeAllRight")) {{
+                addActionListener(e -> {
+                    int tabCount = getTabCount();
+                    while (tabCount-- > 0) {
+                        if (tabCount > getSelectedIndex()) {
+                            removeTabAt(tabCount);
+                        }
+                    }
+                });
+            }});
         }}, () -> getSelectedComponent() != null);
     }
 }
