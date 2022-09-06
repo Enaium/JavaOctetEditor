@@ -217,9 +217,7 @@ public class MethodInstructionPanel extends JPanel {
                     throw new RuntimeException();
             }
 
-            InstructionEditPanel message = new InstructionEditPanel(abstractInsnNode);
-            MessageUtil.confirm(message, LangUtil.i18n("popup.instruction.edit"), () -> {
-                message.getConfirm().run();
+            MessageUtil.confirm(new InstructionEditPanel(abstractInsnNode), LangUtil.i18n("popup.instruction.edit"), () -> {
                 if (before) {
                     methodNode.instructions.insertBefore(instructionJList.getSelectedValue().getWrapper(), abstractInsnNode);
                 } else {
