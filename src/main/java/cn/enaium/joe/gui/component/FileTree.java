@@ -21,7 +21,6 @@ import cn.enaium.joe.config.extend.ApplicationConfig;
 import cn.enaium.joe.gui.panel.file.FileDropTarget;
 import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassTabPanel;
 import cn.enaium.joe.gui.panel.file.tabbed.tab.resources.FileTablePane;
-import cn.enaium.joe.gui.panel.file.tabbed.tab.resources.HexTablePanel;
 import cn.enaium.joe.gui.panel.file.tree.FileTreeCellRenderer;
 import cn.enaium.joe.gui.panel.file.tree.node.*;
 import cn.enaium.joe.jar.Jar;
@@ -34,11 +33,12 @@ import org.objectweb.asm.tree.ClassNode;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeNode;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Enaium
@@ -142,6 +142,7 @@ public class FileTree extends JTree {
                     i++;
                 }
             }
+            compact(model, classesRoot);
             sort(model, classesRoot);
 
             hasMap.clear();
@@ -179,6 +180,7 @@ public class FileTree extends JTree {
                     i++;
                 }
             }
+            compact(model, classesRoot);
             sort(model, resourceRoot);
         } else if (packagePresentationValue.equals("Flat")) {
             Map<String, DefaultTreeNode> hasMap = new HashMap<>();
@@ -236,6 +238,26 @@ public class FileTree extends JTree {
         JavaOctetEditor.getInstance().fileTabbedPanel.removeAll();
 
         repaint();
+    }
+
+    public void compact(DefaultTreeModel defaultTreeModel, DefaultTreeNode defaultTreeNode) {
+        if (!defaultTreeNode.isLeaf()) {
+            DefaultTreeNode parent = (DefaultTreeNode) defaultTreeNode.getParent();
+            if (parent.getChildren().size() == 1) {
+                parent.setUserObject(parent.getUserObject() + "." + defaultTreeNode.getUserObject());
+                parent.getChildren().clear();
+                for (DefaultTreeNode child : defaultTreeNode.getChildren()) {
+                    child.setParent(parent);
+                    parent.getChildren().add(child);
+                }
+            }
+
+
+            for (int i = 0; i < defaultTreeModel.getChildCount(defaultTreeNode); i++) {
+                DefaultTreeNode child = ((DefaultTreeNode) defaultTreeModel.getChild(defaultTreeNode, i));
+                compact(defaultTreeModel, child);
+            }
+        }
     }
 
 
