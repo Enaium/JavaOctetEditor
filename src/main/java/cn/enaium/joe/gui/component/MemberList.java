@@ -36,21 +36,22 @@ import java.awt.event.MouseEvent;
  */
 public class MemberList extends JList<Pair<ClassNode, Object>> {
     public MemberList(ClassNode classNode) {
-        DefaultListModel<Pair<ClassNode, Object>> model = new DefaultListModel<>();
-        setModel(model);
-        for (FieldNode field : classNode.fields) {
-            model.addElement(new Pair<>(classNode, field));
-        }
+        setModel(new DefaultListModel<Pair<ClassNode, Object>>() {{
+            for (FieldNode field : classNode.fields) {
+                addElement(new Pair<>(classNode, field));
+            }
 
-        for (MethodNode method : classNode.methods) {
-            model.addElement(new Pair<>(classNode, method));
-        }
+            for (MethodNode method : classNode.methods) {
+                addElement(new Pair<>(classNode, method));
+            }
+        }});
+
 
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2 && getSelectedIndex() != -1) {
-                    Pair<ClassNode, Object> value = model.get(getSelectedIndex());
+                    Pair<ClassNode, Object> value = ((DefaultListModel<Pair<ClassNode, Object>>) getModel()).get(getSelectedIndex());
                     if (value.getValue() instanceof MethodNode) {
                         new MethodDialog(value.getKey(), ((MethodNode) value.getValue())).setVisible(true);
                     } else if (value.getValue() instanceof FieldNode) {

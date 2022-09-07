@@ -101,21 +101,11 @@ public class FileTreePanel extends JPanel {
             add(new JScrollPane(JavaOctetEditor.getInstance().fileTree), BorderLayout.CENTER);
         }}, HalfLayout.TOP);
         jPanel.add(new JScrollPane() {{
-            JLabel noMember = new JLabel(LangUtil.i18n("class.info.noMember"), SwingConstants.CENTER);
-            setViewportView(noMember);
             JavaOctetEditor.getInstance().event.register(LeftPanel.BottomToggleButtonListener.class, (Consumer<LeftPanel.BottomToggleButtonListener>) listener -> {
-                if (listener.getType() == LeftPanel.BottomToggleButtonListener.Type.MEMBER) {
-                    setVisible(listener.isSelect());
+                setVisible(listener.getSelect() != null);
+                if (listener.getSelect() != null) {
+                    setViewportView(listener.getSelect());
                     jPanel.validate();
-                }
-            });
-
-            JavaOctetEditor.getInstance().event.register(FileTabbedSelectListener.class, (Consumer<FileTabbedSelectListener>) listener -> {
-                Component select = listener.getSelect();
-                if (select instanceof ClassTabPanel) {
-                    setViewportView(new MemberList(((ClassTabPanel) select).getClassNode()));
-                }else {
-                    setViewportView(noMember);
                 }
             });
             setVisible(false);

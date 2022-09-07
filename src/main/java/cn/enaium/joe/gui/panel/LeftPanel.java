@@ -17,31 +17,18 @@
 package cn.enaium.joe.gui.panel;
 
 import cn.enaium.joe.JavaOctetEditor;
-import cn.enaium.joe.dialog.FieldDialog;
-import cn.enaium.joe.dialog.MethodDialog;
 import cn.enaium.joe.event.Listener;
 import cn.enaium.joe.event.listener.FileTabbedSelectListener;
-import cn.enaium.joe.gui.layout.HalfLayout;
+import cn.enaium.joe.gui.component.MemberList;
+import cn.enaium.joe.gui.component.TabbedPanel;
 import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassTabPanel;
-import cn.enaium.joe.gui.panel.file.tree.FileTreePanel;
-import cn.enaium.joe.jar.Jar;
-import cn.enaium.joe.util.JTreeUtil;
-import cn.enaium.joe.util.LangUtil;
-import cn.enaium.joe.util.OpcodeUtil;
-import cn.enaium.joe.util.Pair;
-import com.formdev.flatlaf.extras.FlatSVGIcon;
 import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldNode;
-import org.objectweb.asm.tree.MethodNode;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 /**
  * @author Enaium
@@ -50,33 +37,46 @@ public class LeftPanel extends JPanel {
     public LeftPanel() {
         super(new BorderLayout());
         add(new JPanel(new BorderLayout()) {{
-            add(new JToggleButton("M") {{
-                addActionListener(e -> {
-                    JavaOctetEditor.getInstance().event.call(new BottomToggleButtonListener(isSelected(), BottomToggleButtonListener.Type.MEMBER));
+            add(new TabbedPanel(JTabbedPane.LEFT) {{
+                Set<Integer> set = new HashSet<>();
+                addTab("M", new MemberList(new ClassNode()) {{
+                    JavaOctetEditor.getInstance().event.register(FileTabbedSelectListener.class, (Consumer<FileTabbedSelectListener>) listener -> {
+                        Component select = listener.getSelect();
+                        if (select instanceof ClassTabPanel) {
+                            setModel(new MemberList(((ClassTabPanel) select).getClassNode()).getModel());
+                        }
+                    });
+                }});
+                setSelectedIndex(-1);
+                addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        if (set.contains(getSelectedIndex())) {
+                            set.remove(getSelectedIndex());
+                            setSelectedIndex(-1);
+                        } else {
+                            set.add(getSelectedIndex());
+                        }
+                        JavaOctetEditor.getInstance().event.call(new BottomToggleButtonListener(getSelectedComponent()));
+                    }
                 });
             }}, BorderLayout.SOUTH);
         }}, BorderLayout.WEST);
     }
 
     public static class BottomToggleButtonListener implements Listener {
-        private final boolean select;
+        private final Component select;
 
-        private final Type type;
-
-        public BottomToggleButtonListener(boolean select, Type type) {
+        public BottomToggleButtonListener(Component select) {
             this.select = select;
-            this.type = type;
         }
 
-        public boolean isSelect() {
+        public Component getSelect() {
             return select;
         }
 
-        public Type getType() {
-            return type;
-        }
-
         public enum Type {
+            NULL,
             MEMBER
         }
     }
