@@ -18,6 +18,7 @@ package cn.enaium.joe.config.extend;
 
 import cn.enaium.joe.annotation.NoUI;
 import cn.enaium.joe.config.Config;
+import cn.enaium.joe.config.value.EnableValue;
 import cn.enaium.joe.config.value.ModeValue;
 import cn.enaium.joe.config.value.StringSetValue;
 
@@ -33,6 +34,7 @@ public class ApplicationConfig extends Config {
     public ModeValue decompilerMode = new ModeValue("Decompiler", "CFR", "Java Decompiler", Arrays.asList("CFR", "Procyon", "FernFlower"));
     public ModeValue language = new ModeValue("Language", "System", "UI language", Arrays.asList("System", "zh_CN", "en_US"));
     public ModeValue packagePresentation = new ModeValue("Package Presentation", "Hierarchical", "Package Mode", Arrays.asList("Flat", "Hierarchical"));
+    public EnableValue compactMiddlePackage = new EnableValue("Compact Middle Package", true, "Only Hierarchical Mode");
     @NoUI
     public final StringSetValue loadRecent = new StringSetValue("Load Recent", new HashSet<>(), "");
 

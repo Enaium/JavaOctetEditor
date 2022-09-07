@@ -241,6 +241,11 @@ public class FileTree extends JTree {
     }
 
     public void compact(DefaultTreeModel defaultTreeModel, DefaultTreeNode defaultTreeNode) {
+
+        if (!JavaOctetEditor.getInstance().config.getByClass(ApplicationConfig.class).compactMiddlePackage.getValue()) {
+            return;
+        }
+
         if (!defaultTreeNode.isLeaf()) {
             DefaultTreeNode parent = (DefaultTreeNode) defaultTreeNode.getParent();
             if (parent.getChildren().size() == 1) {
