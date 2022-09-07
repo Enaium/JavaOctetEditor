@@ -17,21 +17,18 @@
 package cn.enaium.joe.gui.panel;
 
 import cn.enaium.joe.JavaOctetEditor;
-import cn.enaium.joe.gui.panel.file.tree.FileTreePanel;
-import cn.enaium.joe.jar.Jar;
-import cn.enaium.joe.util.JTreeUtil;
+import cn.enaium.joe.event.Listener;
+import cn.enaium.joe.event.listener.FileTabbedSelectListener;
+import cn.enaium.joe.gui.component.MemberList;
+import cn.enaium.joe.gui.component.TabbedPanel;
+import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassTabPanel;
+import org.objectweb.asm.tree.ClassNode;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.tree.TreePath;
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.util.Locale;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.awt.event.*;
+import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * @author Enaium
@@ -40,63 +37,47 @@ public class LeftPanel extends JPanel {
     public LeftPanel() {
         super(new BorderLayout());
         add(new JPanel(new BorderLayout()) {{
-            setBorder(new EmptyBorder(5, 0, 5, 0));
-            add(new JTextField() {{
-                JTextField jTextField = this;
-                addFocusListener(new FocusListener() {
-                    @Override
-                    public void focusGained(FocusEvent e) {
-                        if (jTextField.getText().equals("Search...")) {
-                            jTextField.setText("");
-                            jTextField.setForeground(Color.WHITE);
+            add(new TabbedPanel(JTabbedPane.LEFT) {{
+                Set<Integer> set = new HashSet<>();
+                addTab("M", new MemberList(new ClassNode()) {{
+                    JavaOctetEditor.getInstance().event.register(FileTabbedSelectListener.class, (Consumer<FileTabbedSelectListener>) listener -> {
+                        Component select = listener.getSelect();
+                        if (select instanceof ClassTabPanel) {
+                            setModel(new MemberList(((ClassTabPanel) select).getClassNode()).getModel());
                         }
-                    }
-
+                    });
+                }});
+                setSelectedIndex(-1);
+                addMouseListener(new MouseAdapter() {
                     @Override
-                    public void focusLost(FocusEvent e) {
-                        if (jTextField.getText().isEmpty()) {
-                            jTextField.setForeground(Color.GRAY);
-                            jTextField.setText("Search...");
+                    public void mouseClicked(MouseEvent e) {
+                        if (set.contains(getSelectedIndex())) {
+                            set.remove(getSelectedIndex());
+                            setSelectedIndex(-1);
+                        } else {
+                            set.add(getSelectedIndex());
                         }
-                    }
-                });
-                addKeyListener(new KeyAdapter() {
-                    @Override
-                    public void keyPressed(KeyEvent e) {
-                        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                            Jar jar = JavaOctetEditor.getInstance().getJar();
-                            if (jar != null) {
-                                if (!jTextField.getText().replace(" ", "").isEmpty()) {
-                                    Jar searchedJar = jar.copy();
-
-                                    searchedJar.classes = searchedJar.classes.entrySet().stream().filter(stringClassNodeEntry -> {
-                                        String key = stringClassNodeEntry.getKey();
-
-                                        if (!key.contains("/")) {
-                                            key = key.substring(key.lastIndexOf("/") + 1);
-                                        }
-
-                                        return key.toLowerCase(Locale.ROOT).contains(jTextField.getText().toLowerCase(Locale.ROOT));
-                                    }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-                                    searchedJar.resources = searchedJar.resources.entrySet().stream().filter(stringEntry -> {
-                                        String key = stringEntry.getKey();
-                                        if (!key.contains("/")) {
-                                            key = key.substring(key.lastIndexOf("/") + 1);
-                                        }
-                                        return key.toLowerCase(Locale.ROOT).contains(jTextField.getText().toLowerCase(Locale.ROOT));
-                                    }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
-                                    JavaOctetEditor.getInstance().fileTreePanel.refresh(searchedJar);
-                                    JTreeUtil.setTreeExpandedState(JavaOctetEditor.getInstance().fileTreePanel, true);
-                                } else {
-                                    JavaOctetEditor.getInstance().fileTreePanel.refresh(jar);
-                                }
-                            }
-                        }
+                        JavaOctetEditor.getInstance().event.call(new BottomToggleButtonListener(getSelectedComponent()));
                     }
                 });
-            }}, BorderLayout.CENTER);
-        }}, BorderLayout.NORTH);
-        add(new JScrollPane(JavaOctetEditor.getInstance().fileTreePanel), BorderLayout.CENTER);
+            }}, BorderLayout.SOUTH);
+        }}, BorderLayout.WEST);
+    }
+
+    public static class BottomToggleButtonListener implements Listener {
+        private final Component select;
+
+        public BottomToggleButtonListener(Component select) {
+            this.select = select;
+        }
+
+        public Component getSelect() {
+            return select;
+        }
+
+        public enum Type {
+            NULL,
+            MEMBER
+        }
     }
 }

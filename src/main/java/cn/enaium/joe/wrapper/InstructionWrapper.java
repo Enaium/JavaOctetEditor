@@ -38,6 +38,13 @@ public class InstructionWrapper extends Wrapper<AbstractInsnNode> {
 
     @Override
     public String toString() {
+
+
+        if (getWrapper() == null) {
+            return " ";
+        }
+
+
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<html>");
 

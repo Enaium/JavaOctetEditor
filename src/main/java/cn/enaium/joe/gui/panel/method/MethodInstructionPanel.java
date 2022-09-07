@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.file.tabbed.tab.classes.method;
+package cn.enaium.joe.gui.panel.method;
 
 import cn.enaium.joe.gui.component.InstructionComboBox;
 import cn.enaium.joe.gui.panel.confirm.InstructionEditPanel;
-import cn.enaium.joe.util.HtmlUtil;
-import cn.enaium.joe.util.LangUtil;
-import cn.enaium.joe.util.MessageUtil;
-import cn.enaium.joe.util.OpcodeUtil;
+import cn.enaium.joe.util.*;
 import cn.enaium.joe.wrapper.InstructionWrapper;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Opcodes;
@@ -45,6 +42,16 @@ public class MethodInstructionPanel extends JPanel {
         super(new BorderLayout());
         DefaultListModel<InstructionWrapper> instructionDefaultListModel = new DefaultListModel<>();
         JList<InstructionWrapper> instructionJList = new JList<>(instructionDefaultListModel);
+        instructionJList.setPrototypeCellValue(new InstructionWrapper(null));
+        instructionJList.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> new JPanel(new BorderLayout()) {{
+            if (isSelected) {
+                setBackground(list.getSelectionBackground());
+            } else {
+                setBackground(list.getBackground());
+            }
+            add(new JLabel(String.format("%04d ", index)), BorderLayout.WEST);
+            add(new JLabel(value.toString()), BorderLayout.CENTER);
+        }});
         for (AbstractInsnNode instruction : methodNode.instructions) {
             instructionDefaultListModel.addElement(new InstructionWrapper(instruction));
         }
@@ -121,27 +128,8 @@ public class MethodInstructionPanel extends JPanel {
             });
         }});
 
-        instructionJList.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                if (SwingUtilities.isRightMouseButton(e)) {
-                    if (instructionJList.getSelectedValue() != null) {
-                        jPopupMenu.show(instructionJList, e.getX(), e.getY());
-                    }
-                }
-            }
-        });
+        JMenuUtil.addPopupMenu(instructionJList, jPopupMenu, () -> instructionJList.getSelectedValue() != null);
         add(new JScrollPane(instructionJList), BorderLayout.CENTER);
-        JLabel comp = new JLabel();
-        instructionJList.addListSelectionListener(e -> {
-            if (instructionJList.getSelectedIndex() != -1) {
-                comp.setText(String.format("Index:%d", instructionJList.getSelectedIndex()));
-                comp.setVisible(true);
-            } else {
-                comp.setVisible(false);
-            }
-        });
-        add(comp, BorderLayout.SOUTH);
     }
 
     private static void moveInstruction(JList<InstructionWrapper> instructionJList, MethodNode methodNode, boolean up) {
@@ -229,9 +217,7 @@ public class MethodInstructionPanel extends JPanel {
                     throw new RuntimeException();
             }
 
-            InstructionEditPanel message = new InstructionEditPanel(abstractInsnNode);
-            MessageUtil.confirm(message, LangUtil.i18n("popup.instruction.edit"), () -> {
-                message.getConfirm().run();
+            MessageUtil.confirm(new InstructionEditPanel(abstractInsnNode), LangUtil.i18n("popup.instruction.edit"), () -> {
                 if (before) {
                     methodNode.instructions.insertBefore(instructionJList.getSelectedValue().getWrapper(), abstractInsnNode);
                 } else {

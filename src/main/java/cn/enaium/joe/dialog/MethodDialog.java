@@ -14,28 +14,22 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.file.tree.node;
+package cn.enaium.joe.dialog;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreeNode;
-import java.util.Vector;
-import java.util.concurrent.CopyOnWriteArrayList;
+import cn.enaium.joe.gui.panel.method.MethodTabPanel;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.MethodNode;
+
+import java.awt.*;
 
 /**
  * @author Enaium
+ * @since 1.2.0
  */
-public class DefaultTreeNode extends DefaultMutableTreeNode {
-    public DefaultTreeNode(Object userObject) {
-        super(userObject);
-    }
-
-
-    @SuppressWarnings("unchecked")
-    public Vector<DefaultTreeNode> getChildren() {
-        if (children == null) {
-            return new Vector<>();
-        }
-        return children;
+public class MethodDialog extends Dialog {
+    public MethodDialog(ClassNode classNode, MethodNode methodNode) {
+        super(classNode.name + "#" + methodNode.name);
+        setLayout(new BorderLayout());
+        add(new MethodTabPanel(methodNode), BorderLayout.CENTER);
     }
 }

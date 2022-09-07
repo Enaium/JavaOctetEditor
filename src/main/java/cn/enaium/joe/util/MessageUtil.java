@@ -53,6 +53,13 @@ public class MessageUtil {
         });
     }
 
+    public static void confirm(ConfirmPanel confirmPanel, String title, Runnable yes) {
+        confirm(confirmPanel, title, () -> {
+            confirmPanel.getConfirm().run();
+            yes.run();
+        }, null);
+    }
+
     public static void confirm(Object message, String title, Runnable yes) {
         confirm(message, title, yes, null);
     }

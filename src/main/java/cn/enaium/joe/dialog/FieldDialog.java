@@ -14,24 +14,22 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.file.tabbed.tab.classes.method;
+package cn.enaium.joe.dialog;
 
-import org.objectweb.asm.tree.MethodNode;
+import cn.enaium.joe.gui.panel.FieldInfoPanel;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldNode;
 
-import javax.swing.*;
 import java.awt.*;
 
 /**
  * @author Enaium
- * @since 0.8.0
+ * @since 1.2.0
  */
-public class MethodTabPanel extends JPanel {
-    public MethodTabPanel(MethodNode methodNode) {
-        super(new BorderLayout());
-        JTabbedPane jTabbedPane = new JTabbedPane();
-        jTabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
-        jTabbedPane.addTab("InstructionEdit", new MethodInstructionPanel(methodNode));
-        jTabbedPane.addTab("InfoEdit", new MethodInfoTabPanel(methodNode));
-        add(jTabbedPane);
+public class FieldDialog extends Dialog {
+    public FieldDialog(ClassNode classNode, FieldNode fieldNode) {
+        super(classNode.name + "#" + fieldNode.name);
+        setLayout(new BorderLayout());
+        add(new FieldInfoPanel(fieldNode), BorderLayout.CENTER);
     }
 }

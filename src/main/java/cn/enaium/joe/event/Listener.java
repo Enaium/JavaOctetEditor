@@ -14,21 +14,11 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.file.tree.node;
-
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldNode;
+package cn.enaium.joe.event;
 
 /**
  * @author Enaium
+ * @since 1.2.0
  */
-public class FieldTreeNode extends PackageTreeNode {
-    public ClassNode classNode;
-    public FieldNode fieldNode;
-
-    public FieldTreeNode(ClassNode classNode, FieldNode fieldNode) {
-        super(fieldNode.name);
-        this.classNode = classNode;
-        this.fieldNode = fieldNode;
-    }
+public interface Listener {
 }

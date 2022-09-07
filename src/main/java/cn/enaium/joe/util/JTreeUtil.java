@@ -17,15 +17,12 @@
 package cn.enaium.joe.util;
 
 import cn.enaium.joe.gui.panel.file.tree.node.ClassTreeNode;
-import cn.enaium.joe.gui.panel.file.tree.node.MethodTreeNode;
 import cn.enaium.joe.gui.panel.file.tree.node.PackageTreeNode;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Enumeration;
 
 public class JTreeUtil {

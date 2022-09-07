@@ -14,33 +14,24 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.file.tabbed.tab.classes;
+package cn.enaium.joe.gui.panel.method;
 
-import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.MethodNode;
 
 import javax.swing.*;
 import java.awt.*;
 
 /**
  * @author Enaium
+ * @since 0.8.0
  */
-public class ClassTabPanel extends JPanel {
-
-    private final ClassNode classNode;
-
-    public ClassTabPanel(ClassNode classNode) {
+public class MethodTabPanel extends JPanel {
+    public MethodTabPanel(MethodNode methodNode) {
         super(new BorderLayout());
-        this.classNode = classNode;
         JTabbedPane jTabbedPane = new JTabbedPane();
         jTabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
-        jTabbedPane.addTab("BytecodeView", new TraceBytecodeTabPanel(classNode));
-        jTabbedPane.addTab("DecompileView", new DecompileTabPanel(classNode));
-        jTabbedPane.addTab("VisitorEdit", new ASMifierTablePanel(classNode));
-        jTabbedPane.addTab("InfoEdit", new ClassInfoTabPanel(classNode));
+        jTabbedPane.addTab("InstructionEdit", new MethodInstructionPanel(methodNode));
+        jTabbedPane.addTab("InfoEdit", new MethodInfoTabPanel(methodNode));
         add(jTabbedPane);
-    }
-
-    public ClassNode getClassNode() {
-        return classNode;
     }
 }

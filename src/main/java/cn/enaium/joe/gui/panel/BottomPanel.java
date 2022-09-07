@@ -18,12 +18,15 @@ package cn.enaium.joe.gui.panel;
 
 import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.annotation.Indeterminate;
+import cn.enaium.joe.gui.panel.popup.TaskListPopup;
 import cn.enaium.joe.task.AbstractTask;
 import cn.enaium.joe.util.Pair;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
@@ -36,10 +39,21 @@ import java.util.concurrent.TimeUnit;
 public class BottomPanel extends JPanel {
 
     public BottomPanel() {
-        super(new GridLayout(1, 4, 10, 10));
+        super(new GridLayout(1, 2));
         this.setBorder(new EmptyBorder(5, 5, 5, 5));
+        add(new JLabel("\u00A9 Enaium 2022"));
+        TaskListPopup taskListPopup = new TaskListPopup();
+        JProgressBar jProgressBar = new JProgressBar() {{
 
-        JProgressBar jProgressBar = new JProgressBar();
+            JProgressBar self = this;
+            addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    Point locationOnScreen = self.getLocationOnScreen();
+                    taskListPopup.place(locationOnScreen.x, locationOnScreen.y - taskListPopup.getPreferredSize().height);
+                }
+            });
+        }};
 
         add(jProgressBar);
 
@@ -71,9 +85,5 @@ public class BottomPanel extends JPanel {
                 });
             }
         }, 1, 1, TimeUnit.MILLISECONDS);
-
-        JLabel label = new JLabel("\u00A9 Enaium 2022");
-        label.setHorizontalAlignment(SwingConstants.RIGHT);
-        add(label);
     }
 }

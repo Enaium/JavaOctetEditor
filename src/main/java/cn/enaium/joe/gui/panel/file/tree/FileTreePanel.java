@@ -17,299 +17,99 @@
 package cn.enaium.joe.gui.panel.file.tree;
 
 import cn.enaium.joe.JavaOctetEditor;
-import cn.enaium.joe.config.extend.ApplicationConfig;
-import cn.enaium.joe.gui.panel.file.FileDropTarget;
+import cn.enaium.joe.dialog.FieldDialog;
+import cn.enaium.joe.dialog.MethodDialog;
+import cn.enaium.joe.event.listener.FileTabbedSelectListener;
+import cn.enaium.joe.gui.component.MemberList;
+import cn.enaium.joe.gui.layout.HalfLayout;
 import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassTabPanel;
-import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.FieldInfoPanel;
-import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.method.MethodTabPanel;
-import cn.enaium.joe.gui.panel.file.tabbed.tab.resources.HexTablePanel;
-import cn.enaium.joe.gui.panel.file.tree.node.*;
+import cn.enaium.joe.gui.panel.LeftPanel;
 import cn.enaium.joe.jar.Jar;
-import cn.enaium.joe.task.InputJarTask;
 import cn.enaium.joe.util.JTreeUtil;
 import cn.enaium.joe.util.LangUtil;
+import cn.enaium.joe.util.OpcodeUtil;
+import cn.enaium.joe.util.Pair;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DropTarget;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.*;
+import java.util.Locale;
+import java.util.Map;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * @author Enaium
+ * @since 1.2.0
  */
-public class FileTreePanel extends JTree {
-
-    public static final DefaultTreeNode classesRoot = new DefaultTreeNode("classes");
-    public static final DefaultTreeNode resourceRoot = new DefaultTreeNode("resources");
-
+public class FileTreePanel extends JPanel {
     public FileTreePanel() {
-        super(new DefaultTreeNode("") {{
-            add(classesRoot);
-            add(resourceRoot);
-        }});
+        super(new BorderLayout());
 
-        setRootVisible(false);
-        setShowsRootHandles(true);
-        setCellRenderer(new FileTreeCellRenderer());
+        JPanel jPanel = new JPanel(new HalfLayout(HalfLayout.TOP_AND_BOTTOM));
+        jPanel.add(new JPanel(new BorderLayout()) {{
+            add(new JPanel(new BorderLayout()) {{
+                setBorder(new EmptyBorder(0, 0, 5, 0));
+                add(new JTextField() {{
+                    putClientProperty("JTextField.placeholderText", LangUtil.i18n("menu.search"));
+                    JTextField jTextField = this;
+                    addKeyListener(new KeyAdapter() {
+                        @Override
+                        public void keyPressed(KeyEvent e) {
+                            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                                Jar jar = JavaOctetEditor.getInstance().getJar();
+                                if (jar != null) {
+                                    if (!jTextField.getText().replace(" ", "").isEmpty()) {
+                                        Jar searchedJar = jar.copy();
 
-        addTreeSelectionListener(e -> {
-            DefaultTreeNode lastPathComponent = (DefaultTreeNode) e.getPath().getLastPathComponent();
-            SwingUtilities.invokeLater(() -> {
-                if (lastPathComponent instanceof PackageTreeNode) {
-                    PackageTreeNode packageTreeNode = (PackageTreeNode) lastPathComponent;
-                    if (packageTreeNode instanceof ClassTreeNode) {
-                        ClassNode classNode = ((ClassTreeNode) packageTreeNode).classNode;
-                        JavaOctetEditor.getInstance().fileTabbedPanel.addTab(classNode.name.substring(classNode.name.lastIndexOf("/") + 1), new ClassTabPanel(classNode));
-                    } else if (packageTreeNode instanceof MethodTreeNode) {
-                        MethodTreeNode methodTreeNode = (MethodTreeNode) packageTreeNode;
-                        MethodNode methodNode = methodTreeNode.methodNode;
-                        JavaOctetEditor.getInstance().fileTabbedPanel.addTab(methodTreeNode.classNode.name.substring(methodTreeNode.classNode.name.lastIndexOf("/") + 1) + "#" + methodNode.name, new MethodTabPanel(methodNode));
-                    } else if (packageTreeNode instanceof FieldTreeNode) {
-                        FieldTreeNode fieldTreeNode = (FieldTreeNode) packageTreeNode;
-                        FieldNode fieldNode = fieldTreeNode.fieldNode;
-                        JavaOctetEditor.getInstance().fileTabbedPanel.addTab(fieldTreeNode.classNode.name.substring(fieldTreeNode.classNode.name.lastIndexOf("/") + 1) + "#" + fieldNode.name, new FieldInfoPanel(fieldNode));
-                    }
-                } else if (lastPathComponent instanceof FolderTreeNode) {
-                    FolderTreeNode folderTreeNode = (FolderTreeNode) lastPathComponent;
-                    if (folderTreeNode instanceof FileTreeNode) {
-                        FileTreeNode fileTreeNode = (FileTreeNode) folderTreeNode;
-                        JavaOctetEditor.getInstance().fileTabbedPanel.addTab(fileTreeNode.toString().substring(fileTreeNode.toString().lastIndexOf("/") + 1), new HexTablePanel(fileTreeNode));
-                    }
+                                        searchedJar.classes = searchedJar.classes.entrySet().stream().filter(stringClassNodeEntry -> {
+                                            String key = stringClassNodeEntry.getKey();
+
+                                            if (!key.contains("/")) {
+                                                key = key.substring(key.lastIndexOf("/") + 1);
+                                            }
+
+                                            return key.toLowerCase(Locale.ROOT).contains(jTextField.getText().toLowerCase(Locale.ROOT));
+                                        }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                                        searchedJar.resources = searchedJar.resources.entrySet().stream().filter(stringEntry -> {
+                                            String key = stringEntry.getKey();
+                                            if (!key.contains("/")) {
+                                                key = key.substring(key.lastIndexOf("/") + 1);
+                                            }
+                                            return key.toLowerCase(Locale.ROOT).contains(jTextField.getText().toLowerCase(Locale.ROOT));
+                                        }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+                                        JavaOctetEditor.getInstance().fileTree.refresh(searchedJar);
+                                        JTreeUtil.setTreeExpandedState(JavaOctetEditor.getInstance().fileTree, true);
+                                    } else {
+                                        JavaOctetEditor.getInstance().fileTree.refresh(jar);
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }}, BorderLayout.CENTER);
+            }}, BorderLayout.NORTH);
+            add(new JScrollPane(JavaOctetEditor.getInstance().fileTree), BorderLayout.CENTER);
+        }}, HalfLayout.TOP);
+        jPanel.add(new JScrollPane() {{
+            JavaOctetEditor.getInstance().event.register(LeftPanel.BottomToggleButtonListener.class, (Consumer<LeftPanel.BottomToggleButtonListener>) listener -> {
+                setVisible(listener.getSelect() != null);
+                if (listener.getSelect() != null) {
+                    setViewportView(listener.getSelect());
+                    jPanel.validate();
                 }
-                JavaOctetEditor.getInstance().fileTabbedPanel.setSelectedIndex(JavaOctetEditor.getInstance().fileTabbedPanel.getTabCount() - 1);
             });
-        });
-
-        new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, new FileDropTarget(".jar", files -> {
-            if (!files.isEmpty()) {
-                JavaOctetEditor.getInstance().task.submit(new InputJarTask(files.get(0)));
-            }
-        }), true);
-
-        JPopupMenu jPopupMenu = new JPopupMenu();
-
-
-        jPopupMenu.add(new JMenuItem(LangUtil.i18n("popup.expandAll")) {{
-            addActionListener(e -> {
-                JTreeUtil.setNodeExpandedState(FileTreePanel.this, ((DefaultMutableTreeNode) Objects.requireNonNull(getSelectionPath()).getLastPathComponent()), true);
-            });
-        }});
-
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if (SwingUtilities.isRightMouseButton(e) && getSelectionPath() != null) {
-                    jPopupMenu.show(FileTreePanel.this, e.getX(), e.getY());
-                }
-            }
-        });
-
-    }
-
-    public void refresh(Jar jar) {
-        DefaultTreeModel model = (DefaultTreeModel) getModel();
-        model.reload();
-        classesRoot.removeAllChildren();
-        resourceRoot.removeAllChildren();
-
-        ApplicationConfig config = JavaOctetEditor.getInstance().config.getByClass(ApplicationConfig.class);
-
-
-        String packagePresentationValue = config.packagePresentation.getValue();
-
-        if (packagePresentationValue.equals("Hierarchical")) {
-            Map<String, DefaultTreeNode> hasMap = new HashMap<>();
-
-            for (ClassNode classNode : jar.classes.values()) {
-                String[] split = classNode.name.split("/");
-                DefaultTreeNode prev = null;
-                StringBuilder stringBuilder = new StringBuilder();
-                int i = 0;
-                for (String s : split) {
-                    stringBuilder.append(s);
-                    PackageTreeNode packageTreeNode = new PackageTreeNode(s);
-
-                    if (split.length == i + 1) {
-                        packageTreeNode = new ClassTreeNode(classNode);
-                        for (MethodNode methodNode : classNode.methods) {
-                            packageTreeNode.add(new MethodTreeNode(classNode, methodNode));
-                        }
-                        for (FieldNode field : classNode.fields) {
-                            packageTreeNode.add(new FieldTreeNode(classNode, field));
-                        }
-                    }
-
-                    if (prev == null) {
-                        if (!hasMap.containsKey(stringBuilder.toString())) {
-                            classesRoot.add(packageTreeNode);
-                            hasMap.put(stringBuilder.toString(), packageTreeNode);
-                            prev = packageTreeNode;
-                        } else {
-                            prev = hasMap.get(stringBuilder.toString());
-                        }
-                    } else {
-                        if (!hasMap.containsKey(stringBuilder.toString())) {
-                            prev.add(packageTreeNode);
-                            hasMap.put(stringBuilder.toString(), packageTreeNode);
-                            prev = packageTreeNode;
-                        } else {
-                            prev = hasMap.get(stringBuilder.toString());
-                        }
-                    }
-                    i++;
-                }
-            }
-            sort(model, classesRoot);
-
-            hasMap.clear();
-
-            for (Map.Entry<String, byte[]> stringEntry : jar.resources.entrySet()) {
-                String[] split = stringEntry.getKey().split("/");
-                DefaultTreeNode prev = null;
-                StringBuilder stringBuilder = new StringBuilder();
-                int i = 0;
-                for (String s : split) {
-                    stringBuilder.append(s);
-                    FolderTreeNode folderTreeNode = new FolderTreeNode(s);
-
-                    if (split.length == i + 1) {
-                        folderTreeNode = new FileTreeNode(s, stringEntry.getValue());
-                    }
-
-                    if (prev == null) {
-                        if (!hasMap.containsKey(stringBuilder.toString())) {
-                            resourceRoot.add(folderTreeNode);
-                            hasMap.put(stringBuilder.toString(), folderTreeNode);
-                            prev = folderTreeNode;
-                        } else {
-                            prev = hasMap.get(stringBuilder.toString());
-                        }
-                    } else {
-                        if (!hasMap.containsKey(stringBuilder.toString())) {
-                            prev.add(folderTreeNode);
-                            hasMap.put(stringBuilder.toString(), folderTreeNode);
-                            prev = folderTreeNode;
-                        } else {
-                            prev = hasMap.get(stringBuilder.toString());
-                        }
-                    }
-                    i++;
-                }
-            }
-            sort(model, resourceRoot);
-        } else if (packagePresentationValue.equals("Flat")) {
-            Map<String, DefaultTreeNode> hasMap = new HashMap<>();
-            for (ClassNode value : jar.classes.values()) {
-                String packageName = "";
-                if (value.name.contains("/")) {
-                    packageName = value.name.substring(0, value.name.lastIndexOf("/")).replace("/", ".");
-                }
-
-                ClassTreeNode classTreeNode = new ClassTreeNode(value);
-
-                for (FieldNode field : value.fields) {
-                    classTreeNode.add(new FieldTreeNode(value, field));
-                }
-
-                for (MethodNode method : value.methods) {
-                    classTreeNode.add(new MethodTreeNode(value, method));
-                }
-
-                if (packageName.isEmpty()) {
-                    classesRoot.add(classTreeNode);
-                } else {
-                    DefaultTreeNode defaultTreeNode;
-                    if (hasMap.containsKey(packageName)) {
-                        defaultTreeNode = hasMap.get(packageName);
-                    } else {
-                        defaultTreeNode = new PackageTreeNode(packageName);
-                        hasMap.put(packageName, defaultTreeNode);
-                    }
-                    defaultTreeNode.add(classTreeNode);
-                    classesRoot.add(defaultTreeNode);
-                }
-            }
-            hasMap.clear();
-
-            for (Map.Entry<String, byte[]> stringEntry : jar.resources.entrySet()) {
-                String folderName = "";
-                String name = stringEntry.getKey();
-                if (stringEntry.getKey().contains("/")) {
-                    folderName = stringEntry.getKey().substring(0, stringEntry.getKey().lastIndexOf("/")).replace("/", ".");
-                    name = name.substring(name.lastIndexOf("/") + 1);
-                }
-
-                FileTreeNode classTreeNode = new FileTreeNode(name, stringEntry.getValue());
-
-                if (folderName.isEmpty()) {
-                    resourceRoot.add(classTreeNode);
-                } else {
-                    DefaultTreeNode defaultTreeNode;
-                    if (hasMap.containsKey(folderName)) {
-                        defaultTreeNode = hasMap.get(folderName);
-                    } else {
-                        defaultTreeNode = new FolderTreeNode(folderName);
-                        hasMap.put(folderName, defaultTreeNode);
-                    }
-                    defaultTreeNode.add(classTreeNode);
-                    resourceRoot.add(defaultTreeNode);
-                }
-            }
-            sort(model, resourceRoot);
-        }
-
-        JavaOctetEditor.getInstance().fileTabbedPanel.removeAll();
-
-        repaint();
-    }
-
-
-    public void sort(DefaultTreeModel defaultTreeModel, DefaultTreeNode defaultTreeNode) {
-        if (!defaultTreeNode.isLeaf()) {
-            defaultTreeNode.getChildren().sort((o1, o2) -> {
-                boolean class1 = o1 instanceof ClassTreeNode;
-                boolean class2 = o2 instanceof ClassTreeNode;
-
-                boolean method1 = o1 instanceof MethodTreeNode;
-                boolean method2 = o2 instanceof MethodTreeNode;
-
-                boolean file1 = o1 instanceof FileTreeNode;
-                boolean file2 = o2 instanceof FileTreeNode;
-
-                if (class1 && !class2) {
-                    return 1;
-                }
-                if (!class1 && class2) {
-                    return -1;
-                }
-
-
-                if (method1 && !method2) {
-                    return 1;
-                }
-                if (!method1 && method2) {
-                    return -1;
-                }
-
-                if (file1 && !file2) {
-                    return 1;
-                }
-                if (!file1 && file2) {
-                    return -1;
-                }
-                return o1.toString().compareTo(o2.toString());
-            });
-            for (int i = 0; i < defaultTreeModel.getChildCount(defaultTreeNode); i++) {
-                DefaultTreeNode child = ((DefaultTreeNode) defaultTreeModel.getChild(defaultTreeNode, i));
-                sort(defaultTreeModel, child);
-            }
-        }
+            setVisible(false);
+        }}, HalfLayout.BOTTOM);
+        add(jPanel, BorderLayout.CENTER);
     }
 }

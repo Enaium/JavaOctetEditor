@@ -16,34 +16,26 @@
 
 package cn.enaium.joe.util;
 
-import java.util.Enumeration;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
+import org.objectweb.asm.Type;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * @author Enaium
+ * @since 1.2.0
  */
-public class Util {
-    public static int countFiles(JarFile zipFile) {
-        final Enumeration<? extends JarEntry> entries = zipFile.entries();
-        int c = 0;
-        while (entries.hasMoreElements()) {
-            entries.nextElement();
-            ++c;
-        }
-        return c;
-    }
-
-    public static boolean isText(byte[] bytes) {
-        int total = bytes.length;
-        if (total >= 8000) {
-            total = 8000;
-        }
-        for (int i = 0; i < total; i++) {
-            if (((char) bytes[i]) == '\0') {
-                return false;
+public class ASMUtil {
+    public static <T> Object toType(Class<T> type, String text) {
+        try {
+            Method valueOf = type.getMethod("valueOf", String.class);
+            return valueOf.invoke(null, text);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            if (type == Type.class) {
+                return Type.getType(text);
+            } else {
+                return text;
             }
         }
-        return true;
     }
 }

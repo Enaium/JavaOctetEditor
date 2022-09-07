@@ -16,6 +16,10 @@
 
 package cn.enaium.joe.util;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,5 +43,25 @@ public class IOUtil {
         }
         inputStream.close();
         return byteOutputStream.toByteArray();
+    }
+
+    public static Icon getIcon(byte[] data) throws IOException {
+        return new ImageIcon(ImageIO.read(new ByteArrayInputStream(data)));
+    }
+
+    public static boolean isImage(byte[] data) {
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data);
+        try {
+            BufferedImage read = ImageIO.read(byteArrayInputStream);
+            return read != null;
+        } catch (Throwable ignore) {
+            return false;
+        } finally {
+            try {
+                byteArrayInputStream.close();
+            } catch (IOException e) {
+                MessageUtil.error(e);
+            }
+        }
     }
 }

@@ -14,75 +14,81 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.file.tabbed.tab.classes.method;
+package cn.enaium.joe.gui.panel;
 
+import cn.enaium.joe.dialog.AnnotationListDialog;
 import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.StringUtil;
-import org.benf.cfr.reader.util.StringUtils;
-import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.FieldNode;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * @author Enaium
  * @since 0.6.0
  */
-public class MethodInfoTabPanel extends JPanel {
-    public MethodInfoTabPanel(MethodNode methodNode) {
+public class FieldInfoPanel extends JPanel {
+    public FieldInfoPanel(FieldNode fieldNode) {
         setLayout(new BorderLayout());
         JPanel labels = new JPanel(new GridLayout(0, 1));
         JPanel rights = new JPanel(new GridLayout(0, 1));
         add(labels, BorderLayout.WEST);
         add(rights, BorderLayout.CENTER);
         labels.add(new JLabel(LangUtil.i18n("class.info.name")));
-        JTextField name = new JTextField(methodNode.name);
+        JTextField name = new JTextField(fieldNode.name);
         rights.add(name);
         labels.add(new JLabel(LangUtil.i18n("class.info.description")));
-        JTextField description = new JTextField(methodNode.desc);
+        JTextField description = new JTextField(fieldNode.desc);
         rights.add(description);
         labels.add(new JLabel(LangUtil.i18n("class.info.access")));
-        JTextField access = new JTextField(String.valueOf(methodNode.access));
+        JTextField access = new JTextField(String.valueOf(fieldNode.access));
         rights.add(access);
         labels.add(new JLabel(LangUtil.i18n("class.info.signature")));
-        JTextField signature = new JTextField(methodNode.signature);
+        JTextField signature = new JTextField(fieldNode.signature);
         rights.add(signature);
-        labels.add(new JLabel(LangUtil.i18n("class.info.exceptions")));
-        JTextField exceptions = new JTextField(StringUtils.join(methodNode.exceptions, ";"));
-        rights.add(exceptions);
         add(new JButton(LangUtil.i18n("button.save")) {{
             addActionListener(e -> {
 
                 if (!StringUtil.isBlank(name.getText())) {
-                    methodNode.name = name.getText();
+                    fieldNode.name = name.getText();
                 }
 
+
                 if (!StringUtil.isBlank(description.getText())) {
-                    methodNode.desc = description.getText();
+                    fieldNode.desc = description.getText();
                 } else {
-                    methodNode.desc = null;
+                    fieldNode.desc = null;
                 }
 
                 if (!StringUtil.isBlank(access.getText())) {
-                    methodNode.access = Integer.parseInt(access.getText());
+                    fieldNode.access = Integer.parseInt(access.getText());
                 }
 
                 if (!StringUtil.isBlank(signature.getText())) {
-                    methodNode.signature = signature.getName();
+                    fieldNode.signature = signature.getName();
                 } else {
-                    methodNode.signature = null;
+                    fieldNode.signature = null;
                 }
 
-                if (!StringUtil.isBlank(signature.getText())) {
-                    methodNode.exceptions = Arrays.asList(signature.getText().split(";"));
-                } else {
-                    methodNode.exceptions = new ArrayList<>();
-                }
-
-                JOptionPane.showMessageDialog(MethodInfoTabPanel.this, LangUtil.i18n("success"));
+                JOptionPane.showMessageDialog(FieldInfoPanel.this,  LangUtil.i18n("success"));
             });
         }}, BorderLayout.SOUTH);
+        labels.add(new JLabel("Visible Annotation:"));
+        rights.add(new JButton(LangUtil.i18n("button.edit")) {{
+            addActionListener(e -> {
+                if (fieldNode.visibleAnnotations != null) {
+                    new AnnotationListDialog(fieldNode.visibleAnnotations).setVisible(true);
+                }
+            });
+        }});
+        labels.add(new JLabel("Invisible Annotation:"));
+        rights.add(new JButton(LangUtil.i18n("button.edit")) {{
+            addActionListener(e -> {
+                if (fieldNode.invisibleAnnotations != null) {
+                    new AnnotationListDialog(fieldNode.invisibleAnnotations).setVisible(true);
+                }
+            });
+        }});
     }
 }

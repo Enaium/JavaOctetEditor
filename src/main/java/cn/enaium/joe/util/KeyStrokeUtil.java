@@ -33,7 +33,7 @@ public class KeyStrokeUtil {
     public static void register(JComponent component, KeyStroke keyStroke, Runnable action) {
         String key = String.valueOf(ATOMIC_INTEGER.incrementAndGet());
         InputMap inputMap = component.getInputMap(JComponent.WHEN_FOCUSED);
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK), key);
+        inputMap.put(keyStroke, key);
         ActionMap actionMap = component.getActionMap();
         actionMap.put(key, new AbstractAction() {
             @Override

@@ -22,14 +22,12 @@ import cn.enaium.joe.util.ASyncUtil;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
 /**
  * @author Enaium
  * @since 0.7.0
  */
-public class HexTablePanel extends Panel {
+public class HexTablePanel extends JPanel {
     public HexTablePanel(FileTreeNode fileTreeNode) {
         super(new BorderLayout());
         DefaultTableModel defaultTableModel = new DefaultTableModel(new Object[][]{}, new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"});

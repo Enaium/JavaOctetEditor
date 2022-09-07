@@ -14,21 +14,24 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.file.tree.node;
+package cn.enaium.joe.event.listener;
 
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.MethodNode;
+import cn.enaium.joe.event.Listener;
+
+import java.awt.*;
 
 /**
  * @author Enaium
+ * @since 1.2.0
  */
-public class MethodTreeNode extends PackageTreeNode {
-    public ClassNode classNode;
-    public MethodNode methodNode;
+public class FileTabbedSelectListener implements Listener {
+    private final Component select;
 
-    public MethodTreeNode(ClassNode classNode, MethodNode methodNode) {
-        super(methodNode.name);
-        this.classNode = classNode;
-        this.methodNode = methodNode;
+    public FileTabbedSelectListener(Component select) {
+        this.select = select;
+    }
+
+    public Component getSelect() {
+        return select;
     }
 }

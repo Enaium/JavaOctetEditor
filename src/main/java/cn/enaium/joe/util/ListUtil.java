@@ -14,28 +14,16 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.file.tree.node;
+package cn.enaium.joe.util;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreeNode;
-import java.util.Vector;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.List;
 
 /**
  * @author Enaium
+ * @since 1.2.0
  */
-public class DefaultTreeNode extends DefaultMutableTreeNode {
-    public DefaultTreeNode(Object userObject) {
-        super(userObject);
-    }
-
-
-    @SuppressWarnings("unchecked")
-    public Vector<DefaultTreeNode> getChildren() {
-        if (children == null) {
-            return new Vector<>();
-        }
-        return children;
+public class ListUtil {
+    public static Class<?> getType(List<Object> list) {
+        return list.get(0).getClass();
     }
 }

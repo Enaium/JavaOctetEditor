@@ -16,7 +16,16 @@
 
 package cn.enaium.joe.gui.panel.file.tabbed;
 
+import cn.enaium.joe.JavaOctetEditor;
+import cn.enaium.joe.event.listener.FileTabbedSelectListener;
+import cn.enaium.joe.util.JMenuUtil;
+import cn.enaium.joe.util.LangUtil;
+
 import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 
 /**
@@ -27,5 +36,46 @@ public class FileTabbedPanel extends JTabbedPane {
         setTabLayoutPolicy(SCROLL_TAB_LAYOUT);
         putClientProperty("JTabbedPane.tabClosable", true);
         putClientProperty("JTabbedPane.tabCloseCallback", (BiConsumer<JTabbedPane, Integer>) JTabbedPane::remove);
+        addChangeListener(e -> {
+            Component selectedComponent = ((FileTabbedPanel) e.getSource()).getSelectedComponent();
+            JavaOctetEditor.getInstance().event.call(new FileTabbedSelectListener(selectedComponent));
+        });
+        JMenuUtil.addPopupMenu(this, new JPopupMenu() {{
+            add(new JMenuItem(LangUtil.i18n("popup.tabbed.closeAll")) {{
+                addActionListener(e -> {
+                    FileTabbedPanel.this.removeAll();
+                });
+            }});
+            add(new JMenuItem(LangUtil.i18n("popup.tabbed.closeOther")) {{
+                addActionListener(e -> {
+                    int tabCount = getTabCount();
+                    while (tabCount-- > 0) {
+                        if (tabCount != getSelectedIndex()) {
+                            removeTabAt(tabCount);
+                        }
+                    }
+                });
+            }});
+            add(new JMenuItem(LangUtil.i18n("popup.tabbed.closeAllLeft")) {{
+                addActionListener(e -> {
+                    int tabCount = getTabCount();
+                    while (tabCount-- > 0) {
+                        if (tabCount < getSelectedIndex()) {
+                            removeTabAt(tabCount);
+                        }
+                    }
+                });
+            }});
+            add(new JMenuItem(LangUtil.i18n("popup.tabbed.closeAllRight")) {{
+                addActionListener(e -> {
+                    int tabCount = getTabCount();
+                    while (tabCount-- > 0) {
+                        if (tabCount > getSelectedIndex()) {
+                            removeTabAt(tabCount);
+                        }
+                    }
+                });
+            }});
+        }}, () -> getSelectedComponent() != null);
     }
 }
