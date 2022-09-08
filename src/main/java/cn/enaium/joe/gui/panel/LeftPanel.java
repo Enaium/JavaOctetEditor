@@ -20,8 +20,9 @@ import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.event.Listener;
 import cn.enaium.joe.event.listener.FileTabbedSelectListener;
 import cn.enaium.joe.gui.component.MemberList;
-import cn.enaium.joe.gui.component.TabbedPanel;
+import cn.enaium.joe.gui.component.TabbedPane;
 import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassTabPanel;
+import cn.enaium.joe.gui.ui.VerticalLabelUI;
 import org.objectweb.asm.tree.ClassNode;
 
 import javax.swing.*;
@@ -37,9 +38,9 @@ public class LeftPanel extends JPanel {
     public LeftPanel() {
         super(new BorderLayout());
         add(new JPanel(new BorderLayout()) {{
-            add(new TabbedPanel(JTabbedPane.LEFT) {{
+            add(new TabbedPane(JTabbedPane.LEFT) {{
                 Set<Integer> set = new HashSet<>();
-                addTab("M", new MemberList(new ClassNode()) {{
+                addTab("Member", new MemberList(new ClassNode()) {{
                     JavaOctetEditor.getInstance().event.register(FileTabbedSelectListener.class, (Consumer<FileTabbedSelectListener>) listener -> {
                         Component select = listener.getSelect();
                         if (select instanceof ClassTabPanel) {
@@ -47,6 +48,13 @@ public class LeftPanel extends JPanel {
                         }
                     });
                 }});
+                for (int i = 0; i < getTabCount(); i++) {
+                    setTabComponentAt(i, new JLabel(getTitleAt(i)) {{
+                        setUI(new VerticalLabelUI(false));
+                    }});
+                }
+
+
                 setSelectedIndex(-1);
                 addMouseListener(new MouseAdapter() {
                     @Override
