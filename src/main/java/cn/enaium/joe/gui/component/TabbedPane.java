@@ -25,10 +25,10 @@ import java.util.Map;
  * @author Enaium
  * @since 1.2.0
  */
-public class TabbedPanel extends JTabbedPane {
+public class TabbedPane extends JTabbedPane {
     private final Map<Integer, Component> componentMap = new HashMap<>();
 
-    public TabbedPanel(int tabPlacement) {
+    public TabbedPane(int tabPlacement) {
         super(tabPlacement);
     }
 
@@ -36,11 +36,6 @@ public class TabbedPanel extends JTabbedPane {
     public void addTab(String title, Component component) {
         componentMap.put(componentMap.size(), component);
         super.addTab(title, null);
-    }
-
-    @Override
-    public Component getComponent(int n) {
-        return componentMap.get(n);
     }
 
     @Override
