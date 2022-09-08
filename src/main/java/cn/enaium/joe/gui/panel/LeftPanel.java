@@ -22,13 +22,12 @@ import cn.enaium.joe.event.listener.FileTabbedSelectListener;
 import cn.enaium.joe.gui.component.MemberList;
 import cn.enaium.joe.gui.component.TabbedPane;
 import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassTabPanel;
-import cn.enaium.joe.gui.ui.VerticalLabelUI;
 import org.objectweb.asm.tree.ClassNode;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.function.Consumer;
 
 /**
@@ -39,7 +38,16 @@ public class LeftPanel extends JPanel {
         super(new BorderLayout());
         add(new JPanel(new BorderLayout()) {{
             add(new TabbedPane(JTabbedPane.LEFT) {{
-                Set<Integer> set = new HashSet<>();
+                addTab("Project", JavaOctetEditor.getInstance().fileTree);
+                addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        JavaOctetEditor.getInstance().event.call(new LeftPanel.TopToggleButtonListener(getSelectedComponent()));
+                    }
+                });
+                setVerticalLabel();
+            }}, BorderLayout.NORTH);
+            add(new TabbedPane(JTabbedPane.LEFT) {{
                 addTab("Member", new MemberList(new ClassNode()) {{
                     JavaOctetEditor.getInstance().event.register(FileTabbedSelectListener.class, (Consumer<FileTabbedSelectListener>) listener -> {
                         Component select = listener.getSelect();
@@ -48,44 +56,39 @@ public class LeftPanel extends JPanel {
                         }
                     });
                 }});
-                for (int i = 0; i < getTabCount(); i++) {
-                    setTabComponentAt(i, new JLabel(getTitleAt(i)) {{
-                        setUI(new VerticalLabelUI(false));
-                    }});
-                }
-
-
-                setSelectedIndex(-1);
                 addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        if (set.contains(getSelectedIndex())) {
-                            set.remove(getSelectedIndex());
-                            setSelectedIndex(-1);
-                        } else {
-                            set.add(getSelectedIndex());
-                        }
-                        JavaOctetEditor.getInstance().event.call(new BottomToggleButtonListener(getSelectedComponent()));
+                        JavaOctetEditor.getInstance().event.call(new LeftPanel.BottomToggleButtonListener(getSelectedComponent()));
                     }
                 });
+                cancelSelect();
+                setVerticalLabel();
             }}, BorderLayout.SOUTH);
         }}, BorderLayout.WEST);
     }
 
-    public static class BottomToggleButtonListener implements Listener {
+    private static class ToggleButtonListener implements Listener {
         private final Component select;
 
-        public BottomToggleButtonListener(Component select) {
+        public ToggleButtonListener(Component select) {
             this.select = select;
         }
 
         public Component getSelect() {
             return select;
         }
+    }
 
-        public enum Type {
-            NULL,
-            MEMBER
+    public static class TopToggleButtonListener extends ToggleButtonListener {
+        public TopToggleButtonListener(Component select) {
+            super(select);
+        }
+    }
+
+    public static class BottomToggleButtonListener extends ToggleButtonListener {
+        public BottomToggleButtonListener(Component select) {
+            super(select);
         }
     }
 }

@@ -16,10 +16,13 @@
 
 package cn.enaium.joe.gui.component;
 
+import cn.enaium.joe.gui.ui.VerticalLabelUI;
+
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.*;
 
 /**
  * @author Enaium
@@ -27,9 +30,23 @@ import java.util.Map;
  */
 public class TabbedPane extends JTabbedPane {
     private final Map<Integer, Component> componentMap = new HashMap<>();
+    private final Set<Integer> selected = new HashSet<Integer>() {{
+        add(0);
+    }};
 
     public TabbedPane(int tabPlacement) {
         super(tabPlacement);
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (selected.contains(getSelectedIndex())) {
+                    selected.remove(getSelectedIndex());
+                    setSelectedIndex(-1);
+                } else {
+                    selected.add(getSelectedIndex());
+                }
+            }
+        });
     }
 
     @Override
@@ -41,5 +58,18 @@ public class TabbedPane extends JTabbedPane {
     @Override
     public Component getSelectedComponent() {
         return componentMap.get(getSelectedIndex());
+    }
+
+    public void cancelSelect() {
+        selected.clear();
+        setSelectedIndex(-1);
+    }
+
+    public void setVerticalLabel() {
+        for (int i = 0; i < getTabCount(); i++) {
+            setTabComponentAt(i, new JLabel(getTitleAt(i)) {{
+                setUI(new VerticalLabelUI(false));
+            }});
+        }
     }
 }

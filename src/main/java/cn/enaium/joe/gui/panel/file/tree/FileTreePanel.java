@@ -43,6 +43,7 @@ public class FileTreePanel extends JPanel {
 
         JPanel jPanel = new JPanel(new HalfLayout(HalfLayout.TOP_AND_BOTTOM));
         jPanel.add(new JPanel(new BorderLayout()) {{
+            JPanel self = this;
             add(new JPanel(new BorderLayout()) {{
                 setBorder(new EmptyBorder(0, 0, 5, 0));
                 add(new JTextField() {{
@@ -85,7 +86,15 @@ public class FileTreePanel extends JPanel {
                     });
                 }}, BorderLayout.CENTER);
             }}, BorderLayout.NORTH);
-            add(new JScrollPane(JavaOctetEditor.getInstance().fileTree), BorderLayout.CENTER);
+            add(new JScrollPane(JavaOctetEditor.getInstance().fileTree) {{
+                JavaOctetEditor.getInstance().event.register(LeftPanel.TopToggleButtonListener.class, (Consumer<LeftPanel.TopToggleButtonListener>) listener -> {
+                    self.setVisible(listener.getSelect() != null);
+                    if (listener.getSelect() != null) {
+                        setViewportView(listener.getSelect());
+                        jPanel.validate();
+                    }
+                });
+            }}, BorderLayout.CENTER);
         }}, HalfLayout.TOP);
         jPanel.add(new JScrollPane() {{
             JavaOctetEditor.getInstance().event.register(LeftPanel.BottomToggleButtonListener.class, (Consumer<LeftPanel.BottomToggleButtonListener>) listener -> {
