@@ -36,6 +36,6 @@ public class EventManager {
     }
 
     public void call(Listener listener) {
-        listeners.stream().filter(it -> it.getKey() == listener.getClass()).filter(it -> Arrays.stream(it.getKey().getInterfaces()).anyMatch(i -> i == Listener.class)).forEach(it -> it.getValue().accept(listener));
+        listeners.stream().filter(it -> it.getKey() == listener.getClass()).forEach(it -> it.getValue().accept(listener));
     }
 }
