@@ -17,30 +17,17 @@
 package cn.enaium.joe.gui.panel.file.tree;
 
 import cn.enaium.joe.JavaOctetEditor;
-import cn.enaium.joe.dialog.FieldDialog;
-import cn.enaium.joe.dialog.MethodDialog;
-import cn.enaium.joe.event.listener.FileTabbedSelectListener;
-import cn.enaium.joe.gui.component.MemberList;
 import cn.enaium.joe.gui.layout.HalfLayout;
-import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassTabPanel;
 import cn.enaium.joe.gui.panel.LeftPanel;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.util.JTreeUtil;
 import cn.enaium.joe.util.LangUtil;
-import cn.enaium.joe.util.OpcodeUtil;
-import cn.enaium.joe.util.Pair;
-import com.formdev.flatlaf.extras.FlatSVGIcon;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldNode;
-import org.objectweb.asm.tree.MethodNode;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.Locale;
 import java.util.Map;
 import java.util.function.Consumer;
