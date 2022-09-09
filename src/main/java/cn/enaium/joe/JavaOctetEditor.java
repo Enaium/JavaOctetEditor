@@ -19,14 +19,13 @@ package cn.enaium.joe;
 import cn.enaium.joe.config.ConfigManager;
 import cn.enaium.joe.event.EventManager;
 import cn.enaium.joe.gui.panel.BottomPanel;
-import cn.enaium.joe.gui.panel.file.tree.FileTreePanel;
+import cn.enaium.joe.gui.panel.file.tree.CenterPanel;
 import cn.enaium.joe.gui.panel.LeftPanel;
 import cn.enaium.joe.gui.panel.file.tabbed.FileTabbedPanel;
 import cn.enaium.joe.gui.component.FileTree;
 import cn.enaium.joe.gui.panel.menu.*;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.task.TaskManager;
-import cn.enaium.joe.util.KeyStrokeUtil;
 import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.util.ReflectUtil;
@@ -98,10 +97,7 @@ public class JavaOctetEditor {
 
         window.setContentPane(new JPanel(new BorderLayout()) {{
             add(new LeftPanel(), BorderLayout.WEST);
-            add(new JSplitPane() {{
-                setLeftComponent(new FileTreePanel());
-                setRightComponent(fileTabbedPanel);
-            }}, BorderLayout.CENTER);
+            add(new CenterPanel(), BorderLayout.CENTER);
             add(bottomPanel, BorderLayout.SOUTH);
         }});
 

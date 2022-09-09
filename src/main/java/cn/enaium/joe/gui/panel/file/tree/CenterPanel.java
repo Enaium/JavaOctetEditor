@@ -30,6 +30,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -37,11 +38,12 @@ import java.util.stream.Collectors;
  * @author Enaium
  * @since 1.2.0
  */
-public class FileTreePanel extends JPanel {
-    public FileTreePanel() {
+public class CenterPanel extends JPanel {
+    public CenterPanel() {
         super(new BorderLayout());
 
-        JPanel jPanel = new JPanel(new HalfLayout(HalfLayout.TOP_AND_BOTTOM));
+        HalfLayout layout = new HalfLayout(HalfLayout.TOP_AND_BOTTOM);
+        JPanel jPanel = new JPanel(layout);
         jPanel.add(new JPanel(new BorderLayout()) {{
             JPanel self = this;
             add(new JPanel(new BorderLayout()) {{
@@ -87,25 +89,45 @@ public class FileTreePanel extends JPanel {
                 }}, BorderLayout.CENTER);
             }}, BorderLayout.NORTH);
             add(new JScrollPane(JavaOctetEditor.getInstance().fileTree) {{
-                JavaOctetEditor.getInstance().event.register(LeftPanel.TopToggleButtonListener.class, (Consumer<LeftPanel.TopToggleButtonListener>) listener -> {
-                    self.setVisible(listener.getSelect() != null);
-                    if (listener.getSelect() != null) {
-                        setViewportView(listener.getSelect());
-                        jPanel.validate();
+                JavaOctetEditor.getInstance().event.register(LeftPanel.ToggleTabListener.class, (Consumer<LeftPanel.ToggleTabListener>) listener -> {
+                    if (listener.getType() == LeftPanel.ToggleTabListener.Type.TOP) {
+                        self.setVisible(listener.getSelect() != null);
+                        if (listener.getSelect() != null) {
+                            setViewportView(listener.getSelect());
+                            jPanel.validate();
+                        }
                     }
                 });
             }}, BorderLayout.CENTER);
         }}, HalfLayout.TOP);
         jPanel.add(new JScrollPane() {{
-            JavaOctetEditor.getInstance().event.register(LeftPanel.BottomToggleButtonListener.class, (Consumer<LeftPanel.BottomToggleButtonListener>) listener -> {
-                setVisible(listener.getSelect() != null);
-                if (listener.getSelect() != null) {
-                    setViewportView(listener.getSelect());
-                    jPanel.validate();
+            JavaOctetEditor.getInstance().event.register(LeftPanel.ToggleTabListener.class, (Consumer<LeftPanel.ToggleTabListener>) listener -> {
+                if (listener.getType() == LeftPanel.ToggleTabListener.Type.BOTTOM) {
+                    setVisible(listener.getSelect() != null);
+                    if (listener.getSelect() != null) {
+                        setViewportView(listener.getSelect());
+                        jPanel.validate();
+                    }
                 }
             });
             setVisible(false);
         }}, HalfLayout.BOTTOM);
-        add(jPanel, BorderLayout.CENTER);
+
+        add(new JSplitPane() {{
+            AtomicInteger loc = new AtomicInteger();
+            setLeftComponent(jPanel);
+            setRightComponent(JavaOctetEditor.getInstance().fileTabbedPanel);
+            JavaOctetEditor.getInstance().event.register(LeftPanel.ToggleTabListener.class, (Consumer<LeftPanel.ToggleTabListener>) listener -> {
+                if (layout.isAllHide()) {
+                    jPanel.setVisible(false);
+                    loc.set(getDividerLocation());
+                    setDividerSize(0);
+                } else {
+                    jPanel.setVisible(true);
+                    setDividerLocation(loc.get());
+                    setDividerSize((Integer) UIManager.get("SplitPane.dividerSize"));
+                }
+            });
+        }}, BorderLayout.CENTER);
     }
 }

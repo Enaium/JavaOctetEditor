@@ -42,7 +42,7 @@ public class LeftPanel extends JPanel {
                 addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        JavaOctetEditor.getInstance().event.call(new LeftPanel.TopToggleButtonListener(getSelectedComponent()));
+                        JavaOctetEditor.getInstance().event.call(new ToggleTabListener(getSelectedComponent(), ToggleTabListener.Type.TOP));
                     }
                 });
                 setVerticalLabel();
@@ -59,7 +59,7 @@ public class LeftPanel extends JPanel {
                 addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        JavaOctetEditor.getInstance().event.call(new LeftPanel.BottomToggleButtonListener(getSelectedComponent()));
+                        JavaOctetEditor.getInstance().event.call(new ToggleTabListener(getSelectedComponent(), ToggleTabListener.Type.BOTTOM));
                     }
                 });
                 cancelSelect();
@@ -68,27 +68,25 @@ public class LeftPanel extends JPanel {
         }}, BorderLayout.WEST);
     }
 
-    private static class ToggleButtonListener implements Listener {
+    public static class ToggleTabListener implements Listener {
         private final Component select;
+        private final Type type;
 
-        public ToggleButtonListener(Component select) {
+        public ToggleTabListener(Component select, Type type) {
             this.select = select;
+            this.type = type;
         }
 
         public Component getSelect() {
             return select;
         }
-    }
 
-    public static class TopToggleButtonListener extends ToggleButtonListener {
-        public TopToggleButtonListener(Component select) {
-            super(select);
+        public Type getType() {
+            return type;
         }
-    }
 
-    public static class BottomToggleButtonListener extends ToggleButtonListener {
-        public BottomToggleButtonListener(Component select) {
-            super(select);
+        public enum Type {
+            TOP, BOTTOM
         }
     }
 }
