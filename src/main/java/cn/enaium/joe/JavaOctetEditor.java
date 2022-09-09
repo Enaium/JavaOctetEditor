@@ -29,6 +29,7 @@ import cn.enaium.joe.task.TaskManager;
 import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.util.ReflectUtil;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
 
@@ -79,6 +80,8 @@ public class JavaOctetEditor {
 
         AbstractTokenMakerFactory abstractTokenMakerFactory = (AbstractTokenMakerFactory) TokenMakerFactory.getDefaultInstance();
         abstractTokenMakerFactory.putMapping("text/custom", BytecodeTokenMaker.class.getName());
+
+        window.setIconImage(new FlatSVGIcon("icons/logo.svg").getImage());
 
         window.setJMenuBar(new JMenuBar() {{
             add(new FileMenu());

@@ -1,0 +1,20 @@
+<!--
+  - Copyright 2022 Enaium
+  -
+  - Licensed under the Apache License, Version 2.0 (the "License");
+  - you may not use this file except in compliance with the License.
+  - You may obtain a copy of the License at
+  -
+  - http://www.apache.org/licenses/LICENSE-2.0
+  -
+  - Unless required by applicable law or agreed to in writing, software
+  - distributed under the License is distributed on an "AS IS" BASIS,
+  - WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  - See the License for the specific language governing permissions and
+  - limitations under the License.
+  -->
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512.5 512">
+  <rect width="512.5" height="512" style="fill: #61afef;"/>
+  <path d="M255.67,502.46c-45.3,0-80.93-12.88-106.91-38.63-25.98-25.75-38.97-61.05-38.97-105.91h52.62c0,30.64,8.21,54.52,24.65,71.61,16.42,17.1,39.3,25.64,68.61,25.64s52.29-8.54,68.94-25.64c16.65-17.09,24.98-40.97,24.98-71.61V58.17H209.04V9.54h193.17V357.92c0,44.86-13.1,80.16-39.3,105.91-26.21,25.76-61.95,38.63-107.24,38.63Z" style="fill: #fff;"/>
+</svg>

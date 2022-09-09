@@ -16,6 +16,8 @@
 
 package cn.enaium.joe.dialog;
 
+import com.formdev.flatlaf.extras.FlatSVGIcon;
+
 import javax.swing.*;
 
 public class Dialog extends JFrame {
@@ -24,5 +26,6 @@ public class Dialog extends JFrame {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setSize(800, 500);
         setLocationRelativeTo(getOwner());
+        setIconImage(new FlatSVGIcon("icons/logo.svg").getImage());
     }
 }
