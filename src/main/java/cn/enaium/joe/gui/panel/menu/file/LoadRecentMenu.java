@@ -51,7 +51,7 @@ public class LoadRecentMenu extends JMenuItem {
                         });
                     }});
                 }
-                jPopupMenu.show(JavaOctetEditor.getInstance().fileTree, e.getX(), e.getY());
+                jPopupMenu.show(JavaOctetEditor.getInstance().window, e.getX(), e.getY());
             }
         });
     }
