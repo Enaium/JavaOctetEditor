@@ -16,7 +16,7 @@
 
 package cn.enaium.joe.util;
 
-import cn.enaium.joe.JavaOctetEditor;
+import cn.enaium.joe.MainFX;
 import cn.enaium.joe.config.extend.ApplicationConfig;
 import cn.enaium.joe.config.value.ModeValue;
 import com.google.gson.Gson;
@@ -32,7 +32,7 @@ public class LangUtil {
     public static String i18n(String key, Object... args) {
         Locale locale = Locale.getDefault();
         String lang = locale.getLanguage() + "_" + locale.getCountry();
-        ModeValue language = JavaOctetEditor.getInstance().config.getByClass(ApplicationConfig.class).language;
+        ModeValue language = MainFX.getInstance().config.getByClass(ApplicationConfig.class).language;
         if (!language.getValue().equals("System")) {
             lang = language.getValue();
         }
