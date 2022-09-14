@@ -53,11 +53,11 @@ public class SaveAllSourceTask extends AbstractTask<Boolean> {
         try {
             ZipOutputStream zipOutputStream = new ZipOutputStream(Files.newOutputStream(out.toPath()));
 
-            for (Map.Entry<String, ClassNode> stringClassNodeEntry : jar.classes.entrySet()) {
-                String name = stringClassNodeEntry.getKey().substring(0, stringClassNodeEntry.getKey().lastIndexOf(".")) + ".java";
+            for (ClassNode value : jar.classes.values()) {
+                String name = value.name + ".java";
                 name = "src/main/java/" + name;
                 zipOutputStream.putNextEntry(new ZipEntry(name));
-                zipOutputStream.write(DecompileService.getService().decompile(stringClassNodeEntry.getValue()).getBytes(StandardCharsets.UTF_8));
+                zipOutputStream.write(DecompileService.getService().decompile(value).getBytes(StandardCharsets.UTF_8));
                 setProgress((int) ((loaded++ / files) * 100f));
             }
 
