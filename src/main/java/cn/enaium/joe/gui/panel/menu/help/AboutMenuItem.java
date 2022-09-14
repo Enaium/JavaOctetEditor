@@ -18,15 +18,16 @@ package cn.enaium.joe.gui.panel.menu.help;
 
 import cn.enaium.joe.dialog.AboutDialog;
 import cn.enaium.joe.util.LangUtil;
+import javafx.scene.control.MenuItem;
 
 import javax.swing.*;
 
 /**
  * @author Enaium
  */
-public class AboutMenuItem extends JMenuItem {
+public class AboutMenuItem extends MenuItem {
     public AboutMenuItem() {
         super(LangUtil.i18n("menu.help.about"));
-        addActionListener(e -> new AboutDialog().setVisible(true));
+        setOnAction(e -> new AboutDialog().setVisible(true));
     }
 }

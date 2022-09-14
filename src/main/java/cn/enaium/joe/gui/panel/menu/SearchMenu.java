@@ -20,17 +20,18 @@ import cn.enaium.joe.gui.panel.menu.search.FieldMenuItem;
 import cn.enaium.joe.gui.panel.menu.search.LdcMenuItem;
 import cn.enaium.joe.gui.panel.menu.search.MethodMenuItem;
 import cn.enaium.joe.util.LangUtil;
+import javafx.scene.control.Menu;
 
 import javax.swing.*;
 
 /**
  * @author Enaium
  */
-public class SearchMenu extends JMenu {
+public class SearchMenu extends Menu {
     public SearchMenu() {
         super(LangUtil.i18n("menu.search"));
-        add(new LdcMenuItem());
-        add(new FieldMenuItem());
-        add(new MethodMenuItem());
+        getItems().add(new LdcMenuItem());
+        getItems(). add(new FieldMenuItem());
+        getItems().add(new MethodMenuItem());
     }
 }

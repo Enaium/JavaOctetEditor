@@ -21,19 +21,22 @@ import cn.enaium.joe.gui.panel.menu.file.LoadRecentMenu;
 import cn.enaium.joe.gui.panel.menu.file.SaveAllSourceMenuItem;
 import cn.enaium.joe.gui.panel.menu.file.SaveMenuItem;
 import cn.enaium.joe.util.LangUtil;
+import javafx.scene.control.Menu;
+import javafx.scene.control.Separator;
+import javafx.scene.control.SeparatorMenuItem;
 
 import javax.swing.*;
 
 /**
  * @author Enaium
  */
-public class FileMenu extends JMenu {
+public class FileMenu extends Menu {
     public FileMenu() {
         super(LangUtil.i18n("menu.file"));
-        add(new LoadMenuItem());
-        add(new LoadRecentMenu());
-        add(new SaveMenuItem());
-        add(new JSeparator());
-        add(new SaveAllSourceMenuItem());
+        getItems().add(new LoadMenuItem());
+        getItems().add(new LoadRecentMenu());
+        getItems().add(new SaveMenuItem());
+        getItems().add(new SeparatorMenuItem());
+        getItems().add(new SaveAllSourceMenuItem());
     }
 }

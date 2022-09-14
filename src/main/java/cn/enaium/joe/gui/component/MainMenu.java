@@ -14,21 +14,22 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.menu.attach;
+package cn.enaium.joe.gui.component;
 
-import cn.enaium.joe.dialog.ProcessListDialog;
-import cn.enaium.joe.util.LangUtil;
-import javafx.scene.control.MenuItem;
-
-import javax.swing.*;
+import cn.enaium.joe.gui.panel.menu.*;
+import javafx.scene.control.MenuBar;
 
 /**
  * @author Enaium
- * @since 1.1.0
+ * @since 1.3.0
  */
-public class ProcessMenuItem extends MenuItem {
-    public ProcessMenuItem() {
-        super(LangUtil.i18n("menu.attach.process"));
-        setOnAction(e -> new ProcessListDialog().setVisible(true));
+public class MainMenu extends MenuBar {
+    public MainMenu() {
+        getMenus().add(new FileMenu());
+        getMenus().add(new SearchMenu());
+        getMenus().add(new MappingMenu());
+        getMenus().add(new AttachMenu());
+        getMenus().add(new ConfigMenu());
+        getMenus().add(new HelpMenu());
     }
 }

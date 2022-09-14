@@ -18,6 +18,7 @@ package cn.enaium.joe.gui.panel.menu;
 
 import cn.enaium.joe.gui.panel.menu.attach.ProcessMenuItem;
 import cn.enaium.joe.util.LangUtil;
+import javafx.scene.control.Menu;
 
 import javax.swing.*;
 
@@ -25,9 +26,9 @@ import javax.swing.*;
  * @author Enaium
  * @since 1.1.0
  */
-public class AttachMenu extends JMenu {
+public class AttachMenu extends Menu {
     public AttachMenu() {
         super(LangUtil.i18n("menu.attach"));
-        add(new ProcessMenuItem());
+        getItems().add(new ProcessMenuItem());
     }
 }

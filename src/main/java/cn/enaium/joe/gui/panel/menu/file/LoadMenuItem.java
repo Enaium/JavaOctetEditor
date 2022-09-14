@@ -20,6 +20,7 @@ import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.task.InputJarTask;
 import cn.enaium.joe.util.JFileChooserUtil;
 import cn.enaium.joe.util.LangUtil;
+import javafx.scene.control.MenuItem;
 
 import javax.swing.*;
 import java.io.File;
@@ -27,10 +28,10 @@ import java.io.File;
 /**
  * @author Enaium
  */
-public class LoadMenuItem extends JMenuItem {
+public class LoadMenuItem extends MenuItem {
     public LoadMenuItem() {
         super(LangUtil.i18n("menu.file.load"));
-        addActionListener(e -> {
+        setOnAction(e -> {
             File show = JFileChooserUtil.show(JFileChooserUtil.Type.OPEN);
             if (show != null) {
                 JavaOctetEditor.getInstance().task.submit(new InputJarTask(show));

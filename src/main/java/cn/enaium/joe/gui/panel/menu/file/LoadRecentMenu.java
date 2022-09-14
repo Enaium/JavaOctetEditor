@@ -17,9 +17,15 @@
 package cn.enaium.joe.gui.panel.menu.file;
 
 import cn.enaium.joe.JavaOctetEditor;
+import cn.enaium.joe.MainFX;
 import cn.enaium.joe.config.extend.ApplicationConfig;
 import cn.enaium.joe.task.InputJarTask;
 import cn.enaium.joe.util.LangUtil;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.input.ContextMenuEvent;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -31,28 +37,29 @@ import java.util.Set;
  * @author Enaium
  * @since 0.9.0
  */
-public class LoadRecentMenu extends JMenuItem {
+public class LoadRecentMenu extends Menu {
     public LoadRecentMenu() {
         super(LangUtil.i18n("menu.file.loadRecent"));
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                JPopupMenu jPopupMenu = new JPopupMenu();
-                Set<String> loadRecent = JavaOctetEditor.getInstance().config.getByClass(ApplicationConfig.class).loadRecent.getValue();
-                for (String s : loadRecent) {
-                    jPopupMenu.add(new JMenuItem(s) {{
-                        addActionListener(e -> {
-                            File file = new File(s);
-                            if (file.exists()) {
-                                JavaOctetEditor.getInstance().task.submit(new InputJarTask(file));
-                            } else {
-                                loadRecent.remove(s);
-                            }
-                        });
-                    }});
-                }
-                jPopupMenu.show(JavaOctetEditor.getInstance().window, e.getX(), e.getY());
-            }
+        update();
+        setOnShowing(event -> {
+            update();
         });
+    }
+
+    private void update() {
+        Set<String> loadRecent = MainFX.getInstance().config.getByClass(ApplicationConfig.class).loadRecent.getValue();
+        getItems().clear();
+        for (String s : loadRecent) {
+            getItems().add(new MenuItem(s) {{
+                setOnAction(e -> {
+                    File file = new File(s);
+                    if (file.exists()) {
+                        MainFX.getInstance().task.submit(new InputJarTask(file));
+                    } else {
+                        loadRecent.remove(s);
+                    }
+                });
+            }});
+        }
     }
 }

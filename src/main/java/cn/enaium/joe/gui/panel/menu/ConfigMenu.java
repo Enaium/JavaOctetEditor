@@ -17,9 +17,12 @@
 package cn.enaium.joe.gui.panel.menu;
 
 import cn.enaium.joe.JavaOctetEditor;
+import cn.enaium.joe.MainFX;
 import cn.enaium.joe.config.Config;
 import cn.enaium.joe.dialog.ConfigDialog;
 import cn.enaium.joe.util.LangUtil;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 
 import javax.swing.*;
 
@@ -27,14 +30,12 @@ import javax.swing.*;
  * @author Enaium
  * @since 0.7.0
  */
-public class ConfigMenu extends JMenu {
+public class ConfigMenu extends Menu {
     public ConfigMenu() {
         super(LangUtil.i18n("menu.config"));
-        for (Config value : JavaOctetEditor.getInstance().config.getConfig().values()) {
-            add(new JMenuItem(value.getName()) {{
-                addActionListener(e -> {
-                    new ConfigDialog(value).setVisible(true);
-                });
+        for (Config value : MainFX.getInstance().config.getConfig().values()) {
+            getItems().add(new MenuItem(value.getName()) {{
+                setOnAction(e -> new ConfigDialog(value).setVisible(true));
             }});
         }
     }

@@ -20,16 +20,17 @@ import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.dialog.search.SearchLdcDialog;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.util.LangUtil;
+import javafx.scene.control.MenuItem;
 
 import javax.swing.*;
 
 /**
  * @author Enaium
  */
-public class LdcMenuItem extends JMenuItem {
+public class LdcMenuItem extends MenuItem {
     public LdcMenuItem() {
         super(LangUtil.i18n("menu.search.ldc"));
-        addActionListener(e -> {
+        setOnAction(e -> {
             Jar jar = JavaOctetEditor.getInstance().getJar();
             if (jar == null) {
                 return;

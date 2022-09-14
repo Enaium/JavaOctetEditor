@@ -19,16 +19,15 @@ package cn.enaium.joe.gui.panel.menu;
 import cn.enaium.joe.gui.panel.menu.help.AboutMenuItem;
 import cn.enaium.joe.gui.panel.menu.help.ContactMenuItem;
 import cn.enaium.joe.util.LangUtil;
-
-import javax.swing.*;
+import javafx.scene.control.Menu;
 
 /**
  * @author Enaium
  */
-public class HelpMenu extends JMenu {
+public class HelpMenu extends Menu {
     public HelpMenu() {
         super(LangUtil.i18n("menu.help"));
-        add(new AboutMenuItem());
-        add(new ContactMenuItem());
+        getItems().add(new AboutMenuItem());
+        getItems().add(new ContactMenuItem());
     }
 }

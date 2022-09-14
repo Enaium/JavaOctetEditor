@@ -21,6 +21,7 @@ import cn.enaium.joe.dialog.search.SearchFieldDialog;
 import cn.enaium.joe.dialog.search.SearchMethodDialog;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.util.LangUtil;
+import javafx.scene.control.MenuItem;
 
 import javax.swing.*;
 
@@ -28,10 +29,10 @@ import javax.swing.*;
  * @author Enaium
  * @since 0.5.0
  */
-public class MethodMenuItem extends JMenuItem {
+public class MethodMenuItem extends MenuItem {
     public MethodMenuItem() {
         super(LangUtil.i18n("menu.search.method"));
-        addActionListener(e -> {
+        setOnAction(e -> {
             Jar jar = JavaOctetEditor.getInstance().getJar();
             if (jar == null) {
                 return;

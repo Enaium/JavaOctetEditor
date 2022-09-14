@@ -24,6 +24,7 @@ import cn.enaium.joe.task.SaveAllSourceTask;
 import cn.enaium.joe.util.ASyncUtil;
 import cn.enaium.joe.util.JFileChooserUtil;
 import cn.enaium.joe.util.LangUtil;
+import javafx.scene.control.MenuItem;
 import org.objectweb.asm.tree.ClassNode;
 
 import javax.swing.*;
@@ -39,10 +40,10 @@ import java.util.zip.ZipOutputStream;
 /**
  * @author Enaium
  */
-public class SaveAllSourceMenuItem extends JMenuItem {
+public class SaveAllSourceMenuItem extends MenuItem {
     public SaveAllSourceMenuItem() {
         super(LangUtil.i18n("menu.file.saveAllSource"));
-        addActionListener(e -> {
+        setOnAction(e -> {
             Jar jar = JavaOctetEditor.getInstance().getJar();
             if (jar == null) {
                 return;

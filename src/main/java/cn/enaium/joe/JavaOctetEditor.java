@@ -83,20 +83,14 @@ public class JavaOctetEditor {
 
         window.setIconImage(new FlatSVGIcon("icons/logo.svg").getImage());
 
-        window.setJMenuBar(new JMenuBar() {{
-            add(new FileMenu());
-            add(new SearchMenu());
-
-            AttachMenu attachMenu = new AttachMenu() {{
-                if (!ReflectUtil.classHas("com.sun.tools.attach.VirtualMachine")) {
-                    setEnabled(false);
-                }
-            }};
-            add(attachMenu);
-            add(new MappingMenu());
-            add(new ConfigMenu());
-            add(new HelpMenu());
-        }});
+//        window.setJMenuBar(new JMenuBar() {{
+//            AttachMenu attachMenu = new AttachMenu() {{
+//                if (!ReflectUtil.classHas("com.sun.tools.attach.VirtualMachine")) {
+//                    setEnabled(false);
+//                }
+//            }};
+//            add(attachMenu);
+//        }});
 
         window.setContentPane(new JPanel(new BorderLayout()) {{
             add(new LeftPanel(), BorderLayout.WEST);

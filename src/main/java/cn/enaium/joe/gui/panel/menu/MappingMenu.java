@@ -20,6 +20,8 @@ import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.task.RemappingTask;
 import cn.enaium.joe.util.JFileChooserUtil;
 import cn.enaium.joe.util.LangUtil;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import net.fabricmc.mappingio.format.MappingFormat;
 
 import javax.swing.*;
@@ -30,12 +32,12 @@ import java.io.File;
  * @author Enaium
  * @since 1.0.0
  */
-public class MappingMenu extends JMenu {
+public class MappingMenu extends Menu {
     public MappingMenu() {
         super(LangUtil.i18n("menu.mapping"));
         for (MappingFormat value : MappingFormat.values()) {
-            add(new JMenuItem(value.name) {{
-                addActionListener(e -> {
+            getItems().add(new MenuItem(value.name) {{
+                setOnAction(e -> {
                     File show = JFileChooserUtil.show(JFileChooserUtil.Type.OPEN, new FileFilter() {
                         @Override
                         public boolean accept(File f) {

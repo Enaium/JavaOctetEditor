@@ -18,17 +18,16 @@ package cn.enaium.joe.gui.panel.menu.help;
 
 import cn.enaium.joe.dialog.ContactDialog;
 import cn.enaium.joe.util.LangUtil;
+import javafx.scene.control.MenuItem;
 
 import javax.swing.*;
 
 /**
  * @author Enaium
  */
-public class ContactMenuItem extends JMenuItem {
+public class ContactMenuItem extends MenuItem {
     public ContactMenuItem() {
         super(LangUtil.i18n("menu.help.contact"));
-        addActionListener(e -> {
-            new ContactDialog().setVisible(true);
-        });
+        setOnAction(e -> new ContactDialog().setVisible(true));
     }
 }
