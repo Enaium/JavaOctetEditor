@@ -20,6 +20,7 @@ package cn.enaium.joe.config.value;
  * @author Enaium
  * @since 0.7.0
  */
+@SuppressWarnings("FieldMayBeFinal")
 public class Value<T> {
     private String name;
     private T value;

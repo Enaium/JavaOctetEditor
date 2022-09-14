@@ -22,9 +22,10 @@ import cn.enaium.joe.config.extend.FernFlowerConfig;
 import cn.enaium.joe.config.extend.ProcyonConfig;
 import cn.enaium.joe.config.value.*;
 import cn.enaium.joe.util.MessageUtil;
-import cn.enaium.joe.util.ReflectUtil;
-import com.google.gson.*;
-import com.google.gson.annotations.Expose;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -93,7 +94,7 @@ public class ConfigManager {
             Class<? extends Config> klass = classConfigEntry.getKey();
             Config config = classConfigEntry.getValue();
             try {
-                File file = new File(System.getProperty("."), config.getName() + ".json");
+                File file = new File(System.getProperty("user.dir"), config.getName() + ".json");
                 if (file.exists()) {
                     JsonObject jsonObject = gson().fromJson(new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8), JsonObject.class);
 
