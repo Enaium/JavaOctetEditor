@@ -16,15 +16,12 @@
 
 package cn.enaium.joe.gui.panel.menu;
 
-import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.MainFX;
 import cn.enaium.joe.config.Config;
-import cn.enaium.joe.dialog.ConfigDialog;
+import cn.enaium.joe.stage.ConfigDialog;
 import cn.enaium.joe.util.LangUtil;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-
-import javax.swing.*;
 
 /**
  * @author Enaium
@@ -35,7 +32,7 @@ public class ConfigMenu extends Menu {
         super(LangUtil.i18n("menu.config"));
         for (Config value : MainFX.getInstance().config.getConfig().values()) {
             getItems().add(new MenuItem(value.getName()) {{
-                setOnAction(e -> new ConfigDialog(value).setVisible(true));
+                setOnAction(e -> new ConfigDialog(value).show());
             }});
         }
     }

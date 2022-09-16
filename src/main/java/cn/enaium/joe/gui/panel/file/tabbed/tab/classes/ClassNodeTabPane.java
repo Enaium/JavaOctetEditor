@@ -24,13 +24,9 @@ import org.objectweb.asm.tree.ClassNode;
  * @author Enaium
  */
 public class ClassNodeTabPane extends BorderPane {
-    private final ClassNode classNode;
+    public final ClassNode classNode;
 
     public ClassNodeTabPane(ClassNode classNode) {
         this.classNode = classNode;
-    }
-
-    public ClassNode getClassNode() {
-        return classNode;
     }
 }

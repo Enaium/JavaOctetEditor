@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.menu.help;
+package cn.enaium.joe.stage;
 
-import cn.enaium.joe.stage.AboutDialog;
-import cn.enaium.joe.util.LangUtil;
-import javafx.scene.control.MenuItem;
-
-import javax.swing.*;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 /**
  * @author Enaium
+ * @since 1.3.0
  */
-public class AboutMenuItem extends MenuItem {
-    public AboutMenuItem() {
-        super(LangUtil.i18n("menu.help.about"));
-        setOnAction(e -> new AboutDialog().show());
+public class Dialog extends Stage {
+    public Dialog(String title, Parent parent) {
+        Scene scene = new Scene(parent, 800, 500);
+        setScene(scene);
+        setTitle(title);
     }
 }

@@ -17,6 +17,7 @@
 package cn.enaium.joe;
 
 import cn.enaium.joe.config.ConfigManager;
+import cn.enaium.joe.event.EventManager;
 import cn.enaium.joe.gui.component.FileTab;
 import cn.enaium.joe.gui.component.FileTreeFX;
 import cn.enaium.joe.gui.panel.CenterPanel;
@@ -24,6 +25,9 @@ import cn.enaium.joe.task.TaskManager;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.pmw.tinylog.Configurator;
+import org.pmw.tinylog.writers.ConsoleWriter;
+import org.pmw.tinylog.writers.FileWriter;
 
 /**
  * @author Enaium
@@ -33,6 +37,7 @@ public class MainFX extends Application {
 
     private static MainFX instance;
 
+    public EventManager event;
     public ConfigManager config;
     public TaskManager task;
 
@@ -44,9 +49,12 @@ public class MainFX extends Application {
     @Override
     public void init() throws Exception {
         instance = this;
+        event = new EventManager();
         config = new ConfigManager();
         config.load();
         task = new TaskManager();
+        Runtime.getRuntime().addShutdownHook(new Thread(config::save));
+
         fileTree = new FileTreeFX();
         fileTab = new FileTab();
     }
@@ -54,13 +62,15 @@ public class MainFX extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         this.stage = stage;
+        Scene scene = new Scene(new CenterPanel(), 1000, 600);
+        stage.setScene(scene);
         stage.setTitle("JavaOctetEditor");
-        stage.setScene(new Scene(new CenterPanel(), 1000, 600));
         stage.setOnCloseRequest(windowEvent -> System.exit(0));
         stage.show();
     }
 
     public static void main(String[] args) {
+        Configurator.currentConfig().writer(new ConsoleWriter(), "[{date: HH:mm:ss.SSS}] {level} > {message}").addWriter(new FileWriter("latest.log"), "[{date: HH:mm:ss.SSS}] {level} > {message}").activate();
         launch(args);
     }
 

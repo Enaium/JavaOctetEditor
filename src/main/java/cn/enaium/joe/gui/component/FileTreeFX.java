@@ -107,7 +107,7 @@ public class FileTreeFX extends TreeView<Object> {
                 i++;
             }
         }
-//        sort(classesRoot);
+        sort(classesRoot);
         hasMap.clear();
 
         for (Map.Entry<String, byte[]> stringEntry : jar.resources.entrySet()) {
@@ -143,7 +143,7 @@ public class FileTreeFX extends TreeView<Object> {
                 i++;
             }
         }
-//        sort(resourceRoot);
+        sort(resourceRoot);
     }
 
     public void sort(TreeItem<Object> objectItem) {

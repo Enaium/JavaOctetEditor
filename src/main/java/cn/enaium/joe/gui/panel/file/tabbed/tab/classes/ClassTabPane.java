@@ -27,7 +27,7 @@ import org.objectweb.asm.tree.ClassNode;
  */
 public class ClassTabPane extends BorderPane {
 
-    private final ClassNode classNode;
+    public final ClassNode classNode;
 
     public ClassTabPane(ClassNode classNode) {
         this.classNode = classNode;
@@ -39,9 +39,5 @@ public class ClassTabPane extends BorderPane {
         tabPane.getTabs().add(new Tab("VisitorEdit", new ASMifierTablePane(classNode)));
         tabPane.getTabs().add(new Tab("InfoEdit", new ClassInfoTabPane(classNode)));
         setCenter(tabPane);
-    }
-
-    public ClassNode getClassNode() {
-        return classNode;
     }
 }

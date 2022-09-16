@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.menu.help;
+package cn.enaium.joe.util;
 
-import cn.enaium.joe.stage.AboutDialog;
-import cn.enaium.joe.util.LangUtil;
-import javafx.scene.control.MenuItem;
-
-import javax.swing.*;
+import javafx.scene.control.Alert;
 
 /**
  * @author Enaium
+ * @since 1.3.0
  */
-public class AboutMenuItem extends MenuItem {
-    public AboutMenuItem() {
-        super(LangUtil.i18n("menu.help.about"));
-        setOnAction(e -> new AboutDialog().show());
+public class AlertUtil {
+    public static void show() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+
     }
 }

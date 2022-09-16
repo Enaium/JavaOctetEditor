@@ -17,18 +17,13 @@
 package cn.enaium.joe.gui.panel;
 
 import cn.enaium.joe.JavaOctetEditor;
-import cn.enaium.joe.event.Listener;
-import cn.enaium.joe.event.listener.FileTabbedSelectListener;
-import cn.enaium.joe.gui.component.MemberList;
+import cn.enaium.joe.event.Event;
 import cn.enaium.joe.gui.component.TabbedPane;
-import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassTabPane;
-import org.objectweb.asm.tree.ClassNode;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.function.Consumer;
 
 /**
  * @author Enaium
@@ -42,7 +37,7 @@ public class LeftPanel extends JPanel {
                 addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        JavaOctetEditor.getInstance().event.call(new ToggleTabListener(getSelectedComponent(), ToggleTabListener.Type.TOP));
+                        JavaOctetEditor.getInstance().event.call(new ToggleTabEvent(getSelectedComponent(), ToggleTabEvent.Type.TOP));
                     }
                 });
                 setVerticalLabel();
@@ -59,7 +54,7 @@ public class LeftPanel extends JPanel {
                 addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        JavaOctetEditor.getInstance().event.call(new ToggleTabListener(getSelectedComponent(), ToggleTabListener.Type.BOTTOM));
+                        JavaOctetEditor.getInstance().event.call(new ToggleTabEvent(getSelectedComponent(), ToggleTabEvent.Type.BOTTOM));
                     }
                 });
                 cancelSelect();
@@ -68,11 +63,11 @@ public class LeftPanel extends JPanel {
         }}, BorderLayout.WEST);
     }
 
-    public static class ToggleTabListener implements Listener {
+    public static class ToggleTabEvent implements Event {
         private final Component select;
         private final Type type;
 
-        public ToggleTabListener(Component select, Type type) {
+        public ToggleTabEvent(Component select, Type type) {
             this.select = select;
             this.type = type;
         }

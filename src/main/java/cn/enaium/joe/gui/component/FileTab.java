@@ -16,6 +16,10 @@
 
 package cn.enaium.joe.gui.component;
 
+import cn.enaium.joe.MainFX;
+import cn.enaium.joe.event.events.FileTabSelectEvent;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
 /**
@@ -24,6 +28,8 @@ import javafx.scene.control.TabPane;
  */
 public class FileTab extends TabPane {
     public FileTab() {
-
+        getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Tab> observableValue, Tab tab, Tab t1) -> {
+            MainFX.getInstance().event.call(new FileTabSelectEvent(getSelectionModel().getSelectedItem()));
+        });
     }
 }

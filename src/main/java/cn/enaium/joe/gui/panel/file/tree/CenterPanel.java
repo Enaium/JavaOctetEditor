@@ -89,8 +89,8 @@ public class CenterPanel extends JPanel {
                 }}, BorderLayout.CENTER);
             }}, BorderLayout.NORTH);
             add(new JScrollPane(JavaOctetEditor.getInstance().fileTree) {{
-                JavaOctetEditor.getInstance().event.register(LeftPanel.ToggleTabListener.class, (Consumer<LeftPanel.ToggleTabListener>) listener -> {
-                    if (listener.getType() == LeftPanel.ToggleTabListener.Type.TOP) {
+                JavaOctetEditor.getInstance().event.register(LeftPanel.ToggleTabEvent.class, (Consumer<LeftPanel.ToggleTabEvent>) listener -> {
+                    if (listener.getType() == LeftPanel.ToggleTabEvent.Type.TOP) {
                         self.setVisible(listener.getSelect() != null);
                         if (listener.getSelect() != null) {
                             setViewportView(listener.getSelect());
@@ -101,8 +101,8 @@ public class CenterPanel extends JPanel {
             }}, BorderLayout.CENTER);
         }}, HalfLayout.TOP);
         jPanel.add(new JScrollPane() {{
-            JavaOctetEditor.getInstance().event.register(LeftPanel.ToggleTabListener.class, (Consumer<LeftPanel.ToggleTabListener>) listener -> {
-                if (listener.getType() == LeftPanel.ToggleTabListener.Type.BOTTOM) {
+            JavaOctetEditor.getInstance().event.register(LeftPanel.ToggleTabEvent.class, (Consumer<LeftPanel.ToggleTabEvent>) listener -> {
+                if (listener.getType() == LeftPanel.ToggleTabEvent.Type.BOTTOM) {
                     setVisible(listener.getSelect() != null);
                     if (listener.getSelect() != null) {
                         setViewportView(listener.getSelect());
@@ -117,7 +117,7 @@ public class CenterPanel extends JPanel {
             AtomicInteger loc = new AtomicInteger();
             setLeftComponent(jPanel);
             setRightComponent(JavaOctetEditor.getInstance().fileTabbedPanel);
-            JavaOctetEditor.getInstance().event.register(LeftPanel.ToggleTabListener.class, (Consumer<LeftPanel.ToggleTabListener>) listener -> {
+            JavaOctetEditor.getInstance().event.register(LeftPanel.ToggleTabEvent.class, (Consumer<LeftPanel.ToggleTabEvent>) listener -> {
                 if (layout.isAllHide()) {
                     jPanel.setVisible(false);
                     loc.set(getDividerLocation());

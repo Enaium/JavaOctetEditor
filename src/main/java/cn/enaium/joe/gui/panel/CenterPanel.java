@@ -17,9 +17,20 @@
 package cn.enaium.joe.gui.panel;
 
 import cn.enaium.joe.MainFX;
+import cn.enaium.joe.event.Event;
+import cn.enaium.joe.event.events.FileTabSelectEvent;
 import cn.enaium.joe.gui.component.MainMenu;
+import cn.enaium.joe.gui.component.MemberListFX;
+import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassInfoTabPane;
+import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassNodeTabPane;
+import javafx.scene.control.Accordion;
+import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.TitledPane;
 import javafx.scene.layout.BorderPane;
+import org.objectweb.asm.tree.ClassNode;
+
+import java.util.function.Consumer;
 
 /**
  * @author Enaium
@@ -28,6 +39,11 @@ import javafx.scene.layout.BorderPane;
 public class CenterPanel extends BorderPane {
     public CenterPanel() {
         setTop(new MainMenu());
-        setCenter(new SplitPane(MainFX.getInstance().fileTree, MainFX.getInstance().fileTab));
+        setCenter(new SplitPane(MainFX.getInstance().fileTree, MainFX.getInstance().fileTab, new Accordion() {{
+            getPanes().add(new TitledPane("Member", new MemberListFX()));
+            setMinWidth(0);
+        }}) {{
+            setDividerPositions(0.2, 0.9);
+        }});
     }
 }
