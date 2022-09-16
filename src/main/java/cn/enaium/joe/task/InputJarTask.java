@@ -17,19 +17,18 @@
 package cn.enaium.joe.task;
 
 import cn.enaium.joe.JavaOctetEditor;
+import cn.enaium.joe.MainFX;
 import cn.enaium.joe.config.extend.ApplicationConfig;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.util.IOUtil;
-import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.util.Util;
+import javafx.application.Platform;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
 import org.pmw.tinylog.Logger;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -82,9 +81,10 @@ public class InputJarTask extends AbstractTask<Jar> {
             throw new RuntimeException(e);
         }
 
-        JavaOctetEditor.getInstance().config.getByClass(ApplicationConfig.class).loadRecent.getValue().add(file.getAbsolutePath());
-        JavaOctetEditor.getInstance().setJar(jar);
-        JavaOctetEditor.getInstance().window.setTitle(JavaOctetEditor.TITLE + "-" + file.getName());
+        MainFX.getInstance().config.getByClass(ApplicationConfig.class).loadRecent.getValue().add(file.getAbsolutePath());
+        MainFX.getInstance().fileTree.refresh(jar);
+
+//        MainFX.getInstance().stage.setTitle(JavaOctetEditor.TITLE + "-" + file.getName());
         return jar;
     }
 }

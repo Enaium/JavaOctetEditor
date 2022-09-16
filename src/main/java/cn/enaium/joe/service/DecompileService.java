@@ -17,6 +17,7 @@
 package cn.enaium.joe.service;
 
 import cn.enaium.joe.JavaOctetEditor;
+import cn.enaium.joe.MainFX;
 import cn.enaium.joe.config.extend.ApplicationConfig;
 import cn.enaium.joe.config.value.ModeValue;
 import cn.enaium.joe.service.decompiler.*;
@@ -27,7 +28,7 @@ import cn.enaium.joe.service.decompiler.*;
  */
 public class DecompileService {
     public static IDecompiler getService() {
-        ModeValue decompilerMode = JavaOctetEditor.getInstance().config.getByClass(ApplicationConfig.class).decompilerMode;
+        ModeValue decompilerMode = MainFX.getInstance().config.getByClass(ApplicationConfig.class).decompilerMode;
         switch (decompilerMode.getValue()) {
             case "CFR": return new CFRDecompiler();
             case "Procyon": return new ProcyonDecompiler();

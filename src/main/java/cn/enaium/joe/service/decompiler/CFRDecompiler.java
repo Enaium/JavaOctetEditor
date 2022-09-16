@@ -17,6 +17,7 @@
 package cn.enaium.joe.service.decompiler;
 
 import cn.enaium.joe.JavaOctetEditor;
+import cn.enaium.joe.MainFX;
 import cn.enaium.joe.config.extend.CFRConfig;
 import org.benf.cfr.reader.PluginRunner;
 import org.benf.cfr.reader.api.ClassFileSource;
@@ -60,6 +61,6 @@ public class CFRDecompiler implements IDecompiler {
                 throw new RuntimeException();
             }
         };
-        return new PluginRunner(JavaOctetEditor.getInstance().config.getConfigMap(CFRConfig.class), cfs).getDecompilationFor(classNode.name);
+        return new PluginRunner(MainFX.getInstance().config.getConfigMap(CFRConfig.class), cfs).getDecompilationFor(classNode.name);
     }
 }

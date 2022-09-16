@@ -17,6 +17,7 @@
 package cn.enaium.joe.service.decompiler;
 
 import cn.enaium.joe.JavaOctetEditor;
+import cn.enaium.joe.MainFX;
 import cn.enaium.joe.config.extend.FernFlowerConfig;
 import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.util.ReflectUtil;
@@ -53,7 +54,7 @@ public class FernFlowerDecompiler implements IDecompiler, IBytecodeProvider, IRe
         bytes = classWriter.toByteArray();
 
         Fernflower fernflower = new Fernflower(this, this, new HashMap<String, Object>() {{
-            JavaOctetEditor.getInstance().config.getConfigMap(FernFlowerConfig.class).forEach((k, v) -> {
+            MainFX.getInstance().config.getConfigMap(FernFlowerConfig.class).forEach((k, v) -> {
                 if (v.equals("true")) {
                     v = "1";
                 } else if (v.equals("false")) {

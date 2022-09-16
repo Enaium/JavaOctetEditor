@@ -17,6 +17,7 @@
 package cn.enaium.joe.service.decompiler;
 
 import cn.enaium.joe.JavaOctetEditor;
+import cn.enaium.joe.MainFX;
 import cn.enaium.joe.config.extend.ProcyonConfig;
 import com.strobel.assembler.InputTypeLoader;
 import com.strobel.assembler.metadata.Buffer;
@@ -59,7 +60,7 @@ public class ProcyonDecompiler implements IDecompiler {
         decompilerSettings.getLanguage().decompileType(metadataSystem.lookupType(classNode.name).resolve(), new PlainTextOutput(stringwriter), new DecompilationOptions(){{
             setFullDecompilation(true);
             DecompilerSettings settings = DecompilerSettings.javaDefaults();
-            settings.setJavaFormattingOptions(JavaOctetEditor.getInstance().config.getByClass(ProcyonConfig.class).get());
+            settings.setJavaFormattingOptions(MainFX.getInstance().config.getByClass(ProcyonConfig.class).get());
             setSettings(settings);
         }});
         return stringwriter.toString();
