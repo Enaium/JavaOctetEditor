@@ -58,9 +58,9 @@ public class JFileChooserUtil {
         jFileChooser.addChoosableFileFilter(fileFilter);
 
         if (type.equals(Type.OPEN)) {
-            jFileChooser.showOpenDialog(JavaOctetEditor.getInstance().window);
+            jFileChooser.showOpenDialog(null);
         } else if (type.equals(Type.SAVE)) {
-            jFileChooser.showSaveDialog(JavaOctetEditor.getInstance().window);
+            jFileChooser.showSaveDialog(null);
         }
 
         return jFileChooser.getSelectedFile();

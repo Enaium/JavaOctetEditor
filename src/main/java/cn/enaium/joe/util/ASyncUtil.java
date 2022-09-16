@@ -16,9 +16,13 @@
 
 package cn.enaium.joe.util;
 
+import javafx.application.Platform;
+
 import javax.swing.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * @author Enaium
@@ -34,7 +38,17 @@ public class ASyncUtil {
         executorService.execute(() -> {
             run.run();
             if (ui != null) {
-                SwingUtilities.invokeLater(ui);
+                Platform.runLater(ui);
+            }
+        });
+    }
+
+    public static <T> void execute(Supplier<T> supplier, Consumer<T> ui) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.execute(() -> {
+            T t = supplier.get();
+            if (ui != null) {
+                Platform.runLater(() -> ui.accept(t));
             }
         });
     }
