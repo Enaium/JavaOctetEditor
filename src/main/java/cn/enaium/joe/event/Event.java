@@ -20,5 +20,5 @@ package cn.enaium.joe.event;
  * @author Enaium
  * @since 1.2.0
  */
-public interface Listener {
+public interface Event {
 }

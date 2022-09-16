@@ -14,24 +14,23 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.event.listener;
+package cn.enaium.joe.event.events;
 
-import cn.enaium.joe.event.Listener;
-
-import java.awt.*;
+import cn.enaium.joe.event.Event;
+import javafx.scene.control.Tab;
 
 /**
  * @author Enaium
  * @since 1.2.0
  */
-public class FileTabbedSelectListener implements Listener {
-    private final Component select;
+public class FileTabSelectEvent implements Event {
+    private final Tab select;
 
-    public FileTabbedSelectListener(Component select) {
+    public FileTabSelectEvent(Tab select) {
         this.select = select;
     }
 
-    public Component getSelect() {
+    public Tab getSelect() {
         return select;
     }
 }
