@@ -47,6 +47,10 @@
 .annotation {
     -fx-fill: purple;
 }
+
+.description {
+    -fx-fill: rgb(247, 129, 32);
+}
 .paragraph-box:has-caret {
     -fx-background-color: #f2f9fc;
 }
