@@ -16,28 +16,18 @@
 
 package cn.enaium.joe.gui.panel.file.tabbed.tab.classes;
 
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import org.objectweb.asm.tree.ClassNode;
-
-import javax.swing.*;
-import java.awt.*;
 
 /**
  * @author Enaium
  */
-public class ClassTabPanel extends JPanel {
-
+public class ClassNodeTabPane extends BorderPane {
     private final ClassNode classNode;
 
-    public ClassTabPanel(ClassNode classNode) {
-        super(new BorderLayout());
+    public ClassNodeTabPane(ClassNode classNode) {
         this.classNode = classNode;
-        JTabbedPane jTabbedPane = new JTabbedPane();
-        jTabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
-        jTabbedPane.addTab("BytecodeView", new TraceBytecodeTabPanel(classNode));
-        jTabbedPane.addTab("DecompileView", new DecompileTabPanel(classNode));
-        jTabbedPane.addTab("VisitorEdit", new ASMifierTablePanel(classNode));
-        jTabbedPane.addTab("InfoEdit", new ClassInfoTabPanel(classNode));
-        add(jTabbedPane);
     }
 
     public ClassNode getClassNode() {

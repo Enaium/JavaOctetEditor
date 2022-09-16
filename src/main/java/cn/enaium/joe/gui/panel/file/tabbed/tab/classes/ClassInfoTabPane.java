@@ -20,6 +20,10 @@ package cn.enaium.joe.gui.panel.file.tabbed.tab.classes;
 import cn.enaium.joe.dialog.AnnotationListDialog;
 import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.StringUtil;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import org.benf.cfr.reader.util.StringUtils;
 import org.objectweb.asm.tree.ClassNode;
 
@@ -32,49 +36,48 @@ import java.util.Arrays;
  * @author Enaium
  * @since 0.6.0
  */
-public class ClassInfoTabPanel extends ClassNodeTabPanel {
-    public ClassInfoTabPanel(ClassNode classNode) {
+public class ClassInfoTabPane extends ClassNodeTabPane {
+    public ClassInfoTabPane(ClassNode classNode) {
         super(classNode);
-        setLayout(new BorderLayout());
-        JPanel labels = new JPanel(new GridLayout(0, 1));
-        JPanel rights = new JPanel(new GridLayout(0, 1));
-        add(labels, BorderLayout.WEST);
-        add(rights, BorderLayout.CENTER);
-        labels.add(new JLabel(LangUtil.i18n("class.info.name")));
-        JTextField name = new JTextField(classNode.name);
-        rights.add(name);
-        labels.add(new JLabel(LangUtil.i18n("class.info.sourceFile")));
-        JTextField sourceFile = new JTextField(classNode.sourceFile);
-        rights.add(sourceFile);
-        labels.add(new JLabel(LangUtil.i18n("class.info.debugFile")));
-        JTextField sourceDebug = new JTextField(classNode.sourceDebug);
-        rights.add(sourceDebug);
-        labels.add(new JLabel(LangUtil.i18n("class.info.access")));
-        JTextField access = new JTextField(String.valueOf(classNode.access));
-        rights.add(access);
-        labels.add(new JLabel(LangUtil.i18n("class.info.version")));
-        JTextField version = new JTextField(String.valueOf(classNode.version));
-        rights.add(version);
-        labels.add(new JLabel(LangUtil.i18n("class.info.signature")));
-        JTextField signature = new JTextField(classNode.signature);
-        rights.add(signature);
-        labels.add(new JLabel(LangUtil.i18n("class.info.superName")));
-        JTextField superName = new JTextField(classNode.superName);
-        rights.add(superName);
-        labels.add(new JLabel(LangUtil.i18n("class.info.interfaces")));
-        JTextField interfaces = new JTextField(StringUtils.join(classNode.interfaces, ";"));
-        rights.add(interfaces);
-        labels.add(new JLabel(LangUtil.i18n("class.info.outerClass")));
-        JTextField outerClass = new JTextField(classNode.outerClass);
-        rights.add(outerClass);
-        labels.add(new JLabel(LangUtil.i18n("class.info.outerMethod")));
-        JTextField outerMethod = new JTextField(classNode.outerMethod);
-        rights.add(outerMethod);
-        labels.add(new JLabel(LangUtil.i18n("class.info.outerMethodDescription")));
-        JTextField outerMethodDesc = new JTextField(classNode.outerMethodDesc);
-        rights.add(outerMethodDesc);
-        add(new JButton(LangUtil.i18n("button.save")) {{
-            addActionListener(e -> {
+        GridPane labels = new GridPane();
+        GridPane rights = new GridPane();
+        setLeft(labels);
+        setRight(rights);
+        labels.addRow(0, new Label(LangUtil.i18n("class.info.name")));
+        TextField name = new TextField(classNode.name);
+        rights.addRow(0, name);
+        labels.addRow(1, new Label(LangUtil.i18n("class.info.sourceFile")));
+        TextField sourceFile = new TextField(classNode.sourceFile);
+        rights.addRow(1, sourceFile);
+        labels.addRow(2, new Label(LangUtil.i18n("class.info.debugFile")));
+        TextField sourceDebug = new TextField(classNode.sourceDebug);
+        rights.addRow(2, sourceDebug);
+        labels.addRow(3, new Label(LangUtil.i18n("class.info.access")));
+        TextField access = new TextField(String.valueOf(classNode.access));
+        rights.addRow(3, access);
+        labels.addRow(4, new Label(LangUtil.i18n("class.info.version")));
+        TextField version = new TextField(String.valueOf(classNode.version));
+        rights.addRow(4, version);
+        labels.addRow(5, new Label(LangUtil.i18n("class.info.signature")));
+        TextField signature = new TextField(classNode.signature);
+        rights.addRow(5, signature);
+        labels.addRow(6, new Label(LangUtil.i18n("class.info.superName")));
+        TextField superName = new TextField(classNode.superName);
+        rights.addRow(6, superName);
+        labels.addRow(7, new Label(LangUtil.i18n("class.info.interfaces")));
+        TextField interfaces = new TextField(StringUtils.join(classNode.interfaces, ";"));
+        rights.addRow(7, interfaces);
+        labels.addRow(8, new Label(LangUtil.i18n("class.info.outerClass")));
+        TextField outerClass = new TextField(classNode.outerClass);
+        rights.addRow(8, outerClass);
+        labels.addRow(9, new Label(LangUtil.i18n("class.info.outerMethod")));
+        TextField outerMethod = new TextField(classNode.outerMethod);
+        rights.addRow(9, outerMethod);
+        labels.addRow(10, new Label(LangUtil.i18n("class.info.outerMethodDescription")));
+        TextField outerMethodDesc = new TextField(classNode.outerMethodDesc);
+        rights.addRow(10, outerMethodDesc);
+        setBottom(new Button(LangUtil.i18n("button.save")) {{
+            setOnAction(e -> {
 
                 if (!StringUtil.isBlank(name.getText())) {
                     classNode.name = name.getText();
@@ -101,7 +104,7 @@ public class ClassInfoTabPanel extends ClassNodeTabPanel {
                 }
 
                 if (!StringUtil.isBlank(signature.getText())) {
-                    classNode.signature = signature.getName();
+                    classNode.signature = signature.getText();
                 } else {
                     classNode.signature = null;
                 }
@@ -130,20 +133,20 @@ public class ClassInfoTabPanel extends ClassNodeTabPanel {
                     classNode.outerClass = null;
                 }
 
-                JOptionPane.showMessageDialog(ClassInfoTabPanel.this,  LangUtil.i18n("success"));
+//                JOptionPane.showMessageDialog(ClassInfoTabPane.this,  LangUtil.i18n("success"));
             });
-        }}, BorderLayout.SOUTH);
-        labels.add(new JLabel("Visible Annotation:"));
-        rights.add(new JButton(LangUtil.i18n("button.edit")) {{
-            addActionListener(e -> {
+        }});
+        labels.addRow(11, new Label("Visible Annotation:"));
+        rights.addRow(11, new Button(LangUtil.i18n("button.edit")) {{
+            setOnAction(e -> {
                 if (classNode.visibleAnnotations != null) {
                     new AnnotationListDialog(classNode.visibleAnnotations).setVisible(true);
                 }
             });
         }});
-        labels.add(new JLabel("Invisible Annotation:"));
-        rights.add(new JButton(LangUtil.i18n("button.edit")) {{
-            addActionListener(e -> {
+        labels.addRow(12, new Label("Invisible Annotation:"));
+        rights.addRow(12, new Button(LangUtil.i18n("button.edit")) {{
+            setOnAction(e -> {
                 if (classNode.invisibleAnnotations != null) {
                     new AnnotationListDialog(classNode.invisibleAnnotations).setVisible(true);
                 }

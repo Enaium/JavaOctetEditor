@@ -16,25 +16,27 @@
 
 package cn.enaium.joe.gui.panel.file.tabbed.tab.resources;
 
+import cn.enaium.joe.gui.component.CodeEditor;
 import cn.enaium.joe.gui.component.tree.FileTreeItem;
-import cn.enaium.joe.gui.panel.file.tree.node.FileTreeNode;
-import cn.enaium.joe.util.IOUtil;
-import cn.enaium.joe.util.ImageUtil;
-import cn.enaium.joe.util.MessageUtil;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 
-import javax.swing.*;
-import java.awt.*;
-import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author Enaium
  * @since 1.2.0
  */
-public class ImageTablePanel extends BorderPane {
-    public ImageTablePanel(FileTreeItem fileTreeNode) {
-        setCenter(new ScrollPane(new ImageView(ImageUtil.load(fileTreeNode.getData()))));
+public class TextTablePane extends BorderPane {
+    public TextTablePane(FileTreeItem fileTreeNode) {
+        String name = fileTreeNode.toString();
+        CodeEditor.Language.Type type = CodeEditor.Language.Type.UNKNOWN;
+
+        if (name.matches(".*(java)")) {
+            type = CodeEditor.Language.Type.JAVA;
+        }
+
+        setCenter(new CodeEditor(type) {{
+            replaceText(new String(fileTreeNode.getData(), StandardCharsets.UTF_8));
+        }});
     }
 }

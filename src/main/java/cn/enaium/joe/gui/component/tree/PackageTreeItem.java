@@ -14,27 +14,16 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.file.tabbed.tab.resources;
+package cn.enaium.joe.gui.component.tree;
 
-import cn.enaium.joe.gui.component.tree.FileTreeItem;
-import cn.enaium.joe.gui.panel.file.tree.node.FileTreeNode;
-import cn.enaium.joe.util.IOUtil;
 import cn.enaium.joe.util.ImageUtil;
-import cn.enaium.joe.util.MessageUtil;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-
-import javax.swing.*;
-import java.awt.*;
-import java.io.IOException;
 
 /**
  * @author Enaium
- * @since 1.2.0
+ * @since 1.3.0
  */
-public class ImageTablePanel extends BorderPane {
-    public ImageTablePanel(FileTreeItem fileTreeNode) {
-        setCenter(new ScrollPane(new ImageView(ImageUtil.load(fileTreeNode.getData()))));
+public class PackageTreeItem extends ObjectTreeItem {
+    public PackageTreeItem(Object value) {
+        super(value, ImageUtil.loadSVG("icons/package.svg"));
     }
 }

@@ -19,7 +19,7 @@ package cn.enaium.joe.gui.component;
 import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.config.extend.ApplicationConfig;
 import cn.enaium.joe.gui.panel.file.FileDropTarget;
-import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassTabPanel;
+import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassTabPane;
 import cn.enaium.joe.gui.panel.file.tabbed.tab.resources.FileTablePane;
 import cn.enaium.joe.gui.panel.file.tree.FileTreeCellRenderer;
 import cn.enaium.joe.gui.panel.file.tree.node.*;
@@ -33,12 +33,9 @@ import org.objectweb.asm.tree.ClassNode;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreeNode;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Enaium
@@ -58,25 +55,25 @@ public class FileTree extends JTree {
         setShowsRootHandles(true);
         setCellRenderer(new FileTreeCellRenderer());
 
-        addTreeSelectionListener(e -> {
-            DefaultTreeNode lastPathComponent = (DefaultTreeNode) e.getPath().getLastPathComponent();
-            SwingUtilities.invokeLater(() -> {
-                if (lastPathComponent instanceof PackageTreeNode) {
-                    PackageTreeNode packageTreeNode = (PackageTreeNode) lastPathComponent;
-                    if (packageTreeNode instanceof ClassTreeNode) {
-                        ClassNode classNode = ((ClassTreeNode) packageTreeNode).classNode;
-                        JavaOctetEditor.getInstance().fileTabbedPanel.addTab(classNode.name.substring(classNode.name.lastIndexOf("/") + 1), new ClassTabPanel(classNode));
-                    }
-                } else if (lastPathComponent instanceof FolderTreeNode) {
-                    FolderTreeNode folderTreeNode = (FolderTreeNode) lastPathComponent;
-                    if (folderTreeNode instanceof FileTreeNode) {
-                        FileTreeNode fileTreeNode = (FileTreeNode) folderTreeNode;
-                        JavaOctetEditor.getInstance().fileTabbedPanel.addTab(fileTreeNode.toString().substring(fileTreeNode.toString().lastIndexOf("/") + 1), new FileTablePane(fileTreeNode));
-                    }
-                }
-                JavaOctetEditor.getInstance().fileTabbedPanel.setSelectedIndex(JavaOctetEditor.getInstance().fileTabbedPanel.getTabCount() - 1);
-            });
-        });
+//        addTreeSelectionListener(e -> {
+//            DefaultTreeNode lastPathComponent = (DefaultTreeNode) e.getPath().getLastPathComponent();
+//            SwingUtilities.invokeLater(() -> {
+//                if (lastPathComponent instanceof PackageTreeNode) {
+//                    PackageTreeNode packageTreeNode = (PackageTreeNode) lastPathComponent;
+//                    if (packageTreeNode instanceof ClassTreeNode) {
+//                        ClassNode classNode = ((ClassTreeNode) packageTreeNode).classNode;
+//                        JavaOctetEditor.getInstance().fileTabbedPanel.addTab(classNode.name.substring(classNode.name.lastIndexOf("/") + 1), new ClassTabPane(classNode));
+//                    }
+//                } else if (lastPathComponent instanceof FolderTreeNode) {
+//                    FolderTreeNode folderTreeNode = (FolderTreeNode) lastPathComponent;
+//                    if (folderTreeNode instanceof FileTreeNode) {
+//                        FileTreeNode fileTreeNode = (FileTreeNode) folderTreeNode;
+//                        JavaOctetEditor.getInstance().fileTabbedPanel.addTab(fileTreeNode.toString().substring(fileTreeNode.toString().lastIndexOf("/") + 1), new FileTablePane(fileTreeNode));
+//                    }
+//                }
+//                JavaOctetEditor.getInstance().fileTabbedPanel.setSelectedIndex(JavaOctetEditor.getInstance().fileTabbedPanel.getTabCount() - 1);
+//            });
+//        });
 
         new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, new FileDropTarget(".jar", files -> {
             if (!files.isEmpty()) {

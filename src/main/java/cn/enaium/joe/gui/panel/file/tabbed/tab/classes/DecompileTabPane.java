@@ -17,10 +17,15 @@
 package cn.enaium.joe.gui.panel.file.tabbed.tab.classes;
 
 import cn.enaium.joe.JavaOctetEditor;
-import cn.enaium.joe.service.DecompileService;
+import cn.enaium.joe.MainFX;
+import cn.enaium.joe.gui.component.CodeEditor;
 import cn.enaium.joe.gui.panel.CodeAreaPanel;
 import cn.enaium.joe.task.DecompileTask;
-import cn.enaium.joe.util.ASyncUtil;
+import cn.enaium.joe.util.StyleUtil;
+import javafx.application.Platform;
+import org.fxmisc.flowless.VirtualizedScrollPane;
+import org.fxmisc.richtext.CodeArea;
+import org.fxmisc.richtext.LineNumberFactory;
 import org.objectweb.asm.tree.ClassNode;
 
 import java.awt.*;
@@ -28,16 +33,16 @@ import java.awt.*;
 /**
  * @author Enaium
  */
-public class DecompileTabPanel extends ClassNodeTabPanel {
-    public DecompileTabPanel(ClassNode classNode) {
+public class DecompileTabPane extends ClassNodeTabPane {
+    public DecompileTabPane(ClassNode classNode) {
         super(classNode);
-        setLayout(new BorderLayout());
-        CodeAreaPanel codeAreaPanel = new CodeAreaPanel();
-        codeAreaPanel.getTextArea().setSyntaxEditingStyle("text/java");
-        JavaOctetEditor.getInstance().task.submit(new DecompileTask(classNode)).thenAccept(it -> {
-            codeAreaPanel.getTextArea().setText(it);
+        CodeEditor codeArea = new CodeEditor(CodeEditor.Language.Type.JAVA);
+        codeArea.setEditable(false);
+        MainFX.getInstance().task.submit(new DecompileTask(classNode)).thenAccept(it -> {
+            Platform.runLater(() -> {
+                codeArea.replaceText(it);
+            });
         });
-        codeAreaPanel.getTextArea().setCaretPosition(0);
-        add(codeAreaPanel);
+        setCenter(new VirtualizedScrollPane<>(codeArea));
     }
 }

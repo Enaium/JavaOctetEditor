@@ -16,8 +16,12 @@
 
 package cn.enaium.joe.gui.panel.file.tabbed.tab.resources;
 
+import cn.enaium.joe.gui.component.tree.FileTreeItem;
 import cn.enaium.joe.gui.panel.file.tree.node.FileTreeNode;
 import cn.enaium.joe.util.ASyncUtil;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.layout.BorderPane;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -27,34 +31,37 @@ import java.awt.*;
  * @author Enaium
  * @since 0.7.0
  */
-public class HexTablePanel extends JPanel {
-    public HexTablePanel(FileTreeNode fileTreeNode) {
-        super(new BorderLayout());
-        DefaultTableModel defaultTableModel = new DefaultTableModel(new Object[][]{}, new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"});
-        JTable jTable = new JTable(defaultTableModel) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        jTable.getTableHeader().setReorderingAllowed(false);
-        add(new JScrollPane(jTable), BorderLayout.CENTER);
+public class HexTablePanel extends BorderPane {
+    public HexTablePanel(FileTreeItem fileTreeNode) {
+//        DefaultTableModel defaultTableModel = new DefaultTableModel(new Object[][]{}, new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"});
+//        JTable jTable = new JTable(defaultTableModel) {
+//            @Override
+//            public boolean isCellEditable(int row, int column) {
+//                return false;
+//            }
+//        };
+//        jTable.getTableHeader().setReorderingAllowed(false);
+        TableView<Object> objectTableView = new TableView<>();
+        for (char c : "0123456789ABCDEF".toCharArray()) {
+            objectTableView.getColumns().add(new TableColumn<>(String.valueOf(c)));
+        }
 
-        ASyncUtil.execute(() -> {
-            int row = 0;
-            Object[] array = new Object[16];
-            byte[] data = fileTreeNode.getData();
-            for (int i = 0; i < data.length; i++) {
-                byte b = data[i];
-                array[row] = String.format("%02X", b);
-                if (row == 15 || i == fileTreeNode.getData().length - 1) {
-                    defaultTableModel.addRow(array);
-                    row = 0;
-                    array = new Object[16];
-                    continue;
-                }
-                row++;
-            }
-        });
+//        ASyncUtil.execute(() -> {
+//            int row = 0;
+//            Object[] array = new Object[16];
+//            byte[] data = fileTreeNode.getData();
+//            for (int i = 0; i < data.length; i++) {
+//                byte b = data[i];
+//                array[row] = String.format("%02X", b);
+//                if (row == 15 || i == fileTreeNode.getData().length - 1) {
+//                    defaultTableModel.addRow(array);
+//                    row = 0;
+//                    array = new Object[16];
+//                    continue;
+//                }
+//                row++;
+//            }
+//        });
+        setCenter(objectTableView);
     }
 }

@@ -14,23 +14,25 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel.file.tabbed.tab.classes;
+package cn.enaium.joe.gui.component.tree;
 
-import org.objectweb.asm.tree.ClassNode;
-
-import javax.swing.*;
+import cn.enaium.joe.util.ImageUtil;
 
 /**
  * @author Enaium
+ * @since 1.3.0
  */
-public class ClassNodeTabPanel extends JPanel {
-    private final ClassNode classNode;
+public class FileTreeItem extends FolderTreeItem {
 
-    public ClassNodeTabPanel(ClassNode classNode) {
-        this.classNode = classNode;
+    private final byte[] data;
+
+    public FileTreeItem(Object value, byte[] data) {
+        super(value);
+        setGraphic(ImageUtil.loadSVG("icons/file.svg"));
+        this.data = data;
     }
 
-    public ClassNode getClassNode() {
-        return classNode;
+    public byte[] getData() {
+        return data;
     }
 }

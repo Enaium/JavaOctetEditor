@@ -17,11 +17,12 @@
 package cn.enaium.joe;
 
 import cn.enaium.joe.config.ConfigManager;
-import cn.enaium.joe.gui.component.MainMenu;
+import cn.enaium.joe.gui.component.FileTab;
+import cn.enaium.joe.gui.component.FileTreeFX;
+import cn.enaium.joe.gui.panel.CenterPanel;
 import cn.enaium.joe.task.TaskManager;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 /**
@@ -35,20 +36,27 @@ public class MainFX extends Application {
     public ConfigManager config;
     public TaskManager task;
 
+    public FileTreeFX fileTree;
+    public FileTab fileTab;
+
+    public Stage stage;
+
     @Override
     public void init() throws Exception {
         instance = this;
         config = new ConfigManager();
         config.load();
         task = new TaskManager();
+        fileTree = new FileTreeFX();
+        fileTab = new FileTab();
     }
 
     @Override
     public void start(Stage stage) throws Exception {
+        this.stage = stage;
         stage.setTitle("JavaOctetEditor");
-        BorderPane root = new BorderPane();
-        root.setTop(new MainMenu());
-        stage.setScene(new Scene(root, 1000, 600));
+        stage.setScene(new Scene(new CenterPanel(), 1000, 600));
+        stage.setOnCloseRequest(windowEvent -> System.exit(0));
         stage.show();
     }
 

@@ -16,8 +16,13 @@
 
 package cn.enaium.joe.gui.panel.file.tabbed.tab.classes;
 
+import cn.enaium.joe.gui.component.CodeEditor;
 import cn.enaium.joe.gui.panel.CodeAreaPanel;
 import cn.enaium.joe.util.ASyncUtil;
+import cn.enaium.joe.util.StyleUtil;
+import org.fxmisc.flowless.VirtualizedScrollPane;
+import org.fxmisc.richtext.CodeArea;
+import org.fxmisc.richtext.LineNumberFactory;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.util.TraceClassVisitor;
 
@@ -25,23 +30,24 @@ import java.awt.*;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.function.Supplier;
 
 /**
  * @author Enaium
  */
-public class TraceBytecodeTabPanel extends ClassNodeTabPanel {
-    public TraceBytecodeTabPanel(ClassNode classNode) {
+public class TraceBytecodeTabPane extends ClassNodeTabPane {
+    public TraceBytecodeTabPane(ClassNode classNode) {
         super(classNode);
-        setLayout(new BorderLayout());
-        CodeAreaPanel codeAreaPanel = new CodeAreaPanel();
-        codeAreaPanel.getTextArea().setSyntaxEditingStyle("text/custom");
-        final StringWriter stringWriter = new StringWriter();
+        CodeEditor codeArea = new CodeEditor(CodeEditor.Language.Type.BYTECODE);
+        codeArea.setEditable(false);
+
         ASyncUtil.execute(() -> {
+            StringWriter stringWriter = new StringWriter();
             classNode.accept(new TraceClassVisitor(new PrintWriter(stringWriter)));
-        }, () -> {
-            codeAreaPanel.getTextArea().setText(new String(stringWriter.toString().getBytes(StandardCharsets.UTF_8)));
-            codeAreaPanel.getTextArea().setCaretPosition(0);
+            return stringWriter;
+        }, result -> {
+            codeArea.replaceText(new String(result.toString().getBytes(StandardCharsets.UTF_8)));
         });
-        add(codeAreaPanel);
+        setCenter(new VirtualizedScrollPane<>(codeArea));
     }
 }

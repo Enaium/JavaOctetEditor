@@ -16,27 +16,23 @@
 
 package cn.enaium.joe.gui.panel.file.tabbed.tab.resources;
 
-import cn.enaium.joe.gui.panel.file.tree.node.FileTreeNode;
+import cn.enaium.joe.gui.component.tree.FileTreeItem;
 import cn.enaium.joe.util.IOUtil;
-import cn.enaium.joe.util.StringUtil;
 import cn.enaium.joe.util.Util;
-
-import javax.swing.*;
-import java.awt.*;
+import javafx.scene.layout.BorderPane;
 
 /**
  * @author Enaium
  * @since 1.2.0
  */
-public class FileTablePane extends JPanel {
-    public FileTablePane(FileTreeNode fileTreeNode) {
-        super(new BorderLayout());
-        if (Util.isText(fileTreeNode.getData())) {
-            add(new TextTablePanel(fileTreeNode));
-        } else if (IOUtil.isImage(fileTreeNode.getData())) {
-            add(new ImageTablePanel(fileTreeNode));
+public class FileTablePane extends BorderPane {
+    public FileTablePane(FileTreeItem fileTreeItem) {
+        if (Util.isText(fileTreeItem.getData())) {
+            setCenter(new TextTablePane(fileTreeItem));
+        } else if (IOUtil.isImage(fileTreeItem.getData())) {
+            setCenter(new ImageTablePanel(fileTreeItem));
         } else {
-            add(new HexTablePanel(fileTreeNode));
+            setCenter(new HexTablePanel(fileTreeItem));
         }
     }
 }
