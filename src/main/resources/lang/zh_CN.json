@@ -101,5 +101,7 @@
   "instruction.dimension": "维数:",
   "instruction.min": "最小:",
   "instruction.max": "最大:",
-  "instruction.labels": "标签:"
+  "instruction.labels": "标签:",
+  "sideTab.member": "成员",
+  "sideTab.hierarchy": "层次结构"
 }

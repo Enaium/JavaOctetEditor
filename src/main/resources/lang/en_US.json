@@ -101,5 +101,7 @@
   "instruction.dimension": "Dimension:",
   "instruction.min": "Min:",
   "instruction.max": "Max:",
-  "instruction.labels": "Labels:"
+  "instruction.labels": "Labels:",
+  "sideTab.member": "Member",
+  "sideTab.hierarchy": "Hierarchy"
 }
