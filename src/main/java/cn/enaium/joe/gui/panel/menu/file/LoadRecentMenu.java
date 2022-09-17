@@ -20,8 +20,11 @@ import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.config.extend.ApplicationConfig;
 import cn.enaium.joe.task.InputJarTask;
 import cn.enaium.joe.util.LangUtil;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
 
 import javax.swing.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -31,16 +34,17 @@ import java.util.Set;
  * @author Enaium
  * @since 0.9.0
  */
-public class LoadRecentMenu extends JMenuItem {
+public class LoadRecentMenu extends JMenu {
     public LoadRecentMenu() {
         super(LangUtil.i18n("menu.file.loadRecent"));
-        addMouseListener(new MouseAdapter() {
+        addMenuListener(new MenuListener() {
             @Override
-            public void mouseReleased(MouseEvent e) {
-                JPopupMenu jPopupMenu = new JPopupMenu();
+            public void menuSelected(MenuEvent e) {
+                removeAll();
                 Set<String> loadRecent = JavaOctetEditor.getInstance().config.getByClass(ApplicationConfig.class).loadRecent.getValue();
                 for (String s : loadRecent) {
-                    jPopupMenu.add(new JMenuItem(s) {{
+                    add(new JMenuItem(s) {{
+                        setIcon(new FlatSVGIcon("icons/jar.svg"));
                         addActionListener(e -> {
                             File file = new File(s);
                             if (file.exists()) {
@@ -51,7 +55,16 @@ public class LoadRecentMenu extends JMenuItem {
                         });
                     }});
                 }
-                jPopupMenu.show(JavaOctetEditor.getInstance().window, e.getX(), e.getY());
+            }
+
+            @Override
+            public void menuDeselected(MenuEvent e) {
+
+            }
+
+            @Override
+            public void menuCanceled(MenuEvent e) {
+
             }
         });
     }
