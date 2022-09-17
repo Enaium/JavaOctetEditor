@@ -20,8 +20,10 @@ import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.event.Event;
 import cn.enaium.joe.event.events.FileTabbedSelectEvent;
 import cn.enaium.joe.gui.component.MemberList;
+import cn.enaium.joe.gui.component.RightTabBar;
 import cn.enaium.joe.gui.component.TabbedPane;
 import cn.enaium.joe.gui.layout.HalfLayout;
+import cn.enaium.joe.gui.panel.BorderPanel;
 import cn.enaium.joe.gui.panel.LeftPanel;
 import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassTabPanel;
 import cn.enaium.joe.jar.Jar;
@@ -50,44 +52,21 @@ import java.util.stream.Collectors;
  * @author Enaium
  * @since 1.2.0
  */
-public class CenterPanel extends JPanel {
+public class CenterPanel extends BorderPanel {
     public CenterPanel() {
-        super(new BorderLayout());
-        add(new JSplitPane() {{
+        setCenter(new JSplitPane() {{
             setLeftComponent(new LeftPanel());
-            setRightComponent(new JPanel(new BorderLayout()) {{
-                add(JavaOctetEditor.getInstance().fileTabbedPanel, BorderLayout.CENTER);
-                add(new JPanel(new BorderLayout()) {{
-                    JPanel self = this;
-                    add(new TabbedPane(JTabbedPane.RIGHT) {{
-                        addTab("Field&Method", new FlatSVGIcon("icons/structure.svg"), new MemberList() {{
-                            JavaOctetEditor.getInstance().event.register(FileTabbedSelectEvent.class, (Consumer<FileTabbedSelectEvent>) event -> {
-                                if (event.getSelect() instanceof ClassTabPanel) {
-                                    ClassTabPanel select = (ClassTabPanel) event.getSelect();
-                                    ClassNode classNode = select.classNode;
-                                    setModel(new DefaultListModel<Pair<ClassNode, Object>>() {{
-                                        for (FieldNode field : classNode.fields) {
-                                            addElement(new Pair<>(classNode, field));
-                                        }
-
-                                        for (MethodNode method : classNode.methods) {
-                                            addElement(new Pair<>(classNode, method));
-                                        }
-                                    }});
-                                }
-                            });
-                        }});
-                        JScrollPane comp = new JScrollPane();
-                        self.add(comp, BorderLayout.CENTER);
-                        addChangeListener(e -> {
-                            comp.setViewportView(getSelectedComponent());
-                        });
-                        cancelSelect();
-                        setVerticalLabel();
-                    }}, BorderLayout.EAST);
-                }}, BorderLayout.EAST);
-            }});
+            setRightComponent(JavaOctetEditor.getInstance().fileTabbedPanel);
             setDividerLocation(200);
-        }}, BorderLayout.CENTER);
+        }});
+        setRight(new BorderPanel() {{
+            JScrollPane comp = new JScrollPane();
+            setCenter(comp);
+            setRight(new RightTabBar() {{
+                addChangeListener(e -> {
+                    comp.setViewportView(getSelectedComponent());
+                });
+            }});
+        }});
     }
 }
