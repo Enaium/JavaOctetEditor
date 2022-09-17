@@ -18,11 +18,11 @@ package cn.enaium.joe.dialog;
 
 import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.ReflectUtil;
+import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.tools.ToolProvider;
-import java.awt.*;
 
 /**
  * @author Enaium
@@ -30,49 +30,36 @@ import java.awt.*;
 public class AboutDialog extends Dialog {
     public AboutDialog() {
         super(LangUtil.i18n("menu.help.about"));
-        setContentPane(new JPanel(new GridLayout(2, 0)) {{
+        setContentPane(new JPanel(new MigLayout()) {{
             setBorder(new EmptyBorder(10, 10, 10, 10));
-            add(new JPanel(new GridLayout(5, 0)) {{
-                add(new JLabel(LangUtil.i18n("about.system")));
-                add(new JLabel(LangUtil.i18n("about.system.description")));
-                add(new JPanel(new BorderLayout()) {{
-                    add(new JLabel(LangUtil.i18n("about.system.name")), BorderLayout.WEST);
-                    add(new JLabel(System.getProperty("os.name")), BorderLayout.EAST);
-                }});
-                add(new JPanel(new BorderLayout()) {{
-                    add(new JLabel(LangUtil.i18n("about.system.architecture")), BorderLayout.WEST);
-                    add(new JLabel(System.getProperty("os.arch")), BorderLayout.EAST);
-                }});
-                add(new JSeparator());
-            }});
-            add(new JPanel(new GridLayout(8, 0)) {{
-                add(new JLabel(LangUtil.i18n("about.java")));
-                add(new JLabel(LangUtil.i18n("about.java.description")));
-                add(new JPanel(new BorderLayout()) {{
-                    add(new JLabel(LangUtil.i18n("about.java.version")), BorderLayout.WEST);
-                    add(new JLabel(System.getProperty("java.version")), BorderLayout.EAST);
-                }});
-                add(new JPanel(new BorderLayout()) {{
-                    add(new JLabel(LangUtil.i18n("about.java.vm.name")), BorderLayout.WEST);
-                    add(new JLabel(System.getProperty("java.vm.name")), BorderLayout.EAST);
-                }});
-                add(new JPanel(new BorderLayout()) {{
-                    add(new JLabel(LangUtil.i18n("about.java.vm.vendor")), BorderLayout.WEST);
-                    add(new JLabel(System.getProperty("java.vm.vendor")), BorderLayout.EAST);
-                }});
-                add(new JPanel(new BorderLayout()) {{
-                    add(new JLabel(LangUtil.i18n("about.java.home")), BorderLayout.WEST);
-                    add(new JLabel(System.getProperty("java.home")), BorderLayout.EAST);
-                }});
-                add(new JPanel(new BorderLayout()) {{
-                    add(new JLabel(LangUtil.i18n("about.java.supportCompiler")), BorderLayout.WEST);
-                    add(new JLabel(String.valueOf(ToolProvider.getSystemJavaCompiler() != null)), BorderLayout.EAST);
-                }});
-                add(new JPanel(new BorderLayout()) {{
-                    add(new JLabel(LangUtil.i18n("about.java.supportAttach")), BorderLayout.WEST);
-                    add(new JLabel(String.valueOf(ReflectUtil.classHas("com.sun.tools.attach.VirtualMachine"))), BorderLayout.EAST);
-                }});
-            }});
+            add(new JLabel(LangUtil.i18n("about.system")), "wrap");
+            add(new JLabel(LangUtil.i18n("about.system.description")), "wrap");
+
+            add(new JLabel(LangUtil.i18n("about.system.name")));
+            add(new JLabel(System.getProperty("os.name")), "wrap");
+            add(new JLabel(LangUtil.i18n("about.system.architecture")));
+            add(new JLabel(System.getProperty("os.arch")), "wrap");
+
+            add(new JSeparator(), "wrap");
+
+            add(new JLabel(LangUtil.i18n("about.java")), "wrap");
+            add(new JLabel(LangUtil.i18n("about.java.description")), "wrap");
+
+
+            add(new JLabel(LangUtil.i18n("about.java.version")));
+            add(new JLabel(System.getProperty("java.version")), "wrap");
+            add(new JLabel(LangUtil.i18n("about.java.vm.name")));
+            add(new JLabel(System.getProperty("java.vm.name")), "wrap");
+            add(new JLabel(LangUtil.i18n("about.java.vm.vendor")));
+            add(new JLabel(System.getProperty("java.vm.vendor")), "wrap");
+            add(new JLabel(LangUtil.i18n("about.java.home")));
+            add(new JLabel(System.getProperty("java.home")), "wrap");
+            add(new JLabel(LangUtil.i18n("about.java.supportCompiler")));
+            add(new JLabel(String.valueOf(ToolProvider.getSystemJavaCompiler() != null)), "wrap");
+            add(new JLabel(LangUtil.i18n("about.java.supportAttach")));
+            add(new JLabel(String.valueOf(ReflectUtil.classHas("com.sun.tools.attach.VirtualMachine"))), "wrap");
         }});
+        setResizable(false);
+        pack();
     }
 }

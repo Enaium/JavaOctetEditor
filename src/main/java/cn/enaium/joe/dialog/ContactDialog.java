@@ -18,6 +18,7 @@ package cn.enaium.joe.dialog;
 
 import cn.enaium.joe.util.LangUtil;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,32 +36,31 @@ public class ContactDialog extends Dialog {
     public ContactDialog() {
         super(LangUtil.i18n("menu.help.contact"));
         setSize(290, 150);
-        setContentPane(new JPanel(new GridLayout(0, 1)) {{
-            addLink(this, new FlatSVGIcon("icons/github.svg"), "https://github.com/Enaium/JavaOctetEditor");
+        setContentPane(new JPanel(new MigLayout()) {{
+            addLink(this, "Github", new FlatSVGIcon("icons/github.svg"), "https://github.com/Enaium/JavaOctetEditor");
             if (Locale.getDefault().getLanguage().equals("zh")) {
-                addLink(this, new FlatSVGIcon("icons/bilibili.svg"), "https://space.bilibili.com/44537204");
-                addLink(this, null, "https://kook.top/YaP12f");
+                addLink(this, "BiliBili", new FlatSVGIcon("icons/biliBili.svg"), "https://space.bilibili.com/44537204");
+                addLink(this, "KOOK", new FlatSVGIcon("icons/kook.svg"), "https://kook.top/YaP12f");
             }
         }});
+        setResizable(false);
+        pack();
     }
 
-    public void addLink(JComponent jComponent, Icon icon, String link) {
-        jComponent.add(new JPanel(new BorderLayout()) {{
-            add(new JLabel() {{
-                setIcon(icon);
-            }}, BorderLayout.WEST);
-            add(new JLabel("<html><a>" + link + "</a></html>") {{
-                addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        try {
-                            Desktop.getDesktop().browse(new URI(link));
-                        } catch (IOException | URISyntaxException ex) {
-                            throw new RuntimeException(ex);
-                        }
+    public void addLink(JPanel panel, String name, Icon icon, String link) {
+        panel.add(new JLabel(icon));
+        panel.add(new JLabel(name));
+        panel.add(new JLabel("<html><a style=\"text-decoration: underline\">" + link + "</a></html>") {{
+            addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    try {
+                        Desktop.getDesktop().browse(new URI(link));
+                    } catch (IOException | URISyntaxException ex) {
+                        throw new RuntimeException(ex);
                     }
-                });
-            }});
-        }});
+                }
+            });
+        }}, "wrap");
     }
 }

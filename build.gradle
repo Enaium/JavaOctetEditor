@@ -41,6 +41,8 @@ dependencies {
 
     implementation 'com.formdev:flatlaf:2.4'
     implementation 'com.formdev:flatlaf-extras:2.4'
+    //noinspection GradlePackageUpdate
+    implementation 'com.miglayout:miglayout-swing:5.3'
     implementation 'com.github.bobbylight:RSyntaxTextArea:3.2.0'
     implementation 'org.ow2.asm:asm-tree:9.3'
     implementation 'org.ow2.asm:asm-util:9.3'
@@ -63,6 +65,7 @@ test {
 shadowJar {
     dependencies {
         include(dependency('com.formdev:.*'))
+        include(dependency('com.miglayout:miglayout-swing'))
         include(dependency('com.github.bobbylight:RSyntaxTextArea'))
         include(dependency('org.ow2.asm:.*'))
         include(dependency('org.benf:cfr'))
