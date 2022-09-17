@@ -259,9 +259,9 @@ public class FileTree extends JTree {
             return;
         }
 
-        if (!defaultTreeNode.isLeaf() && !defaultTreeNode.equals(classesRoot) && !defaultTreeNode.equals(resourceRoot)) {
+        if (!defaultTreeNode.isLeaf()) {
             DefaultTreeNode parent = (DefaultTreeNode) defaultTreeNode.getParent();
-            if (parent.getChildren().size() == 1) {
+            if (parent.getChildren().size() == 1 && !(parent.equals(classesRoot) || parent.equals(resourceRoot))) {
                 parent.setUserObject(parent.getUserObject() + "." + defaultTreeNode.getUserObject());
                 parent.getChildren().clear();
                 for (DefaultTreeNode child : defaultTreeNode.getChildren()) {
