@@ -72,8 +72,10 @@ public class TabbedPane extends JTabbedPane {
     public void setVerticalLabel() {
         for (int i = 0; i < getTabCount(); i++) {
             int finalI = i;
-            setTabComponentAt(i, new JLabel(getTitleAt(finalI)) {{
+            String titleAt = getTitleAt(i);
+            setTabComponentAt(i, new JLabel(titleAt) {{
                 setIcon(getIconAt(finalI));
+                setToolTipText(titleAt);
                 setUI(new VerticalLabelUI(getTabPlacement() == RIGHT));
             }});
         }
