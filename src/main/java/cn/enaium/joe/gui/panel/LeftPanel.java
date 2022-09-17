@@ -33,13 +33,12 @@ import java.util.stream.Collectors;
 /**
  * @author Enaium
  */
-public class LeftPanel extends JPanel {
+public class LeftPanel extends BorderPanel {
     public LeftPanel() {
-        super(new BorderLayout());
-        add(new JScrollPane(JavaOctetEditor.getInstance().fileTree), BorderLayout.CENTER);
-        add(new JPanel(new BorderLayout()) {{
+        setCenter(new JScrollPane(JavaOctetEditor.getInstance().fileTree));
+        setBottom(new BorderPanel() {{
             setBorder(new EmptyBorder(5, 0, 0, 0));
-            add(new JTextField() {{
+            setCenter(new JTextField() {{
                 putClientProperty("JTextField.placeholderText", LangUtil.i18n("menu.search"));
                 JTextField jTextField = this;
                 addKeyListener(new KeyAdapter() {
@@ -77,7 +76,7 @@ public class LeftPanel extends JPanel {
                         }
                     }
                 });
-            }}, BorderLayout.CENTER);
-        }}, BorderLayout.SOUTH);
+            }});
+        }});
     }
 }
