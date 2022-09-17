@@ -101,7 +101,7 @@ public class ClassInfoTabPanel extends ClassNodeTabPanel {
                 }
 
                 if (!StringUtil.isBlank(signature.getText())) {
-                    classNode.signature = signature.getName();
+                    classNode.signature = signature.getText();
                 } else {
                     classNode.signature = null;
                 }
