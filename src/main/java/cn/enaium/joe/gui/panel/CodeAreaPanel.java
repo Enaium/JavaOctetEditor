@@ -16,7 +16,9 @@
 
 package cn.enaium.joe.gui.panel;
 
+import cn.enaium.joe.util.KeyStrokeUtil;
 import cn.enaium.joe.util.LangUtil;
+import cn.enaium.joe.util.StringUtil;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rtextarea.RTextScrollPane;
@@ -27,12 +29,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 /**
  * @author Enaium
  */
-public class CodeAreaPanel extends JPanel implements ActionListener {
+public class CodeAreaPanel extends BorderPanel implements ActionListener {
 
     private RSyntaxTextArea textArea;
     private JTextField searchField;
@@ -40,7 +44,6 @@ public class CodeAreaPanel extends JPanel implements ActionListener {
     private JCheckBox matchCaseCB;
 
     public CodeAreaPanel() {
-        super(new BorderLayout());
         textArea = new RSyntaxTextArea();
         textArea.setCodeFoldingEnabled(true);
         textArea.setEditable(false);
@@ -52,7 +55,6 @@ public class CodeAreaPanel extends JPanel implements ActionListener {
         }
         theme.apply(textArea);
 
-        add(new RTextScrollPane(textArea), BorderLayout.CENTER);
         JToolBar toolBar = new JToolBar();
         searchField = new JTextField(30);
         toolBar.add(searchField);
@@ -69,7 +71,19 @@ public class CodeAreaPanel extends JPanel implements ActionListener {
         toolBar.add(regexCB);
         matchCaseCB = new JCheckBox("Match Case");
         toolBar.add(matchCaseCB);
-        add(toolBar, BorderLayout.NORTH);
+        toolBar.setVisible(false);
+        setTop(toolBar);
+        setCenter(new RTextScrollPane(textArea) {{
+            KeyStrokeUtil.register(textArea, KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK), () -> {
+                if (!StringUtil.isBlank(textArea.getSelectedText())) {
+                    searchField.setText(textArea.getSelectedText());
+                }
+                toolBar.setVisible(true);
+            });
+            KeyStrokeUtil.register(textArea, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), () -> {
+                toolBar.setVisible(false);
+            });
+        }});
     }
 
     @Override
