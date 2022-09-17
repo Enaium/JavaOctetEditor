@@ -16,7 +16,10 @@
 
 package cn.enaium.joe.util;
 
+import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.ClassNode;
+import org.pmw.tinylog.Logger;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -37,5 +40,19 @@ public class ASMUtil {
                 return text;
             }
         }
+    }
+
+    public static ClassNode acceptClassNode(ClassReader classReader) {
+        ClassNode classNode = new ClassNode();
+        try {
+            classReader.accept(classNode, ClassReader.EXPAND_FRAMES);
+        } catch (Throwable throwable) {
+            try {
+                classReader.accept(classNode, ClassReader.SKIP_FRAMES | ClassReader.SKIP_DEBUG);
+            } catch (Throwable ignored) {
+
+            }
+        }
+        return classNode;
     }
 }
