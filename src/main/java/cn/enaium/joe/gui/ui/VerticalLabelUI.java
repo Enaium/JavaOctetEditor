@@ -69,16 +69,17 @@ public class VerticalLabelUI extends BasicLabelUI {
 
         Graphics2D g2 = (Graphics2D) g;
         AffineTransform tr = g2.getTransform();
+
+        if (icon != null) {
+            icon.paintIcon(c, g, paintIconR.x, paintIconR.y);
+        }
+
         if (clockwise) {
             g2.rotate(Math.PI / 2);
             g2.translate(0, -c.getWidth());
         } else {
             g2.rotate(-Math.PI / 2);
             g2.translate(-c.getHeight(), 0);
-        }
-
-        if (icon != null) {
-            icon.paintIcon(c, g, paintIconR.x, paintIconR.y);
         }
 
         if (text != null) {

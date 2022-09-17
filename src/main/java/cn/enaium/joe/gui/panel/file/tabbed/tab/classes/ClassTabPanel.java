@@ -26,7 +26,7 @@ import java.awt.*;
  */
 public class ClassTabPanel extends JPanel {
 
-    private final ClassNode classNode;
+    public final ClassNode classNode;
 
     public ClassTabPanel(ClassNode classNode) {
         super(new BorderLayout());
@@ -38,9 +38,5 @@ public class ClassTabPanel extends JPanel {
         jTabbedPane.addTab("VisitorEdit", new ASMifierTablePanel(classNode));
         jTabbedPane.addTab("InfoEdit", new ClassInfoTabPanel(classNode));
         add(jTabbedPane);
-    }
-
-    public ClassNode getClassNode() {
-        return classNode;
     }
 }

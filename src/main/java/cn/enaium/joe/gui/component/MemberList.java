@@ -35,18 +35,7 @@ import java.awt.event.MouseEvent;
  * @since 1.2.0
  */
 public class MemberList extends JList<Pair<ClassNode, Object>> {
-    public MemberList(ClassNode classNode) {
-        setModel(new DefaultListModel<Pair<ClassNode, Object>>() {{
-            for (FieldNode field : classNode.fields) {
-                addElement(new Pair<>(classNode, field));
-            }
-
-            for (MethodNode method : classNode.methods) {
-                addElement(new Pair<>(classNode, method));
-            }
-        }});
-
-
+    public MemberList() {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

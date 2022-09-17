@@ -51,8 +51,12 @@ public class TabbedPane extends JTabbedPane {
 
     @Override
     public void addTab(String title, Component component) {
+        addTab(title, null, component);
+    }
+
+    public void addTab(String title, Icon icon, Component component) {
         componentMap.put(componentMap.size(), component);
-        super.addTab(title, null);
+        super.addTab(title, icon, null);
     }
 
     @Override
@@ -67,8 +71,10 @@ public class TabbedPane extends JTabbedPane {
 
     public void setVerticalLabel() {
         for (int i = 0; i < getTabCount(); i++) {
-            setTabComponentAt(i, new JLabel(getTitleAt(i)) {{
-                setUI(new VerticalLabelUI(false));
+            int finalI = i;
+            setTabComponentAt(i, new JLabel(getTitleAt(finalI)) {{
+                setIcon(getIconAt(finalI));
+                setUI(new VerticalLabelUI(getTabPlacement() == RIGHT));
             }});
         }
     }

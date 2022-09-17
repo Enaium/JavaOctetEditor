@@ -99,7 +99,6 @@ public class JavaOctetEditor {
         }});
 
         window.setContentPane(new JPanel(new BorderLayout()) {{
-            add(new LeftPanel(), BorderLayout.WEST);
             add(new CenterPanel(), BorderLayout.CENTER);
             add(bottomPanel, BorderLayout.SOUTH);
         }});

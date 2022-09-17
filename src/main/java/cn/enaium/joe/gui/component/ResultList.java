@@ -53,14 +53,13 @@ public class ResultList extends JList<ResultNode> {
         JMenuItem jMenuItem = new JMenuItem("Jump to Node");
         jMenuItem.addActionListener(e -> {
             if (getSelectedValue() != null) {
-                ASyncUtil.execute(() -> {
-                    SwingUtilities.invokeLater(() -> {
-                        FileTree fileTree = JavaOctetEditor.getInstance().fileTree;
-                        DefaultTreeModel model = (DefaultTreeModel) fileTree.getModel();
-                        if (selectEntry(fileTree, getSelectedValue().getClassNode(), model, FileTree.classesRoot)) {
-                            fileTree.repaint();
-                        }
-                    });
+                SwingUtilities.invokeLater(() -> {
+                    FileTree fileTree = JavaOctetEditor.getInstance().fileTree;
+                    DefaultTreeModel model = (DefaultTreeModel) fileTree.getModel();
+                    if (selectEntry(fileTree, getSelectedValue().getClassNode(), model, FileTree.classesRoot)) {
+                        fileTree.addTab();
+                        fileTree.repaint();
+                    }
                 });
             }
         });

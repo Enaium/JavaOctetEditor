@@ -17,14 +17,26 @@
 package cn.enaium.joe.gui.panel.file.tree;
 
 import cn.enaium.joe.JavaOctetEditor;
+import cn.enaium.joe.event.Event;
+import cn.enaium.joe.event.events.FileTabbedSelectEvent;
+import cn.enaium.joe.gui.component.MemberList;
+import cn.enaium.joe.gui.component.TabbedPane;
 import cn.enaium.joe.gui.layout.HalfLayout;
 import cn.enaium.joe.gui.panel.LeftPanel;
+import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassTabPanel;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.util.JTreeUtil;
 import cn.enaium.joe.util.LangUtil;
+import cn.enaium.joe.util.Pair;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldNode;
+import org.objectweb.asm.tree.MethodNode;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -41,93 +53,41 @@ import java.util.stream.Collectors;
 public class CenterPanel extends JPanel {
     public CenterPanel() {
         super(new BorderLayout());
-
-        HalfLayout layout = new HalfLayout(HalfLayout.TOP_AND_BOTTOM);
-        JPanel jPanel = new JPanel(layout);
-        jPanel.add(new JPanel(new BorderLayout()) {{
-            JPanel self = this;
-            add(new JPanel(new BorderLayout()) {{
-                setBorder(new EmptyBorder(0, 0, 5, 0));
-                add(new JTextField() {{
-                    putClientProperty("JTextField.placeholderText", LangUtil.i18n("menu.search"));
-                    JTextField jTextField = this;
-                    addKeyListener(new KeyAdapter() {
-                        @Override
-                        public void keyPressed(KeyEvent e) {
-                            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                                Jar jar = JavaOctetEditor.getInstance().getJar();
-                                if (jar != null) {
-                                    if (!jTextField.getText().replace(" ", "").isEmpty()) {
-                                        Jar searchedJar = jar.copy();
-
-                                        searchedJar.classes = searchedJar.classes.entrySet().stream().filter(stringClassNodeEntry -> {
-                                            String key = stringClassNodeEntry.getKey();
-
-                                            if (!key.contains("/")) {
-                                                key = key.substring(key.lastIndexOf("/") + 1);
-                                            }
-
-                                            return key.toLowerCase(Locale.ROOT).contains(jTextField.getText().toLowerCase(Locale.ROOT));
-                                        }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-                                        searchedJar.resources = searchedJar.resources.entrySet().stream().filter(stringEntry -> {
-                                            String key = stringEntry.getKey();
-                                            if (!key.contains("/")) {
-                                                key = key.substring(key.lastIndexOf("/") + 1);
-                                            }
-                                            return key.toLowerCase(Locale.ROOT).contains(jTextField.getText().toLowerCase(Locale.ROOT));
-                                        }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
-                                        JavaOctetEditor.getInstance().fileTree.refresh(searchedJar);
-                                        JTreeUtil.setTreeExpandedState(JavaOctetEditor.getInstance().fileTree, true);
-                                    } else {
-                                        JavaOctetEditor.getInstance().fileTree.refresh(jar);
-                                    }
-                                }
-                            }
-                        }
-                    });
-                }}, BorderLayout.CENTER);
-            }}, BorderLayout.NORTH);
-            add(new JScrollPane(JavaOctetEditor.getInstance().fileTree) {{
-                JavaOctetEditor.getInstance().event.register(LeftPanel.ToggleTabListener.class, (Consumer<LeftPanel.ToggleTabListener>) listener -> {
-                    if (listener.getType() == LeftPanel.ToggleTabListener.Type.TOP) {
-                        self.setVisible(listener.getSelect() != null);
-                        if (listener.getSelect() != null) {
-                            setViewportView(listener.getSelect());
-                            jPanel.validate();
-                        }
-                    }
-                });
-            }}, BorderLayout.CENTER);
-        }}, HalfLayout.TOP);
-        jPanel.add(new JScrollPane() {{
-            JavaOctetEditor.getInstance().event.register(LeftPanel.ToggleTabListener.class, (Consumer<LeftPanel.ToggleTabListener>) listener -> {
-                if (listener.getType() == LeftPanel.ToggleTabListener.Type.BOTTOM) {
-                    setVisible(listener.getSelect() != null);
-                    if (listener.getSelect() != null) {
-                        setViewportView(listener.getSelect());
-                        jPanel.validate();
-                    }
-                }
-            });
-            setVisible(false);
-        }}, HalfLayout.BOTTOM);
-
         add(new JSplitPane() {{
-            AtomicInteger loc = new AtomicInteger();
-            setLeftComponent(jPanel);
-            setRightComponent(JavaOctetEditor.getInstance().fileTabbedPanel);
-            JavaOctetEditor.getInstance().event.register(LeftPanel.ToggleTabListener.class, (Consumer<LeftPanel.ToggleTabListener>) listener -> {
-                if (layout.isAllHide()) {
-                    jPanel.setVisible(false);
-                    loc.set(getDividerLocation());
-                    setDividerSize(0);
-                } else {
-                    jPanel.setVisible(true);
-                    setDividerLocation(loc.get());
-                    setDividerSize((Integer) UIManager.get("SplitPane.dividerSize"));
-                }
-            });
+            setLeftComponent(new LeftPanel());
+            setRightComponent(new JPanel(new BorderLayout()) {{
+                add(JavaOctetEditor.getInstance().fileTabbedPanel, BorderLayout.CENTER);
+                add(new JPanel(new BorderLayout()) {{
+                    JPanel self = this;
+                    add(new TabbedPane(JTabbedPane.RIGHT) {{
+                        addTab("Field&Method", new FlatSVGIcon("icons/structure.svg"), new MemberList() {{
+                            JavaOctetEditor.getInstance().event.register(FileTabbedSelectEvent.class, (Consumer<FileTabbedSelectEvent>) event -> {
+                                if (event.getSelect() instanceof ClassTabPanel) {
+                                    ClassTabPanel select = (ClassTabPanel) event.getSelect();
+                                    ClassNode classNode = select.classNode;
+                                    setModel(new DefaultListModel<Pair<ClassNode, Object>>() {{
+                                        for (FieldNode field : classNode.fields) {
+                                            addElement(new Pair<>(classNode, field));
+                                        }
+
+                                        for (MethodNode method : classNode.methods) {
+                                            addElement(new Pair<>(classNode, method));
+                                        }
+                                    }});
+                                }
+                            });
+                        }});
+                        JScrollPane comp = new JScrollPane();
+                        self.add(comp, BorderLayout.CENTER);
+                        addChangeListener(e -> {
+                            comp.setViewportView(getSelectedComponent());
+                        });
+                        cancelSelect();
+                        setVerticalLabel();
+                    }}, BorderLayout.EAST);
+                }}, BorderLayout.EAST);
+            }});
+            setDividerLocation(200);
         }}, BorderLayout.CENTER);
     }
 }
