@@ -18,6 +18,8 @@ package cn.enaium.joe.gui.component;
 
 import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.event.events.FileTabbedSelectEvent;
+import cn.enaium.joe.gui.panel.HierarchyPanel;
+import cn.enaium.joe.gui.panel.MemberListPanel;
 import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassTabPanel;
 import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.Pair;
@@ -33,27 +35,11 @@ import java.util.function.Consumer;
  * @author Enaium
  * @since 1.3.0
  */
-public class RightTabBar extends TabbedPane {
+public class RightTabBar extends TabPane {
     public RightTabBar() {
-        super(TabbedPane.RIGHT);
-        addTab(LangUtil.i18n("sideTab.member"), new FlatSVGIcon("icons/structure.svg"), new MemberList() {{
-            JavaOctetEditor.getInstance().event.register(FileTabbedSelectEvent.class, (Consumer<FileTabbedSelectEvent>) event -> {
-                if (event.getSelect() instanceof ClassTabPanel) {
-                    ClassTabPanel select = (ClassTabPanel) event.getSelect();
-                    ClassNode classNode = select.classNode;
-                    setModel(new DefaultListModel<Pair<ClassNode, Object>>() {{
-                        for (FieldNode field : classNode.fields) {
-                            addElement(new Pair<>(classNode, field));
-                        }
-
-                        for (MethodNode method : classNode.methods) {
-                            addElement(new Pair<>(classNode, method));
-                        }
-                    }});
-                }
-            });
-        }});
-        addTab(LangUtil.i18n("sideTab.hierarchy"), new FlatSVGIcon("icons/hierarchy.svg"), new InheritanceTree());
+        super(TabPane.RIGHT);
+        addTab(LangUtil.i18n("sideTab.member"), new FlatSVGIcon("icons/structure.svg"), new MemberListPanel());
+        addTab(LangUtil.i18n("sideTab.hierarchy"), new FlatSVGIcon("icons/hierarchy.svg"), new HierarchyPanel());
         cancelSelect();
         setVerticalLabel();
     }

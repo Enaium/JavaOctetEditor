@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.component;
+package cn.enaium.joe.gui.panel;
 
+import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.dialog.FieldDialog;
 import cn.enaium.joe.dialog.MethodDialog;
+import cn.enaium.joe.event.events.FileTabbedSelectEvent;
+import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassTabPanel;
 import cn.enaium.joe.util.OpcodeUtil;
 import cn.enaium.joe.util.Pair;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
@@ -29,18 +32,22 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.function.Consumer;
 
 /**
  * @author Enaium
  * @since 1.2.0
  */
-public class MemberList extends JList<Pair<ClassNode, Object>> {
-    public MemberList() {
-        addMouseListener(new MouseAdapter() {
+public class MemberListPanel extends BorderPanel {
+    public MemberListPanel() {
+
+        JList<Pair<ClassNode, Object>> memberList = new JList<>();
+
+        memberList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2 && getSelectedIndex() != -1) {
-                    Pair<ClassNode, Object> value = ((DefaultListModel<Pair<ClassNode, Object>>) getModel()).get(getSelectedIndex());
+                if (e.getClickCount() == 2 && memberList.getSelectedIndex() != -1) {
+                    Pair<ClassNode, Object> value = ((DefaultListModel<Pair<ClassNode, Object>>) memberList.getModel()).get(memberList.getSelectedIndex());
                     if (value.getValue() instanceof MethodNode) {
                         new MethodDialog(value.getKey(), ((MethodNode) value.getValue())).setVisible(true);
                     } else if (value.getValue() instanceof FieldNode) {
@@ -49,7 +56,8 @@ public class MemberList extends JList<Pair<ClassNode, Object>> {
                 }
             }
         });
-        setCellRenderer((list, value, index, isSelected, cellHasFocus) -> new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0)) {{
+
+        memberList.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0)) {{
             if (isSelected) {
                 setBackground(list.getSelectionBackground());
             } else {
@@ -84,5 +92,25 @@ public class MemberList extends JList<Pair<ClassNode, Object>> {
             add(new JLabel(accessIcon));
             add(new JLabel(name));
         }});
+
+        JavaOctetEditor.getInstance().event.register(FileTabbedSelectEvent.class, (Consumer<FileTabbedSelectEvent>) event -> {
+            if (event.getSelect() instanceof ClassTabPanel) {
+                ClassTabPanel select = (ClassTabPanel) event.getSelect();
+                ClassNode classNode = select.classNode;
+                memberList.setModel(new DefaultListModel<Pair<ClassNode, Object>>() {{
+                    for (FieldNode field : classNode.fields) {
+                        addElement(new Pair<>(classNode, field));
+                    }
+
+                    for (MethodNode method : classNode.methods) {
+                        addElement(new Pair<>(classNode, method));
+                    }
+                }});
+            } else {
+                ((DefaultListModel<Pair<ClassNode, Object>>) memberList.getModel()).clear();
+            }
+            memberList.repaint();
+        });
+        setCenter(new JScrollPane(memberList));
     }
 }
