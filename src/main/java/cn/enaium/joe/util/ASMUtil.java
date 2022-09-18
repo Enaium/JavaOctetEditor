@@ -19,10 +19,11 @@ package cn.enaium.joe.util;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.ClassNode;
-import org.pmw.tinylog.Logger;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Enaium
@@ -54,5 +55,14 @@ public class ASMUtil {
             }
         }
         return classNode;
+    }
+
+    public static Set<String> getParentClass(ClassNode classNode) {
+        Set<String> parent = new HashSet<>();
+        if (classNode.superName != null && !classNode.superName.equals(Object.class.getName().replace(".", "/"))) {
+            parent.add(classNode.superName);
+        }
+        parent.addAll(classNode.interfaces);
+        return parent;
     }
 }
