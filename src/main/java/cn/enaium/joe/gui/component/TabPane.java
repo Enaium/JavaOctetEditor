@@ -28,20 +28,19 @@ import java.util.*;
  * @author Enaium
  * @since 1.2.0
  */
-public class TabbedPane extends JTabbedPane {
+public class TabPane extends JTabbedPane {
     private final Map<Integer, Component> componentMap = new HashMap<>();
     private final Set<Integer> selected = new HashSet<Integer>() {{
         add(0);
     }};
 
-    public TabbedPane(int tabPlacement) {
+    public TabPane(int tabPlacement) {
         super(tabPlacement);
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (selected.contains(getSelectedIndex())) {
-                    selected.remove(getSelectedIndex());
-                    setSelectedIndex(-1);
+                    cancelSelect();
                 } else {
                     selected.add(getSelectedIndex());
                 }
@@ -72,10 +71,8 @@ public class TabbedPane extends JTabbedPane {
     public void setVerticalLabel() {
         for (int i = 0; i < getTabCount(); i++) {
             int finalI = i;
-            String titleAt = getTitleAt(i);
-            setTabComponentAt(i, new JLabel(titleAt) {{
+            setTabComponentAt(i, new JLabel(getTitleAt(i)) {{
                 setIcon(getIconAt(finalI));
-                setToolTipText(titleAt);
                 setUI(new VerticalLabelUI(getTabPlacement() == RIGHT));
             }});
         }
