@@ -25,20 +25,15 @@ import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.util.ASMUtil;
 import cn.enaium.joe.util.JTreeUtil;
 import cn.enaium.joe.util.ReflectUtil;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -47,11 +42,11 @@ import java.util.function.Consumer;
  * @author Enaium
  * @since 1.3.0
  */
-public class InheritancePanel extends BorderPanel {
+public class InheritPanel extends BorderPanel {
 
     private ClassNode current;
 
-    public InheritancePanel() {
+    public InheritPanel() {
         JTree inheritance = new JTree() {{
             setModel(new DefaultTreeModel(null));
             setCellRenderer(new FileTreeCellRenderer());
@@ -66,20 +61,10 @@ public class InheritancePanel extends BorderPanel {
             }
             repaint();
         });
-        setCenter(inheritance);
+        setCenter(new JScrollPane(inheritance));
 
-        setBottom(new JPanel(new GridLayout(0, 2)) {{
-            ButtonGroup buttonGroup = new ButtonGroup();
-            JToggleButton parent = new JToggleButton("Parent", true) {{
-                addActionListener(e -> InheritancePanel.this.setModel(inheritance, true));
-            }};
-            JToggleButton children = new JToggleButton("Children") {{
-                addActionListener(e -> InheritancePanel.this.setModel(inheritance, false));
-            }};
-            buttonGroup.add(parent);
-            buttonGroup.add(children);
-            add(parent);
-            add(children);
+        setBottom(new JToggleButton("Parent", true) {{
+            addActionListener(e -> InheritPanel.this.setModel(inheritance, isSelected()));
         }});
     }
 

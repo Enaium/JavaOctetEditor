@@ -103,5 +103,5 @@
   "instruction.max": "Max:",
   "instruction.labels": "Labels:",
   "sideTab.member": "Member",
-  "sideTab.hierarchy": "Hierarchy"
+  "sideTab.inherit": "inherit"
 }

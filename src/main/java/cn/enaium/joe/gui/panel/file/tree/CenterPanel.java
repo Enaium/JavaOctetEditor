@@ -22,6 +22,7 @@ import cn.enaium.joe.gui.panel.BorderPanel;
 import cn.enaium.joe.gui.panel.LeftPanel;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * @author Enaium
@@ -42,6 +43,7 @@ public class CenterPanel extends BorderPanel {
                     jViewport.setView(getSelectedComponent());
                 });
             }});
+
         }});
     }
 }

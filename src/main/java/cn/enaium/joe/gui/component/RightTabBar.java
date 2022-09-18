@@ -16,20 +16,12 @@
 
 package cn.enaium.joe.gui.component;
 
-import cn.enaium.joe.JavaOctetEditor;
-import cn.enaium.joe.event.events.FileTabbedSelectEvent;
-import cn.enaium.joe.gui.panel.HierarchyPanel;
+import cn.enaium.joe.gui.panel.InheritPanel;
 import cn.enaium.joe.gui.panel.MemberListPanel;
-import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassTabPanel;
 import cn.enaium.joe.util.LangUtil;
-import cn.enaium.joe.util.Pair;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldNode;
-import org.objectweb.asm.tree.MethodNode;
 
 import javax.swing.*;
-import java.util.function.Consumer;
 
 /**
  * @author Enaium
@@ -39,7 +31,7 @@ public class RightTabBar extends TabPane {
     public RightTabBar() {
         super(TabPane.RIGHT);
         addTab(LangUtil.i18n("sideTab.member"), new FlatSVGIcon("icons/structure.svg"), new MemberListPanel());
-        addTab(LangUtil.i18n("sideTab.hierarchy"), new FlatSVGIcon("icons/hierarchy.svg"), new HierarchyPanel());
+        addTab(LangUtil.i18n("sideTab.inherit"), new FlatSVGIcon("icons/inherit.svg"), new InheritPanel());
         cancelSelect();
         setVerticalLabel();
     }

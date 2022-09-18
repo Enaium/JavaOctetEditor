@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.panel;
+package cn.enaium.joe.gui.panel.file.tree.node;
 
-import javax.swing.*;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.MethodNode;
 
 /**
  * @author Enaium
- * @since 1.3.0
  */
-public class HierarchyPanel extends BorderPanel {
-    public HierarchyPanel() {
-        setCenter(new JTabbedPane() {{
-            putClientProperty("JTabbedPane.tabAreaAlignment", "fill");
+public class MethodTreeNode extends PackageTreeNode {
+    public ClassNode classNode;
+    public MethodNode methodNode;
 
-            addTab("Inherit", new InheritancePanel());
-            addTab("Call", new JPanel());
-        }});
+    public MethodTreeNode(ClassNode classNode, MethodNode methodNode) {
+        super(classNode.name + "." + methodNode.name + methodNode.desc);
+        this.classNode = classNode;
+        this.methodNode = methodNode;
     }
 }
