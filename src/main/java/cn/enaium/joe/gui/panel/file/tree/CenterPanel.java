@@ -17,36 +17,11 @@
 package cn.enaium.joe.gui.panel.file.tree;
 
 import cn.enaium.joe.JavaOctetEditor;
-import cn.enaium.joe.event.Event;
-import cn.enaium.joe.event.events.FileTabbedSelectEvent;
-import cn.enaium.joe.gui.component.MemberList;
 import cn.enaium.joe.gui.component.RightTabBar;
-import cn.enaium.joe.gui.component.TabbedPane;
-import cn.enaium.joe.gui.layout.HalfLayout;
 import cn.enaium.joe.gui.panel.BorderPanel;
 import cn.enaium.joe.gui.panel.LeftPanel;
-import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassTabPanel;
-import cn.enaium.joe.jar.Jar;
-import cn.enaium.joe.util.JTreeUtil;
-import cn.enaium.joe.util.LangUtil;
-import cn.enaium.joe.util.Pair;
-import com.formdev.flatlaf.extras.FlatSVGIcon;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldNode;
-import org.objectweb.asm.tree.MethodNode;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 /**
  * @author Enaium
@@ -60,11 +35,11 @@ public class CenterPanel extends BorderPanel {
             setDividerLocation(200);
         }});
         setRight(new BorderPanel() {{
-            JScrollPane comp = new JScrollPane();
-            setCenter(comp);
+            JViewport jViewport = new JViewport();
+            setCenter(jViewport);
             setRight(new RightTabBar() {{
                 addChangeListener(e -> {
-                    comp.setViewportView(getSelectedComponent());
+                    jViewport.setView(getSelectedComponent());
                 });
             }});
         }});
