@@ -28,7 +28,7 @@ import org.pmw.tinylog.Logger;
 import org.pmw.tinylog.writers.ConsoleWriter;
 import org.pmw.tinylog.writers.FileWriter;
 
-import java.io.File;
+import javax.swing.*;
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.InvocationTargetException;
@@ -75,6 +75,7 @@ public final class Main {
 
         Logger.info("DIR:{}", System.getProperty("user.dir"));
         FlatDarkLaf.setup();
+        UIManager.put("Tree.paintLines", true);
         new JavaOctetEditor().run();
     }
 
