@@ -17,10 +17,12 @@
 package cn.enaium.joe.gui.panel;
 
 import cn.enaium.joe.JavaOctetEditor;
+import cn.enaium.joe.dialog.CallTreeDialog;
 import cn.enaium.joe.dialog.FieldDialog;
 import cn.enaium.joe.dialog.MethodDialog;
 import cn.enaium.joe.event.events.FileTabbedSelectEvent;
 import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassTabPanel;
+import cn.enaium.joe.util.JMenuUtil;
 import cn.enaium.joe.util.OpcodeUtil;
 import cn.enaium.joe.util.Pair;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
@@ -56,6 +58,17 @@ public class MemberListPanel extends BorderPanel {
                 }
             }
         });
+
+        JMenuUtil.addPopupMenu(memberList, new JPopupMenu() {{
+            add(new JMenuItem("Call Tree") {{
+                addActionListener(e -> {
+                    Pair<ClassNode, Object> value = ((DefaultListModel<Pair<ClassNode, Object>>) memberList.getModel()).get(memberList.getSelectedIndex());
+                    if (value.getValue() instanceof MethodNode) {
+                        new CallTreeDialog(value.getKey(), (MethodNode) value.getValue()).setVisible(true);
+                    }
+                });
+            }});
+        }}, () -> memberList.getSelectedIndex() != -1);
 
         memberList.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0)) {{
             if (isSelected) {
