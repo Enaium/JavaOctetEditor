@@ -46,7 +46,7 @@ import java.util.function.Consumer;
 public class MemberListPanel extends BorderPanel {
     public MemberListPanel() {
 
-        JList<Pair<ClassNode, Object>> memberList = new JList<>();
+        JList<Pair<ClassNode, Object>> memberList = new JList<>(new DefaultListModel<>());
 
         memberList.addMouseListener(new MouseAdapter() {
             @Override
