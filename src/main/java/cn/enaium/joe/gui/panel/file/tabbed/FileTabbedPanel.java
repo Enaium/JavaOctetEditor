@@ -37,7 +37,7 @@ public class FileTabbedPanel extends JTabbedPane {
             Component selectedComponent = ((FileTabbedPanel) e.getSource()).getSelectedComponent();
             JavaOctetEditor.getInstance().event.call(new FileTabbedSelectEvent(selectedComponent));
         });
-        JMenuUtil.addPopupMenu(this, new JPopupMenu() {{
+        JMenuUtil.addPopupMenu(this, () -> new JPopupMenu() {{
             add(new JMenuItem(LangUtil.i18n("popup.tabbed.closeAll")) {{
                 addActionListener(e -> {
                     FileTabbedPanel.this.removeAll();

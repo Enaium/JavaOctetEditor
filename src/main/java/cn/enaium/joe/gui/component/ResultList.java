@@ -64,7 +64,7 @@ public class ResultList extends JList<ResultNode> {
             }
         });
         jPopupMenu.add(jMenuItem);
-        JMenuUtil.addPopupMenu(this, jPopupMenu, () -> this.getSelectedValue() != null);
+        JMenuUtil.addPopupMenu(this, () -> jPopupMenu, () -> this.getSelectedValue() != null);
     }
 
     public boolean selectEntry(JTree jTree, ClassNode classNode, DefaultTreeModel defaultTreeModel, DefaultTreeNode defaultTreeNode) {

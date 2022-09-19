@@ -23,6 +23,7 @@ import cn.enaium.joe.dialog.MethodDialog;
 import cn.enaium.joe.event.events.FileTabbedSelectEvent;
 import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassTabPanel;
 import cn.enaium.joe.util.JMenuUtil;
+import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.OpcodeUtil;
 import cn.enaium.joe.util.Pair;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
@@ -32,6 +33,8 @@ import org.objectweb.asm.tree.MethodNode;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.function.Consumer;
@@ -49,26 +52,12 @@ public class MemberListPanel extends BorderPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2 && memberList.getSelectedIndex() != -1) {
-                    Pair<ClassNode, Object> value = ((DefaultListModel<Pair<ClassNode, Object>>) memberList.getModel()).get(memberList.getSelectedIndex());
-                    if (value.getValue() instanceof MethodNode) {
-                        new MethodDialog(value.getKey(), ((MethodNode) value.getValue())).setVisible(true);
-                    } else if (value.getValue() instanceof FieldNode) {
-                        new FieldDialog(value.getKey(), ((FieldNode) value.getValue())).setVisible(true);
-                    }
+                    edit(memberList.getSelectedValue());
                 }
             }
         });
 
-        JMenuUtil.addPopupMenu(memberList, new JPopupMenu() {{
-            add(new JMenuItem("Call Tree") {{
-                addActionListener(e -> {
-                    Pair<ClassNode, Object> value = ((DefaultListModel<Pair<ClassNode, Object>>) memberList.getModel()).get(memberList.getSelectedIndex());
-                    if (value.getValue() instanceof MethodNode) {
-                        new CallTreeDialog(value.getKey(), (MethodNode) value.getValue()).setVisible(true);
-                    }
-                });
-            }});
-        }}, () -> memberList.getSelectedIndex() != -1);
+        JMenuUtil.addPopupMenu(memberList, () -> getPopupMenu(memberList.getSelectedValue()), () -> memberList.getSelectedIndex() != -1);
 
         memberList.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0)) {{
             if (isSelected) {
@@ -125,5 +114,28 @@ public class MemberListPanel extends BorderPanel {
             memberList.repaint();
         });
         setCenter(new JScrollPane(memberList));
+    }
+
+    public static JPopupMenu getPopupMenu(Pair<ClassNode, Object> selectedValue) {
+        return new JPopupMenu() {{
+            add(new JMenuItem(LangUtil.i18n("button.edit")) {{
+                addActionListener(e -> edit(selectedValue));
+            }});
+            add(new JMenuItem(LangUtil.i18n("popup.member.callTree")) {{
+                addActionListener(e -> {
+                    if (selectedValue.getValue() instanceof MethodNode) {
+                        new CallTreeDialog(selectedValue.getKey(), (MethodNode) selectedValue.getValue()).setVisible(true);
+                    }
+                });
+            }});
+        }};
+    }
+
+    private static void edit(Pair<ClassNode, Object> value) {
+        if (value.getValue() instanceof MethodNode) {
+            new MethodDialog(value.getKey(), ((MethodNode) value.getValue())).setVisible(true);
+        } else if (value.getValue() instanceof FieldNode) {
+            new FieldDialog(value.getKey(), ((FieldNode) value.getValue())).setVisible(true);
+        }
     }
 }

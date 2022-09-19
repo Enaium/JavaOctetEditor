@@ -49,6 +49,7 @@
   "popup.tabbed.closeOther": "Close Others",
   "popup.tabbed.closeAllLeft": "Close All Left",
   "popup.tabbed.closeAllRight": "Close All Right",
+  "popup.member.callTree": "Call Tree",
   "class.info.name": "Name:",
   "class.info.sourceFile": "SourceFile:",
   "class.info.debugFile": "DebugFile:",

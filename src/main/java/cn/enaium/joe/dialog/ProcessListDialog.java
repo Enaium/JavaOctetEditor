@@ -129,7 +129,7 @@ public class ProcessListDialog extends Dialog {
                 }
             });
         }});
-        JMenuUtil.addPopupMenu(jList, jPopupMenu, () -> jList.getSelectedValue() != null);
+        JMenuUtil.addPopupMenu(jList, () -> jPopupMenu, () -> jList.getSelectedValue() != null);
 
         add(new JScrollPane(jList), BorderLayout.CENTER);
     }

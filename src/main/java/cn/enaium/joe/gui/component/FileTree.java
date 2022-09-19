@@ -82,7 +82,7 @@ public class FileTree extends JTree {
                 JTreeUtil.setNodeExpandedState(FileTree.this, ((DefaultMutableTreeNode) Objects.requireNonNull(getSelectionPath()).getLastPathComponent()), true);
             });
         }});
-        JMenuUtil.addPopupMenu(this, jPopupMenu, () -> getSelectionPath() != null);
+        JMenuUtil.addPopupMenu(this, () -> jPopupMenu, () -> getSelectionPath() != null);
     }
 
     public void addTab() {
