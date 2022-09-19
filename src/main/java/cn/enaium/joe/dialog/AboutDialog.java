@@ -30,7 +30,7 @@ import javax.tools.ToolProvider;
 public class AboutDialog extends Dialog {
     public AboutDialog() {
         super(LangUtil.i18n("menu.help.about"));
-        setContentPane(new JPanel(new MigLayout()) {{
+        setContentPane(new JPanel(new MigLayout("fillx", "[fill][fill]")) {{
             setBorder(new EmptyBorder(10, 10, 10, 10));
             add(new JLabel(LangUtil.i18n("about.system")), "wrap");
             add(new JLabel(LangUtil.i18n("about.system.description")), "wrap");
@@ -40,7 +40,8 @@ public class AboutDialog extends Dialog {
             add(new JLabel(LangUtil.i18n("about.system.architecture")));
             add(new JLabel(System.getProperty("os.arch")), "wrap");
 
-            add(new JSeparator(), "wrap");
+            add(new JSeparator(), "span 2");
+            add(new JLabel(), "wrap");
 
             add(new JLabel(LangUtil.i18n("about.java")), "wrap");
             add(new JLabel(LangUtil.i18n("about.java.description")), "wrap");
