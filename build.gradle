@@ -65,7 +65,7 @@ test {
 shadowJar {
     dependencies {
         include(dependency('com.formdev:.*'))
-        include(dependency('com.miglayout:miglayout-swing'))
+        include(dependency('com.miglayout:.*'))
         include(dependency('com.github.bobbylight:RSyntaxTextArea'))
         include(dependency('org.ow2.asm:.*'))
         include(dependency('org.benf:cfr'))
