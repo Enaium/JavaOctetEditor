@@ -20,6 +20,7 @@ import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.util.IOUtil;
 import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.util.ReflectUtil;
+import cn.enaium.joe.util.TinyLogPrintStream;
 import com.formdev.flatlaf.FlatDarkLaf;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
@@ -40,6 +41,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
+
+import static cn.enaium.joe.util.TinyLogPrintStream.Type.STDERR;
+import static cn.enaium.joe.util.TinyLogPrintStream.Type.STDOUT;
 
 /**
  * @author Enaium
@@ -72,6 +76,8 @@ public final class Main {
 
     private static void launch() {
         Configurator.currentConfig().writer(new ConsoleWriter(), "[{date: HH:mm:ss.SSS}] {level} > {message}").addWriter(new FileWriter("latest.log"), "[{date: HH:mm:ss.SSS}] {level} > {message}").activate();
+        System.setOut(new TinyLogPrintStream(System.out, STDOUT));
+        System.setErr(new TinyLogPrintStream(System.err, STDERR));
 
         Logger.info("DIR:{}", System.getProperty("user.dir"));
         FlatDarkLaf.setup();
