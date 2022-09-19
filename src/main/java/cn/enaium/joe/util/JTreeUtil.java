@@ -40,14 +40,6 @@ public class JTreeUtil {
         if (!expanded && node.isRoot()) {
             return;
         }
-
-        if (node instanceof PackageTreeNode) {
-            PackageTreeNode packageTreeNode = (PackageTreeNode) node;
-            if (packageTreeNode instanceof ClassTreeNode) {
-                return;
-            }
-        }
-
         TreePath path = new TreePath(node.getPath());
         if (expanded) {
             tree.expandPath(path);

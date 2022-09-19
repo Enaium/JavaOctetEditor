@@ -19,6 +19,7 @@ package cn.enaium.joe.gui.panel.method;
 import cn.enaium.joe.dialog.AnnotationListDialog;
 import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.StringUtil;
+import net.miginfocom.swing.MigLayout;
 import org.benf.cfr.reader.util.StringUtils;
 import org.objectweb.asm.tree.MethodNode;
 
@@ -33,26 +34,39 @@ import java.util.Arrays;
  */
 public class MethodInfoTabPanel extends JPanel {
     public MethodInfoTabPanel(MethodNode methodNode) {
-        setLayout(new BorderLayout());
-        JPanel labels = new JPanel(new GridLayout(0, 1));
-        JPanel rights = new JPanel(new GridLayout(0, 1));
-        add(labels, BorderLayout.WEST);
-        add(rights, BorderLayout.CENTER);
-        labels.add(new JLabel(LangUtil.i18n("class.info.name")));
+        setLayout(new MigLayout("fillx", "[fill][fill]"));
+        add(new JLabel(LangUtil.i18n("class.info.name")));
         JTextField name = new JTextField(methodNode.name);
-        rights.add(name);
-        labels.add(new JLabel(LangUtil.i18n("class.info.description")));
+        add(name, "wrap");
+        add(new JLabel(LangUtil.i18n("class.info.description")));
         JTextField description = new JTextField(methodNode.desc);
-        rights.add(description);
-        labels.add(new JLabel(LangUtil.i18n("class.info.access")));
+        add(description, "wrap");
+        add(new JLabel(LangUtil.i18n("class.info.access")));
         JTextField access = new JTextField(String.valueOf(methodNode.access));
-        rights.add(access);
-        labels.add(new JLabel(LangUtil.i18n("class.info.signature")));
+        add(access, "wrap");
+        add(new JLabel(LangUtil.i18n("class.info.signature")));
         JTextField signature = new JTextField(methodNode.signature);
-        rights.add(signature);
-        labels.add(new JLabel(LangUtil.i18n("class.info.exceptions")));
+        add(signature, "wrap");
+        add(new JLabel(LangUtil.i18n("class.info.exceptions")));
         JTextField exceptions = new JTextField(StringUtils.join(methodNode.exceptions, ";"));
-        rights.add(exceptions);
+        add(exceptions, "wrap");
+
+        add(new JLabel("Visible Annotation:"));
+        add(new JButton(LangUtil.i18n("button.edit")) {{
+            addActionListener(e -> {
+                if (methodNode.visibleAnnotations != null) {
+                    new AnnotationListDialog(methodNode.visibleAnnotations).setVisible(true);
+                }
+            });
+        }}, "wrap");
+        add(new JLabel("Invisible Annotation:"));
+        add(new JButton(LangUtil.i18n("button.edit")) {{
+            addActionListener(e -> {
+                if (methodNode.invisibleAnnotations != null) {
+                    new AnnotationListDialog(methodNode.invisibleAnnotations).setVisible(true);
+                }
+            });
+        }}, "wrap");
         add(new JButton(LangUtil.i18n("button.save")) {{
             addActionListener(e -> {
 
@@ -84,23 +98,6 @@ public class MethodInfoTabPanel extends JPanel {
 
                 JOptionPane.showMessageDialog(MethodInfoTabPanel.this, LangUtil.i18n("success"));
             });
-        }}, BorderLayout.SOUTH);
-
-        labels.add(new JLabel("Visible Annotation:"));
-        rights.add(new JButton(LangUtil.i18n("button.edit")) {{
-            addActionListener(e -> {
-                if (methodNode.visibleAnnotations != null) {
-                    new AnnotationListDialog(methodNode.visibleAnnotations).setVisible(true);
-                }
-            });
-        }});
-        labels.add(new JLabel("Invisible Annotation:"));
-        rights.add(new JButton(LangUtil.i18n("button.edit")) {{
-            addActionListener(e -> {
-                if (methodNode.invisibleAnnotations != null) {
-                    new AnnotationListDialog(methodNode.invisibleAnnotations).setVisible(true);
-                }
-            });
-        }});
+        }}, "span 2");
     }
 }

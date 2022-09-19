@@ -27,12 +27,12 @@ import java.util.function.Supplier;
  * @since 1.2.0
  */
 public class JMenuUtil {
-    public static void addPopupMenu(Component component, JPopupMenu popupMenu, Supplier<Boolean> show) {
+    public static void addPopupMenu(Component component, Supplier<JPopupMenu> popupMenu, Supplier<Boolean> show) {
         component.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (SwingUtilities.isRightMouseButton(e) && show.get()) {
-                    popupMenu.show(component, e.getX(), e.getY());
+                    popupMenu.get().show(component, e.getX(), e.getY());
                 }
             }
         });

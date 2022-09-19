@@ -49,6 +49,7 @@
   "popup.tabbed.closeOther": "Close Others",
   "popup.tabbed.closeAllLeft": "Close All Left",
   "popup.tabbed.closeAllRight": "Close All Right",
+  "popup.member.callTree": "Call Tree",
   "class.info.name": "Name:",
   "class.info.sourceFile": "SourceFile:",
   "class.info.debugFile": "DebugFile:",
@@ -62,7 +63,10 @@
   "class.info.outerMethodDescription": "Outer Method Description:",
   "class.info.description": "Description:",
   "class.info.exceptions": "Exceptions:",
-  "class.info.noMember": "No Member",
+  "class.tab.bytecodeView": "BytecodeView",
+  "class.tab.decompileView": "DecompileView",
+  "class.tab.visitorEdit": "VisitorEdit",
+  "class.tab.infoEdit": "InfoEdit",
   "button.search": "Search",
   "button.findNext": "Find Next",
   "button.findPrevious": "Find Previous",
@@ -101,5 +105,7 @@
   "instruction.dimension": "Dimension:",
   "instruction.min": "Min:",
   "instruction.max": "Max:",
-  "instruction.labels": "Labels:"
+  "instruction.labels": "Labels:",
+  "sideTab.member": "Member",
+  "sideTab.inherit": "inherit"
 }

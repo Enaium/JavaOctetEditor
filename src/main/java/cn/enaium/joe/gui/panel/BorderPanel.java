@@ -14,37 +14,37 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.gui.component;
+package cn.enaium.joe.gui.panel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Enaium
- * @since 1.2.0
+ * @since 1.3.0
  */
-public class TabbedPanel extends JTabbedPane {
-    private final Map<Integer, Component> componentMap = new HashMap<>();
-
-    public TabbedPanel(int tabPlacement) {
-        super(tabPlacement);
+public class BorderPanel extends JPanel {
+    public BorderPanel() {
+        super(new BorderLayout());
     }
 
-    @Override
-    public void addTab(String title, Component component) {
-        componentMap.put(componentMap.size(), component);
-        super.addTab(title, null);
+    public void setCenter(Component component) {
+        add(component, BorderLayout.CENTER);
     }
 
-    @Override
-    public Component getComponent(int n) {
-        return componentMap.get(n);
+    public void setTop(Component component) {
+        add(component, BorderLayout.NORTH);
     }
 
-    @Override
-    public Component getSelectedComponent() {
-        return componentMap.get(getSelectedIndex());
+    public void setBottom(Component component) {
+        add(component, BorderLayout.SOUTH);
+    }
+
+    public void setLeft(Component component) {
+        add(component, BorderLayout.WEST);
+    }
+
+    public void setRight(Component component) {
+        add(component, BorderLayout.EAST);
     }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe;
+package cn.enaium.joe.util;
 
 import org.fife.ui.rsyntaxtextarea.*;
 

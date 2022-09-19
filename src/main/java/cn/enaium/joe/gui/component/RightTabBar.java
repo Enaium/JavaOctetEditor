@@ -14,24 +14,25 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.event.listener;
+package cn.enaium.joe.gui.component;
 
-import cn.enaium.joe.event.Listener;
+import cn.enaium.joe.gui.panel.InheritPanel;
+import cn.enaium.joe.gui.panel.MemberListPanel;
+import cn.enaium.joe.util.LangUtil;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
 
-import java.awt.*;
+import javax.swing.*;
 
 /**
  * @author Enaium
- * @since 1.2.0
+ * @since 1.3.0
  */
-public class FileTabbedSelectListener implements Listener {
-    private final Component select;
-
-    public FileTabbedSelectListener(Component select) {
-        this.select = select;
-    }
-
-    public Component getSelect() {
-        return select;
+public class RightTabBar extends TabPane {
+    public RightTabBar() {
+        super(TabPane.RIGHT);
+        addTab(LangUtil.i18n("sideTab.member"), new FlatSVGIcon("icons/structure.svg"), new MemberListPanel());
+        addTab(LangUtil.i18n("sideTab.inherit"), new FlatSVGIcon("icons/inherit.svg"), new InheritPanel());
+        cancelSelect();
+        setVerticalLabel();
     }
 }

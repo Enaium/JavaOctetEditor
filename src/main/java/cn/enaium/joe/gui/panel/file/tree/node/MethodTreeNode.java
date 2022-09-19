@@ -14,18 +14,21 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.dialog;
+package cn.enaium.joe.gui.panel.file.tree.node;
 
-import com.formdev.flatlaf.extras.FlatSVGIcon;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.MethodNode;
 
-import javax.swing.*;
+/**
+ * @author Enaium
+ */
+public class MethodTreeNode extends PackageTreeNode {
+    public ClassNode classNode;
+    public MethodNode methodNode;
 
-public class Dialog extends JFrame {
-    public Dialog(String title) {
-        super(title);
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        setSize(800, 500);
-        setLocationRelativeTo(getOwner());
-        setIconImage(new FlatSVGIcon("icons/logo.svg").getImage());
+    public MethodTreeNode(ClassNode classNode, MethodNode methodNode) {
+        super(classNode.name + "." + methodNode.name + methodNode.desc);
+        this.classNode = classNode;
+        this.methodNode = methodNode;
     }
 }

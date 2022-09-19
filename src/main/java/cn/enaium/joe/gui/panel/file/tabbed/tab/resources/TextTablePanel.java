@@ -16,41 +16,35 @@
 
 package cn.enaium.joe.gui.panel.file.tabbed.tab.resources;
 
+import cn.enaium.joe.gui.panel.BorderPanel;
 import cn.enaium.joe.gui.panel.CodeAreaPanel;
 import cn.enaium.joe.gui.panel.file.tree.node.FileTreeNode;
+import org.fife.ui.rsyntaxtextarea.FileTypeUtil;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 import javax.swing.*;
 import java.awt.*;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Enaium
  * @since 1.2.0
  */
-public class TextTablePanel extends JPanel {
+public class TextTablePanel extends BorderPanel {
     public TextTablePanel(FileTreeNode fileTreeNode) {
-        super(new BorderLayout());
-        add(new CodeAreaPanel() {{
+        setCenter(new CodeAreaPanel() {{
             String name = fileTreeNode.toString();
             String syntax = SyntaxConstants.SYNTAX_STYLE_NONE;
-            if (name.matches(".*(xml|svg)")) {
-                syntax = SyntaxConstants.SYNTAX_STYLE_XML;
-            } else if (name.matches(".*(md|markdown)")) {
-                syntax = SyntaxConstants.SYNTAX_STYLE_MARKDOWN;
-            } else if (name.matches(".*(properties)")) {
-                syntax = SyntaxConstants.SYNTAX_STYLE_PROPERTIES_FILE;
-            } else if (name.matches(".*(yml)")) {
-                syntax = SyntaxConstants.SYNTAX_STYLE_YAML;
-            } else if (name.matches(".*(html)")) {
-                syntax = SyntaxConstants.SYNTAX_STYLE_YAML;
-            } else if (name.matches(".*(css)")) {
-                syntax = SyntaxConstants.SYNTAX_STYLE_YAML;
-            } else if (name.matches(".*(js)")) {
-                syntax = SyntaxConstants.SYNTAX_STYLE_JSON;
-            } else if (name.matches(".*(json)")) {
-                syntax = SyntaxConstants.SYNTAX_STYLE_JSON;
+            for (Map.Entry<String, List<String>> stringListEntry : FileTypeUtil.get().getDefaultContentTypeToFilterMap().entrySet()) {
+                for (String s : stringListEntry.getValue()) {
+                    if (name.matches("." + s)) {
+                        syntax = stringListEntry.getKey();
+                        break;
+                    }
+                }
             }
             getTextArea().setSyntaxEditingStyle(syntax);
             getTextArea().setText(new String(fileTreeNode.getData(), StandardCharsets.UTF_8));

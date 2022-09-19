@@ -16,7 +16,6 @@
 
 package cn.enaium.joe.gui.layout;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -129,5 +128,16 @@ public class HalfLayout extends AbstractLayout {
     @Override
     public void addLayoutComponent(Component comp, Object constraints) {
         componentMap.put(constraints.toString(), comp);
+    }
+
+    public boolean isAllHide() {
+        boolean hide = true;
+        for (Map.Entry<String, Component> stringComponentEntry : componentMap.entrySet()) {
+            if (stringComponentEntry.getValue().isVisible()) {
+                hide = false;
+                break;
+            }
+        }
+        return hide;
     }
 }

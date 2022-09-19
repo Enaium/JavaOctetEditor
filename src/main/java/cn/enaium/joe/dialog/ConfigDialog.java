@@ -22,6 +22,7 @@ import cn.enaium.joe.config.Config;
 import cn.enaium.joe.config.value.*;
 import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.MessageUtil;
+import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -39,84 +40,81 @@ import java.lang.reflect.Field;
 public class ConfigDialog extends Dialog {
     public ConfigDialog(Config config) {
         super(LangUtil.i18n("menu.config"));
-        JPanel names = new JPanel(new GridLayout(0, 1));
-        JPanel components = new JPanel(new GridLayout(0, 1));
-        try {
-            for (Field declaredField : config.getClass().getDeclaredFields()) {
-                declaredField.setAccessible(true);
 
-                if (declaredField.isAnnotationPresent(NoUI.class)) {
-                    continue;
-                }
+        setContentPane(new JScrollPane(new JPanel(new MigLayout("fillx", "[fill][fill]")) {{
+            try {
+                for (Field declaredField : config.getClass().getDeclaredFields()) {
+                    declaredField.setAccessible(true);
 
-                Object o = declaredField.get(config);
+                    if (declaredField.isAnnotationPresent(NoUI.class)) {
+                        continue;
+                    }
 
-                if (o instanceof Value) {
-                    Value<?> value = (Value<?>) o;
+                    Object o = declaredField.get(config);
 
-                    names.add(new JLabel(value.getName()) {{
-                        setToolTipText(value.getDescription());
-                    }}, BorderLayout.WEST);
-                }
+                    if (o instanceof Value) {
+                        Value<?> value = (Value<?>) o;
 
-                if (o instanceof StringValue) {
-                    StringValue stringValue = (StringValue) o;
-                    components.add(new JTextField(25) {{
-                        JTextField jTextField = this;
-                        jTextField.setText(stringValue.getValue());
-                        getDocument().addDocumentListener(new DocumentListener() {
-                            @Override
-                            public void insertUpdate(DocumentEvent e) {
-                                stringValue.setValue(jTextField.getText());
-                            }
+                        add(new JLabel(value.getName()) {{
+                            setToolTipText(value.getDescription());
+                        }});
+                    }
 
-                            @Override
-                            public void removeUpdate(DocumentEvent e) {
-                                stringValue.setValue(jTextField.getText());
-                            }
+                    if (o instanceof StringValue) {
+                        StringValue stringValue = (StringValue) o;
+                        add(new JTextField(25) {{
+                            JTextField jTextField = this;
+                            jTextField.setText(stringValue.getValue());
+                            getDocument().addDocumentListener(new DocumentListener() {
+                                @Override
+                                public void insertUpdate(DocumentEvent e) {
+                                    stringValue.setValue(jTextField.getText());
+                                }
 
-                            @Override
-                            public void changedUpdate(DocumentEvent e) {
-                                stringValue.setValue(jTextField.getText());
-                            }
-                        });
-                    }});
-                } else if (o instanceof IntegerValue) {
-                    IntegerValue integerValue = (IntegerValue) o;
-                    components.add(new JSpinner() {{
-                        addChangeListener(e -> integerValue.setValue(Integer.parseInt(getValue().toString())));
-                    }});
-                } else if (o instanceof EnableValue) {
-                    EnableValue enableValue = (EnableValue) o;
-                    components.add(new JCheckBox() {{
-                        JCheckBox jCheckBox = this;
-                        setHorizontalAlignment(JCheckBox.RIGHT);
-                        setSelected(enableValue.getValue());
-                        addActionListener(e -> {
-                            enableValue.setValue(jCheckBox.isSelected());
-                        });
-                    }});
-                } else if (o instanceof ModeValue) {
-                    components.add(new JComboBox<String>(new DefaultComboBoxModel<>()) {{
-                        JComboBox<String> jComboBox = this;
-                        ModeValue modeValue = (ModeValue) o;
-                        for (String s : modeValue.getMode()) {
-                            DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) getModel();
-                            model.addElement(s);
-                            model.setSelectedItem(modeValue.getValue());
-                            jComboBox.addActionListener(e -> {
-                                modeValue.setValue(model.getSelectedItem().toString());
+                                @Override
+                                public void removeUpdate(DocumentEvent e) {
+                                    stringValue.setValue(jTextField.getText());
+                                }
+
+                                @Override
+                                public void changedUpdate(DocumentEvent e) {
+                                    stringValue.setValue(jTextField.getText());
+                                }
                             });
-                        }
-                    }});
+                        }}, "wrap");
+                    } else if (o instanceof IntegerValue) {
+                        IntegerValue integerValue = (IntegerValue) o;
+                        add(new JSpinner() {{
+                            addChangeListener(e -> integerValue.setValue(Integer.parseInt(getValue().toString())));
+                        }}, "wrap");
+                    } else if (o instanceof EnableValue) {
+                        EnableValue enableValue = (EnableValue) o;
+                        add(new JCheckBox() {{
+                            JCheckBox jCheckBox = this;
+                            setHorizontalAlignment(JCheckBox.RIGHT);
+                            setSelected(enableValue.getValue());
+                            addActionListener(e -> {
+                                enableValue.setValue(jCheckBox.isSelected());
+                            });
+                        }}, "wrap");
+                    } else if (o instanceof ModeValue) {
+                        add(new JComboBox<String>(new DefaultComboBoxModel<>()) {{
+                            JComboBox<String> jComboBox = this;
+                            ModeValue modeValue = (ModeValue) o;
+                            for (String s : modeValue.getMode()) {
+                                DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) getModel();
+                                model.addElement(s);
+                                model.setSelectedItem(modeValue.getValue());
+                                jComboBox.addActionListener(e -> {
+                                    modeValue.setValue(model.getSelectedItem().toString());
+                                });
+                            }
+                        }}, "wrap");
+                    }
                 }
+            } catch (IllegalAccessException e) {
+                MessageUtil.error(e);
             }
-        } catch (IllegalAccessException e) {
-            MessageUtil.error(e);
-        }
-        add(new JScrollPane(new JPanel(new BorderLayout()) {{
-            add(names, BorderLayout.WEST);
-            add(components, BorderLayout.CENTER);
         }}));
         addWindowListener(new WindowAdapter() {
             @Override

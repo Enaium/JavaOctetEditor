@@ -18,7 +18,6 @@ package cn.enaium.joe.event;
 
 import cn.enaium.joe.util.Pair;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
@@ -28,14 +27,14 @@ import java.util.function.Consumer;
  * @since 1.2.0
  */
 public class EventManager {
-    List<Pair<Class<? extends Listener>, Consumer<Listener>>> listeners = new CopyOnWriteArrayList<>();
+    List<Pair<Class<? extends Event>, Consumer<Event>>> listeners = new CopyOnWriteArrayList<>();
 
     @SuppressWarnings("unchecked")
-    public void register(Class<? extends Listener> listener, Consumer<? extends Listener> consumer) {
-        listeners.add(new Pair<>(listener, ((Consumer<Listener>) consumer)));
+    public void register(Class<? extends Event> listener, Consumer<? extends Event> consumer) {
+        listeners.add(new Pair<>(listener, ((Consumer<Event>) consumer)));
     }
 
-    public void call(Listener listener) {
-        listeners.stream().filter(it -> it.getKey() == listener.getClass()).filter(it -> Arrays.stream(it.getKey().getInterfaces()).anyMatch(i -> i == Listener.class)).forEach(it -> it.getValue().accept(listener));
+    public void call(Event event) {
+        listeners.stream().filter(it -> it.getKey() == event.getClass()).forEach(it -> it.getValue().accept(event));
     }
 }

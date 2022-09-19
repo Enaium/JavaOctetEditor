@@ -14,18 +14,11 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.dialog;
+package cn.enaium.joe.event;
 
-import com.formdev.flatlaf.extras.FlatSVGIcon;
-
-import javax.swing.*;
-
-public class Dialog extends JFrame {
-    public Dialog(String title) {
-        super(title);
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        setSize(800, 500);
-        setLocationRelativeTo(getOwner());
-        setIconImage(new FlatSVGIcon("icons/logo.svg").getImage());
-    }
+/**
+ * @author Enaium
+ * @since 1.2.0
+ */
+public interface Event {
 }

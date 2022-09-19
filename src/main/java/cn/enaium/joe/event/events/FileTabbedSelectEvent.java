@@ -14,11 +14,24 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.event;
+package cn.enaium.joe.event.events;
+
+import cn.enaium.joe.event.Event;
+
+import java.awt.*;
 
 /**
  * @author Enaium
  * @since 1.2.0
  */
-public interface Listener {
+public class FileTabbedSelectEvent implements Event {
+    private final Component select;
+
+    public FileTabbedSelectEvent(Component select) {
+        this.select = select;
+    }
+
+    public Component getSelect() {
+        return select;
+    }
 }

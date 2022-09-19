@@ -37,6 +37,8 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -57,25 +59,13 @@ public class FileTree extends JTree {
         setRootVisible(false);
         setShowsRootHandles(true);
         setCellRenderer(new FileTreeCellRenderer());
-
-        addTreeSelectionListener(e -> {
-            DefaultTreeNode lastPathComponent = (DefaultTreeNode) e.getPath().getLastPathComponent();
-            SwingUtilities.invokeLater(() -> {
-                if (lastPathComponent instanceof PackageTreeNode) {
-                    PackageTreeNode packageTreeNode = (PackageTreeNode) lastPathComponent;
-                    if (packageTreeNode instanceof ClassTreeNode) {
-                        ClassNode classNode = ((ClassTreeNode) packageTreeNode).classNode;
-                        JavaOctetEditor.getInstance().fileTabbedPanel.addTab(classNode.name.substring(classNode.name.lastIndexOf("/") + 1), new ClassTabPanel(classNode));
-                    }
-                } else if (lastPathComponent instanceof FolderTreeNode) {
-                    FolderTreeNode folderTreeNode = (FolderTreeNode) lastPathComponent;
-                    if (folderTreeNode instanceof FileTreeNode) {
-                        FileTreeNode fileTreeNode = (FileTreeNode) folderTreeNode;
-                        JavaOctetEditor.getInstance().fileTabbedPanel.addTab(fileTreeNode.toString().substring(fileTreeNode.toString().lastIndexOf("/") + 1), new FileTablePane(fileTreeNode));
-                    }
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    addTab();
                 }
-                JavaOctetEditor.getInstance().fileTabbedPanel.setSelectedIndex(JavaOctetEditor.getInstance().fileTabbedPanel.getTabCount() - 1);
-            });
+            }
         });
 
         new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, new FileDropTarget(".jar", files -> {
@@ -92,7 +82,30 @@ public class FileTree extends JTree {
                 JTreeUtil.setNodeExpandedState(FileTree.this, ((DefaultMutableTreeNode) Objects.requireNonNull(getSelectionPath()).getLastPathComponent()), true);
             });
         }});
-        JMenuUtil.addPopupMenu(this, jPopupMenu, () -> getSelectionPath() != null);
+        JMenuUtil.addPopupMenu(this, () -> jPopupMenu, () -> getSelectionPath() != null);
+    }
+
+    public void addTab() {
+        if (getSelectionPath() == null) {
+            return;
+        }
+        Object lastPathComponent = getSelectionPath().getLastPathComponent();
+        SwingUtilities.invokeLater(() -> {
+            if (lastPathComponent instanceof PackageTreeNode) {
+                PackageTreeNode packageTreeNode = (PackageTreeNode) lastPathComponent;
+                if (packageTreeNode instanceof ClassTreeNode) {
+                    ClassNode classNode = ((ClassTreeNode) packageTreeNode).classNode;
+                    JavaOctetEditor.getInstance().fileTabbedPanel.addTab(classNode.name.substring(classNode.name.lastIndexOf("/") + 1), new ClassTabPanel(classNode));
+                }
+            } else if (lastPathComponent instanceof FolderTreeNode) {
+                FolderTreeNode folderTreeNode = (FolderTreeNode) lastPathComponent;
+                if (folderTreeNode instanceof FileTreeNode) {
+                    FileTreeNode fileTreeNode = (FileTreeNode) folderTreeNode;
+                    JavaOctetEditor.getInstance().fileTabbedPanel.addTab(fileTreeNode.toString().substring(fileTreeNode.toString().lastIndexOf("/") + 1), new FileTablePane(fileTreeNode));
+                }
+            }
+            JavaOctetEditor.getInstance().fileTabbedPanel.setSelectedIndex(JavaOctetEditor.getInstance().fileTabbedPanel.getTabCount() - 1);
+        });
     }
 
     public void refresh(Jar jar) {
@@ -248,7 +261,7 @@ public class FileTree extends JTree {
 
         if (!defaultTreeNode.isLeaf()) {
             DefaultTreeNode parent = (DefaultTreeNode) defaultTreeNode.getParent();
-            if (parent.getChildren().size() == 1) {
+            if (parent.getChildren().size() == 1 && !(parent.equals(classesRoot) || parent.equals(resourceRoot))) {
                 parent.setUserObject(parent.getUserObject() + "." + defaultTreeNode.getUserObject());
                 parent.getChildren().clear();
                 for (DefaultTreeNode child : defaultTreeNode.getChildren()) {

@@ -128,7 +128,7 @@ public class MethodInstructionPanel extends JPanel {
             });
         }});
 
-        JMenuUtil.addPopupMenu(instructionJList, jPopupMenu, () -> instructionJList.getSelectedValue() != null);
+        JMenuUtil.addPopupMenu(instructionJList, () -> jPopupMenu, () -> instructionJList.getSelectedValue() != null);
         add(new JScrollPane(instructionJList), BorderLayout.CENTER);
     }
 

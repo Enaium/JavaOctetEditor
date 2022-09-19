@@ -16,6 +16,7 @@
 
 package cn.enaium.joe.gui.panel.file.tabbed.tab.classes;
 
+import cn.enaium.joe.util.LangUtil;
 import org.objectweb.asm.tree.ClassNode;
 
 import javax.swing.*;
@@ -26,21 +27,17 @@ import java.awt.*;
  */
 public class ClassTabPanel extends JPanel {
 
-    private final ClassNode classNode;
+    public final ClassNode classNode;
 
     public ClassTabPanel(ClassNode classNode) {
         super(new BorderLayout());
         this.classNode = classNode;
         JTabbedPane jTabbedPane = new JTabbedPane();
         jTabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
-        jTabbedPane.addTab("BytecodeView", new TraceBytecodeTabPanel(classNode));
-        jTabbedPane.addTab("DecompileView", new DecompileTabPanel(classNode));
-        jTabbedPane.addTab("VisitorEdit", new ASMifierTablePanel(classNode));
-        jTabbedPane.addTab("InfoEdit", new ClassInfoTabPanel(classNode));
+        jTabbedPane.addTab(LangUtil.i18n("class.tab.bytecodeView"), new TraceBytecodeTabPanel(classNode));
+        jTabbedPane.addTab(LangUtil.i18n("class.tab.decompileView"), new DecompileTabPanel(classNode));
+        jTabbedPane.addTab(LangUtil.i18n("class.tab.visitorEdit"), new ASMifierTablePanel(classNode));
+        jTabbedPane.addTab(LangUtil.i18n("class.tab.infoEdit"), new ClassInfoTabPanel(classNode));
         add(jTabbedPane);
-    }
-
-    public ClassNode getClassNode() {
-        return classNode;
     }
 }

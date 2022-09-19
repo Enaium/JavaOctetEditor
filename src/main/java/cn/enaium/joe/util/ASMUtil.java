@@ -16,10 +16,14 @@
 
 package cn.enaium.joe.util;
 
+import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.ClassNode;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Enaium
@@ -37,5 +41,28 @@ public class ASMUtil {
                 return text;
             }
         }
+    }
+
+    public static ClassNode acceptClassNode(ClassReader classReader) {
+        ClassNode classNode = new ClassNode();
+        try {
+            classReader.accept(classNode, ClassReader.EXPAND_FRAMES);
+        } catch (Throwable throwable) {
+            try {
+                classReader.accept(classNode, ClassReader.SKIP_FRAMES | ClassReader.SKIP_DEBUG);
+            } catch (Throwable ignored) {
+
+            }
+        }
+        return classNode;
+    }
+
+    public static Set<String> getParentClass(ClassNode classNode) {
+        Set<String> parent = new HashSet<>();
+        if (classNode.superName != null && !classNode.superName.equals(Object.class.getName().replace(".", "/"))) {
+            parent.add(classNode.superName);
+        }
+        parent.addAll(classNode.interfaces);
+        return parent;
     }
 }

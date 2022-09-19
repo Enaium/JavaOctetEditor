@@ -56,7 +56,7 @@ public class AnnotationValueDialog extends Dialog {
         jTable.getTableHeader().setReorderingAllowed(false);
         jTable.getTableHeader().setResizingAllowed(false);
         add(new JScrollPane(jTable), BorderLayout.CENTER);
-        JMenuUtil.addPopupMenu(jTable, new JPopupMenu() {{
+        JMenuUtil.addPopupMenu(jTable, () -> new JPopupMenu() {{
             add(new JMenuItem(LangUtil.i18n("button.edit")) {{
                 addActionListener(e -> {
                     ObjectWrapper valueAt = (ObjectWrapper) dm.getValueAt(jTable.getSelectedRow(), 1);

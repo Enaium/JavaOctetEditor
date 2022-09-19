@@ -19,6 +19,7 @@ package cn.enaium.joe.gui.panel;
 import cn.enaium.joe.dialog.AnnotationListDialog;
 import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.StringUtil;
+import net.miginfocom.swing.MigLayout;
 import org.objectweb.asm.tree.FieldNode;
 
 import javax.swing.*;
@@ -30,23 +31,35 @@ import java.awt.*;
  */
 public class FieldInfoPanel extends JPanel {
     public FieldInfoPanel(FieldNode fieldNode) {
-        setLayout(new BorderLayout());
-        JPanel labels = new JPanel(new GridLayout(0, 1));
-        JPanel rights = new JPanel(new GridLayout(0, 1));
-        add(labels, BorderLayout.WEST);
-        add(rights, BorderLayout.CENTER);
-        labels.add(new JLabel(LangUtil.i18n("class.info.name")));
+        setLayout(new MigLayout("fillx", "[fill][fill]"));
+        add(new JLabel(LangUtil.i18n("class.info.name")));
         JTextField name = new JTextField(fieldNode.name);
-        rights.add(name);
-        labels.add(new JLabel(LangUtil.i18n("class.info.description")));
+        add(name, "wrap");
+        add(new JLabel(LangUtil.i18n("class.info.description")));
         JTextField description = new JTextField(fieldNode.desc);
-        rights.add(description);
-        labels.add(new JLabel(LangUtil.i18n("class.info.access")));
+        add(description, "wrap");
+        add(new JLabel(LangUtil.i18n("class.info.access")));
         JTextField access = new JTextField(String.valueOf(fieldNode.access));
-        rights.add(access);
-        labels.add(new JLabel(LangUtil.i18n("class.info.signature")));
+        add(access, "wrap");
+        add(new JLabel(LangUtil.i18n("class.info.signature")));
         JTextField signature = new JTextField(fieldNode.signature);
-        rights.add(signature);
+        add(signature, "wrap");
+        add(new JLabel("Visible Annotation:"));
+        add(new JButton(LangUtil.i18n("button.edit")) {{
+            addActionListener(e -> {
+                if (fieldNode.visibleAnnotations != null) {
+                    new AnnotationListDialog(fieldNode.visibleAnnotations).setVisible(true);
+                }
+            });
+        }}, "wrap");
+        add(new JLabel("Invisible Annotation:"));
+        add(new JButton(LangUtil.i18n("button.edit")) {{
+            addActionListener(e -> {
+                if (fieldNode.invisibleAnnotations != null) {
+                    new AnnotationListDialog(fieldNode.invisibleAnnotations).setVisible(true);
+                }
+            });
+        }}, "wrap");
         add(new JButton(LangUtil.i18n("button.save")) {{
             addActionListener(e -> {
 
@@ -71,24 +84,8 @@ public class FieldInfoPanel extends JPanel {
                     fieldNode.signature = null;
                 }
 
-                JOptionPane.showMessageDialog(FieldInfoPanel.this,  LangUtil.i18n("success"));
+                JOptionPane.showMessageDialog(FieldInfoPanel.this, LangUtil.i18n("success"));
             });
-        }}, BorderLayout.SOUTH);
-        labels.add(new JLabel("Visible Annotation:"));
-        rights.add(new JButton(LangUtil.i18n("button.edit")) {{
-            addActionListener(e -> {
-                if (fieldNode.visibleAnnotations != null) {
-                    new AnnotationListDialog(fieldNode.visibleAnnotations).setVisible(true);
-                }
-            });
-        }});
-        labels.add(new JLabel("Invisible Annotation:"));
-        rights.add(new JButton(LangUtil.i18n("button.edit")) {{
-            addActionListener(e -> {
-                if (fieldNode.invisibleAnnotations != null) {
-                    new AnnotationListDialog(fieldNode.invisibleAnnotations).setVisible(true);
-                }
-            });
-        }});
+        }}, "span 2");
     }
 }

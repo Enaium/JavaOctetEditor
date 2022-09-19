@@ -46,7 +46,7 @@ public class AnnotationListDialog extends Dialog {
         jTable.getTableHeader().setReorderingAllowed(false);
         jTable.getTableHeader().setResizingAllowed(false);
         add(new JScrollPane(jTable), BorderLayout.CENTER);
-        JMenuUtil.addPopupMenu(jTable, new JPopupMenu() {{
+        JMenuUtil.addPopupMenu(jTable, () -> new JPopupMenu() {{
             add(new JMenuItem(LangUtil.i18n("button.edit")) {{
                 addActionListener(e -> {
                     new AnnotationValueDialog(((AnnotationNode) ((ObjectWrapper) dm.getValueAt(jTable.getSelectedRow(), 0)).getWrapper()).values).setVisible(true);

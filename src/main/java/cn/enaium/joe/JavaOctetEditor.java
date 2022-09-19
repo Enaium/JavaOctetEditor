@@ -19,17 +19,17 @@ package cn.enaium.joe;
 import cn.enaium.joe.config.ConfigManager;
 import cn.enaium.joe.event.EventManager;
 import cn.enaium.joe.gui.panel.BottomPanel;
-import cn.enaium.joe.gui.panel.file.tree.FileTreePanel;
-import cn.enaium.joe.gui.panel.LeftPanel;
+import cn.enaium.joe.gui.panel.file.tree.CenterPanel;
 import cn.enaium.joe.gui.panel.file.tabbed.FileTabbedPanel;
 import cn.enaium.joe.gui.component.FileTree;
 import cn.enaium.joe.gui.panel.menu.*;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.task.TaskManager;
-import cn.enaium.joe.util.KeyStrokeUtil;
+import cn.enaium.joe.util.BytecodeTokenMaker;
 import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.MessageUtil;
 import cn.enaium.joe.util.ReflectUtil;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
 
@@ -81,6 +81,8 @@ public class JavaOctetEditor {
         AbstractTokenMakerFactory abstractTokenMakerFactory = (AbstractTokenMakerFactory) TokenMakerFactory.getDefaultInstance();
         abstractTokenMakerFactory.putMapping("text/custom", BytecodeTokenMaker.class.getName());
 
+        window.setIconImage(new FlatSVGIcon("icons/logo.svg").getImage());
+
         window.setJMenuBar(new JMenuBar() {{
             add(new FileMenu());
             add(new SearchMenu());
@@ -97,11 +99,7 @@ public class JavaOctetEditor {
         }});
 
         window.setContentPane(new JPanel(new BorderLayout()) {{
-            add(new LeftPanel(), BorderLayout.WEST);
-            add(new JSplitPane() {{
-                setLeftComponent(new FileTreePanel());
-                setRightComponent(fileTabbedPanel);
-            }}, BorderLayout.CENTER);
+            add(new CenterPanel(), BorderLayout.CENTER);
             add(bottomPanel, BorderLayout.SOUTH);
         }});
 
