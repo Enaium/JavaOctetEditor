@@ -38,10 +38,10 @@ import java.io.IOException;
  */
 public class CodeAreaPanel extends BorderPanel implements ActionListener {
 
-    private RSyntaxTextArea textArea;
-    private JTextField searchField;
-    private JCheckBox regexCB;
-    private JCheckBox matchCaseCB;
+    private final RSyntaxTextArea textArea;
+    private final JTextField searchField;
+    private final JCheckBox regexCB;
+    private final JCheckBox matchCaseCB;
 
     public CodeAreaPanel() {
         textArea = new RSyntaxTextArea();
@@ -77,8 +77,10 @@ public class CodeAreaPanel extends BorderPanel implements ActionListener {
             KeyStrokeUtil.register(textArea, KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK), () -> {
                 if (!StringUtil.isBlank(textArea.getSelectedText())) {
                     searchField.setText(textArea.getSelectedText());
+                    searchField.setFocusable(true);
                 }
                 toolBar.setVisible(true);
+                searchField.requestFocus();
             });
             KeyStrokeUtil.register(textArea, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), () -> {
                 toolBar.setVisible(false);
