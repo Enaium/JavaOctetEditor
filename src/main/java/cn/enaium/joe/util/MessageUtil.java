@@ -16,10 +16,17 @@
 
 package cn.enaium.joe.util;
 
+import cn.enaium.joe.gui.panel.BorderPanel;
 import cn.enaium.joe.gui.panel.confirm.ConfirmPanel;
+import org.benf.cfr.reader.util.StringUtils;
 import org.pmw.tinylog.Logger;
 
 import javax.swing.*;
+import java.awt.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * @author Enaium
@@ -28,8 +35,15 @@ import javax.swing.*;
 public class MessageUtil {
 
     public static void error(Throwable e) {
-        Logger.error(e);
-        JOptionPane.showMessageDialog(null, e.toString(), LangUtil.i18n("error"), JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, new BorderPanel() {{
+            setTop(new JLabel(e.toString()));
+            setCenter(new JScrollPane(new JTextArea() {{
+                StringWriter out = new StringWriter();
+                e.printStackTrace(new PrintWriter(out));
+                setText(out.toString());
+                setEditable(false);
+            }}));
+        }}, LangUtil.i18n("error"), JOptionPane.ERROR_MESSAGE);
     }
 
     public static void confirm(Object message, String title, Runnable yes, Runnable no) {
