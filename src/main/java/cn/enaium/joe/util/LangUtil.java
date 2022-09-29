@@ -38,23 +38,23 @@ public class LangUtil {
         }
         try {
 
-            String en = IOUtil.getString(LangUtil.class.getResourceAsStream("/lang/en_US.json"));
+            String text;
 
             URL url = LangUtil.class.getResource("/lang/" + lang + ".json");
 
-            if (url == null) {
-                RuntimeException runtimeException = new RuntimeException(String.format("lang ' %s ' not Found!", lang));
-                MessageUtil.error(runtimeException);
-                throw runtimeException;
+            if (url != null) {
+                text = IOUtil.getString(url.openStream());
+            } else {
+                text = IOUtil.getString(LangUtil.class.getResourceAsStream("/lang/en_US.json"));
             }
 
-            JsonObject jsonObject = new Gson().fromJson(IOUtil.getString(url.openStream()), JsonObject.class);
+            JsonObject jsonObject = new Gson().fromJson(text, JsonObject.class);
             try {
                 return String.format(jsonObject.get(key).getAsString(), args);
             } catch (NullPointerException e) {
                 Logger.warn(String.format("Lang not found \" %s \" ", key));
                 try {
-                    return String.format(new Gson().fromJson(en, JsonObject.class).get(key).getAsString(), args);
+                    return String.format(new Gson().fromJson(text, JsonObject.class).get(key).getAsString(), args);
                 } catch (NullPointerException ex) {
                     MessageUtil.error(new NullPointerException(String.format("not found key ' %s ' in en_us", key)));
                 }
