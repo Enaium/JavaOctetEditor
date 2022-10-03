@@ -46,7 +46,6 @@ public class CodeAreaPanel extends BorderPanel implements ActionListener {
     public CodeAreaPanel() {
         textArea = new RSyntaxTextArea();
         textArea.setCodeFoldingEnabled(true);
-        textArea.setEditable(false);
         Theme theme;
         try {
             theme = Theme.load(getClass().getResourceAsStream("/org/fife/ui/rsyntaxtextarea/themes/monokai.xml"));

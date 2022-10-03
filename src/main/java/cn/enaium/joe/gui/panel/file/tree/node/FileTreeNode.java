@@ -16,19 +16,25 @@
 
 package cn.enaium.joe.gui.panel.file.tree.node;
 
+import cn.enaium.joe.JavaOctetEditor;
+
 /**
  * @author Enaium
  */
 public class FileTreeNode extends FolderTreeNode {
 
-    private final byte[] data;
+    private final String file;
 
-    public FileTreeNode(Object userObject, byte[] data) {
+    public FileTreeNode(Object userObject, String file) {
         super(userObject);
-        this.data = data;
+        this.file = file;
     }
 
     public byte[] getData() {
-        return data;
+        return JavaOctetEditor.getInstance().getJar().resources.get(file);
+    }
+
+    public void setData(byte[] data) {
+        JavaOctetEditor.getInstance().getJar().resources.put(file, data);
     }
 }

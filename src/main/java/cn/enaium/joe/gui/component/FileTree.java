@@ -33,14 +33,11 @@ import org.objectweb.asm.tree.ClassNode;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreeNode;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Enaium
@@ -170,7 +167,7 @@ public class FileTree extends JTree {
                     FolderTreeNode folderTreeNode = new FolderTreeNode(s);
 
                     if (split.length == i + 1) {
-                        folderTreeNode = new FileTreeNode(s, stringEntry.getValue());
+                        folderTreeNode = new FileTreeNode(s,stringEntry.getKey());
                     }
 
                     if (prev == null) {
@@ -229,7 +226,7 @@ public class FileTree extends JTree {
                     name = name.substring(name.lastIndexOf("/") + 1);
                 }
 
-                FileTreeNode classTreeNode = new FileTreeNode(name, stringEntry.getValue());
+                FileTreeNode classTreeNode = new FileTreeNode(name, stringEntry.getKey());
 
                 if (folderName.isEmpty()) {
                     resourceRoot.add(classTreeNode);
