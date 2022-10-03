@@ -20,12 +20,13 @@ import com.formdev.flatlaf.extras.FlatSVGIcon;
 
 import javax.swing.*;
 
-public class Dialog extends JFrame {
+public class Dialog extends JDialog {
     public Dialog(String title) {
-        super(title);
+        setTitle(title);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setSize(800, 500);
         setLocationRelativeTo(getOwner());
         setIconImage(new FlatSVGIcon("icons/logo.svg").getImage());
+        set
     }
 }

@@ -43,7 +43,6 @@ public class CenterPanel extends BorderPanel {
                     jViewport.setView(getSelectedComponent());
                 });
             }});
-
         }});
     }
 }

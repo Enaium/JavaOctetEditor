@@ -16,17 +16,14 @@
 
 package cn.enaium.joe.util;
 
-import cn.enaium.joe.gui.panel.BorderPanel;
+import cn.enaium.joe.dialog.OptionDialog;
 import cn.enaium.joe.gui.panel.confirm.ConfirmPanel;
-import org.benf.cfr.reader.util.StringUtils;
 import org.pmw.tinylog.Logger;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 /**
  * @author Enaium
@@ -35,36 +32,21 @@ import java.util.stream.Collectors;
 public class MessageUtil {
 
     public static void error(Throwable e) {
-        JOptionPane.showMessageDialog(null, new BorderPanel() {{
-            setTop(new JLabel(e.toString()));
-            setCenter(new JScrollPane(new JTextArea() {{
-                StringWriter out = new StringWriter();
-                e.printStackTrace(new PrintWriter(out));
-                setText(out.toString());
-                setEditable(false);
-            }}));
-        }}, LangUtil.i18n("error"), JOptionPane.ERROR_MESSAGE);
+        new OptionDialog(LangUtil.i18n("error"), new JScrollPane(new JTextArea() {{
+            StringWriter out = new StringWriter();
+            e.printStackTrace(new PrintWriter(out));
+            setText(out.toString());
+            setEditable(false);
+        }}), JOptionPane.ERROR_MESSAGE).setVisible(true);
     }
 
     public static void confirm(Object message, String title, Runnable yes, Runnable no) {
-        int i = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.OK_CANCEL_OPTION);
-        if (i == JOptionPane.YES_OPTION) {
-            if (yes != null) {
-                yes.run();
-            }
-        } else {
-            if (no != null) {
-                no.run();
-            }
-        }
+        OptionDialog optionDialog = new OptionDialog(title, message, JOptionPane.INFORMATION_MESSAGE, yes, no);
+        optionDialog.setVisible(true);
     }
 
     public static void confirm(ConfirmPanel confirmPanel, String title) {
-        confirm(confirmPanel, title, () -> {
-            confirmPanel.getConfirm().run();
-        }, () -> {
-            confirmPanel.getCancel().run();
-        });
+        confirm(confirmPanel, title, confirmPanel.getConfirm(), confirmPanel.getCancel());
     }
 
     public static void confirm(ConfirmPanel confirmPanel, String title, Runnable yes) {
@@ -80,12 +62,14 @@ public class MessageUtil {
 
 
     public static void info(String message) {
-        JOptionPane.showMessageDialog(null, message, LangUtil.i18n("info"), JOptionPane.INFORMATION_MESSAGE);
+        OptionDialog info = new OptionDialog(LangUtil.i18n("info"), message, JOptionPane.INFORMATION_MESSAGE);
+        info.setVisible(true);
         Logger.info(message);
     }
 
     public static void warning(String message) {
-        JOptionPane.showMessageDialog(null, message, LangUtil.i18n("warning"), JOptionPane.WARNING_MESSAGE);
+        OptionDialog warning = new OptionDialog(LangUtil.i18n("warning"), message, JOptionPane.WARNING_MESSAGE);
+        warning.setVisible(true);
         Logger.warn(message);
     }
 }

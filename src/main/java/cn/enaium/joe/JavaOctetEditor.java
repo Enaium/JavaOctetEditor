@@ -18,6 +18,7 @@ package cn.enaium.joe;
 
 import cn.enaium.joe.config.ConfigManager;
 import cn.enaium.joe.event.EventManager;
+import cn.enaium.joe.gui.panel.BorderPanel;
 import cn.enaium.joe.gui.panel.BottomPanel;
 import cn.enaium.joe.gui.panel.file.tree.CenterPanel;
 import cn.enaium.joe.gui.panel.file.tabbed.FileTabbedPanel;
@@ -98,9 +99,9 @@ public class JavaOctetEditor {
             add(new HelpMenu());
         }});
 
-        window.setContentPane(new JPanel(new BorderLayout()) {{
-            add(new CenterPanel(), BorderLayout.CENTER);
-            add(bottomPanel, BorderLayout.SOUTH);
+        window.setContentPane(new BorderPanel() {{
+            setCenter(new CenterPanel());
+            setBottom(bottomPanel);
         }});
 
 
