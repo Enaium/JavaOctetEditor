@@ -27,6 +27,5 @@ public class Dialog extends JDialog {
         setSize(800, 500);
         setLocationRelativeTo(getOwner());
         setIconImage(new FlatSVGIcon("icons/logo.svg").getImage());
-        set
     }
 }
