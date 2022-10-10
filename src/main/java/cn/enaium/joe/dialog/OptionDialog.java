@@ -33,11 +33,9 @@ public class OptionDialog extends Dialog {
         super(title);
         setContentPane(new BorderPanel() {{
             setBorder(new EmptyBorder(10, 10, 10, 10));
-            setLeft(new JLabel(getIconForType(type)));
-
             JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             if (message != null) {
-                bottom.add(new JButton("Ok") {{
+                bottom.add(new JButton(UIManager.getString("OptionPane.okButton.textAndMnemonic")) {{
                     addActionListener(e -> {
                         if (confirm != null) {
                             confirm.run();
@@ -47,7 +45,7 @@ public class OptionDialog extends Dialog {
                 }});
 
                 if (cancel != null) {
-                    bottom.add(new JButton("No") {{
+                    bottom.add(new JButton(UIManager.getString("OptionPane.cancelButton.textAndMnemonic")) {{
                         addActionListener(e -> {
                             cancel.run();
                             dispose();
@@ -55,14 +53,18 @@ public class OptionDialog extends Dialog {
                     }});
                 }
 
-
+                Component content;
                 if (message instanceof String) {
-                    setCenter(new JLabel(message.toString()));
+                    content = (new JLabel(message.toString()));
                 } else if (message instanceof ConfirmPanel) {
-                    setCenter((Component) message);
+                    content = ((Component) message);
                 } else {
-                    setCenter((Component) message);
+                    content = ((Component) message);
                 }
+                setTop(new BorderPanel() {{
+                    setLeft(new JLabel(getIconForType(type)));
+                    setCenter(content);
+                }});
             }
             setBottom(bottom);
         }});
