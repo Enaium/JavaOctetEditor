@@ -26,10 +26,7 @@ import cn.enaium.joe.gui.component.FileTree;
 import cn.enaium.joe.gui.panel.menu.*;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.task.TaskManager;
-import cn.enaium.joe.util.BytecodeTokenMaker;
-import cn.enaium.joe.util.LangUtil;
-import cn.enaium.joe.util.MessageUtil;
-import cn.enaium.joe.util.ReflectUtil;
+import cn.enaium.joe.util.*;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
@@ -116,8 +113,7 @@ public class JavaOctetEditor {
                 });
             }
         });
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        window.setSize((int) (1000 * screenSize.getWidth() / 1920), (int) (600 * screenSize.getHeight() / 1080));
+        window.setSize(Util.screenSize(1000, 600));
         window.setLocationRelativeTo(null);
         window.setVisible(true);
     }

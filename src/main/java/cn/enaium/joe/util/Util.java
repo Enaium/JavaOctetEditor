@@ -16,6 +16,7 @@
 
 package cn.enaium.joe.util;
 
+import java.awt.*;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -45,5 +46,10 @@ public class Util {
             }
         }
         return true;
+    }
+
+    public static Dimension screenSize(int width, int height) {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        return new Dimension((int) (width * screenSize.getWidth() / 1920), (int) (height * screenSize.getHeight() / 1080));
     }
 }

@@ -16,15 +16,17 @@
 
 package cn.enaium.joe.dialog;
 
+import cn.enaium.joe.util.Util;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class Dialog extends JDialog {
     public Dialog(String title) {
         setTitle(title);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        setSize(800, 500);
+        setSize(Util.screenSize(800, 500));
         setLocationRelativeTo(getOwner());
         setIconImage(new FlatSVGIcon("icons/logo.svg").getImage());
     }
