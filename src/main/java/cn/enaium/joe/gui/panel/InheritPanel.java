@@ -21,6 +21,7 @@ import cn.enaium.joe.event.events.FileTabbedSelectEvent;
 import cn.enaium.joe.gui.panel.file.tabbed.tab.classes.ClassTabPanel;
 import cn.enaium.joe.gui.panel.file.tree.FileTreeCellRenderer;
 import cn.enaium.joe.gui.panel.file.tree.node.ClassTreeNode;
+import cn.enaium.joe.gui.panel.file.tree.node.PackageTreeNode;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.util.ASMUtil;
 import cn.enaium.joe.util.JTreeUtil;
@@ -33,6 +34,8 @@ import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
@@ -50,6 +53,23 @@ public class InheritPanel extends BorderPanel {
         JTree inheritance = new JTree() {{
             setModel(new DefaultTreeModel(null));
             setCellRenderer(new FileTreeCellRenderer());
+            addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if (e.getClickCount() == 2) {
+                        if (getSelectionPath() != null) {
+                            Object lastPathComponent = getSelectionPath().getLastPathComponent();
+                            if (lastPathComponent instanceof PackageTreeNode) {
+                                PackageTreeNode packageTreeNode = (PackageTreeNode) lastPathComponent;
+                                if (packageTreeNode instanceof ClassTreeNode) {
+                                    ClassNode classNode = ((ClassTreeNode) packageTreeNode).classNode;
+                                    JavaOctetEditor.getInstance().fileTabbedPanel.addTab(classNode.name.substring(classNode.name.lastIndexOf("/") + 1), new ClassTabPanel(classNode));
+                                }
+                            }
+                        }
+                    }
+                }
+            });
         }};
         JavaOctetEditor.getInstance().event.register(FileTabbedSelectEvent.class, (Consumer<FileTabbedSelectEvent>) event -> {
             if (event.getSelect() instanceof ClassTabPanel) {
