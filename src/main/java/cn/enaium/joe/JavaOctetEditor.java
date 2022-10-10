@@ -116,7 +116,8 @@ public class JavaOctetEditor {
                 });
             }
         });
-        window.setSize(1000, 600);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        window.setSize((int) (1000 * screenSize.getWidth() / 1920), (int) (600 * screenSize.getHeight() / 1080));
         window.setLocationRelativeTo(null);
         window.setVisible(true);
     }
