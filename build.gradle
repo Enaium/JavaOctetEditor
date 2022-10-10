@@ -44,9 +44,9 @@ dependencies {
     //noinspection GradlePackageUpdate
     implementation 'com.miglayout:miglayout-swing:5.3'
     implementation 'com.github.bobbylight:RSyntaxTextArea:3.2.0'
-    implementation 'org.ow2.asm:asm-tree:9.3'
-    implementation 'org.ow2.asm:asm-util:9.3'
-    implementation 'org.ow2.asm:asm-commons:9.3'
+    implementation 'org.ow2.asm:asm-tree:9.4'
+    implementation 'org.ow2.asm:asm-util:9.4'
+    implementation 'org.ow2.asm:asm-commons:9.4'
     implementation 'org.benf:cfr:0.152'
     implementation 'com.github.mstrobel.procyon:procyon-decompiler:v0.6.0'
     implementation 'org.quiltmc:quiltflower:1.8.1'
