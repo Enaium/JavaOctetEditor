@@ -57,8 +57,8 @@ public class CodeAreaPanel extends BorderPanel implements ActionListener {
         Font defaultFont = RTextArea.getDefaultFont();
         Font font = defaultFont.deriveFont((float) UIManager.getFont("defaultFont").getSize());
         textArea.setFont(font);
-        textArea.setPaintMatchedBracketPair( true );
-        textArea.setAnimateBracketMatching( false );
+        textArea.setPaintMatchedBracketPair(true);
+        textArea.setAnimateBracketMatching(false);
 
 
         JToolBar toolBar = new JToolBar();
