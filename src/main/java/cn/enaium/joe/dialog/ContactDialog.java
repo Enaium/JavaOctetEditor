@@ -51,6 +51,7 @@ public class ContactDialog extends Dialog {
         panel.add(new JLabel(icon));
         panel.add(new JLabel(name));
         panel.add(new JLabel("<html><a style=\"text-decoration: underline\">" + link + "</a></html>") {{
+            setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {

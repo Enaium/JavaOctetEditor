@@ -18,6 +18,7 @@ package cn.enaium.joe.dialog;
 
 import cn.enaium.joe.gui.panel.BorderPanel;
 import cn.enaium.joe.gui.panel.confirm.ConfirmPanel;
+import cn.enaium.joe.util.Util;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -61,15 +62,22 @@ public class OptionDialog extends Dialog {
                 } else {
                     content = ((Component) message);
                 }
-                setTop(new BorderPanel() {{
-                    setLeft(new JLabel(getIconForType(type)));
-                    setCenter(content);
-                }});
+                setLeft(new JLabel(getIconForType(type)));
+                setCenter(content);
             }
             setBottom(bottom);
         }});
         setModal(true);
-        pack();
+        Dimension size = Util.screenSize(getPreferredSize());
+        if (size.width > getWidth()) {
+            size.width = getWidth();
+        }
+
+        if (size.height > getHeight()) {
+            size.height = getHeight();
+        }
+        setMinimumSize(size);
+        setSize(size);
     }
 
     public OptionDialog(String title, Object message, int type) {
