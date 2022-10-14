@@ -67,7 +67,6 @@ public class Compiler {
         public JavaFileObject getJavaFileForOutput(JavaFileManager.Location location, String className, JavaFileObject.Kind kind, FileObject sibling) throws IOException {
             if (JavaFileObject.Kind.CLASS == kind) {
                 VirtualJavaFileObject virtualJavaFileObject = new VirtualJavaFileObject(className, null);
-                System.out.println(className);
                 javaFileObjectMap.put(className, virtualJavaFileObject);
                 return virtualJavaFileObject;
             } else {
