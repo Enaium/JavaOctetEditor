@@ -57,6 +57,7 @@ public class ASMifierTablePanel extends ClassNodeTabPanel {
                             "import org.objectweb.asm.MethodVisitor;" +
                             "import org.objectweb.asm.Opcodes;" +
                             "import org.objectweb.asm.RecordComponentVisitor;" +
+                            "import org.objectweb.asm.ModuleVisitor;" +
                             "import org.objectweb.asm.Type;" +
                             "import org.objectweb.asm.TypePath;" +
                             "public class" + " " + ASMifier.class.getSimpleName() + " " + "implements Opcodes" +
