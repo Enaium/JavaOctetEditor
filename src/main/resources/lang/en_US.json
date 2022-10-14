@@ -64,7 +64,7 @@
   "class.info.description": "Description:",
   "class.info.exceptions": "Exceptions:",
   "class.tab.bytecodeView": "BytecodeView",
-  "class.tab.decompileView": "DecompileView",
+  "class.tab.decompileEdit": "DecompileEdit",
   "class.tab.visitorEdit": "VisitorEdit",
   "class.tab.infoEdit": "InfoEdit",
   "button.search": "Search",
