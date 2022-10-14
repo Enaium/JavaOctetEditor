@@ -19,13 +19,18 @@ package cn.enaium.joe.service.decompiler;
 import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.config.extend.CFRConfig;
 import org.benf.cfr.reader.PluginRunner;
+import org.benf.cfr.reader.api.CfrDriver;
 import org.benf.cfr.reader.api.ClassFileSource;
+import org.benf.cfr.reader.api.OutputSinkFactory;
 import org.benf.cfr.reader.bytecode.analysis.parse.utils.Pair;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Enaium
@@ -57,9 +62,42 @@ public class CFRDecompiler implements IDecompiler {
 
             @Override
             public Collection<String> addJar(String arg0) {
-                throw new RuntimeException();
+                return Collections.emptySet();
             }
         };
-        return new PluginRunner(JavaOctetEditor.getInstance().config.getConfigMap(CFRConfig.class), cfs).getDecompilationFor(classNode.name);
+
+        OutputSinkFactory outputSinkFactory = new OutputSinkFactory() {
+            String content;
+
+            @Override
+            public List<SinkClass> getSupportedSinks(SinkType sinkType, Collection<SinkClass> available) {
+                return Arrays.asList(SinkClass.values());
+            }
+
+            @Override
+            public <T> Sink<T> getSink(SinkType sinkType, SinkClass sinkClass) {
+
+                if (sinkType == SinkType.JAVA) {
+                    return this::setContent;
+                }
+
+                return t -> {
+
+                };
+            }
+
+            private <T> void setContent(T content) {
+                this.content = content.toString();
+            }
+
+            @Override
+            public String toString() {
+                return content;
+            }
+        };
+        CfrDriver driver = new CfrDriver.Builder().withClassFileSource(cfs).withOptions(JavaOctetEditor.getInstance().config.getConfigMap(CFRConfig.class)).withOutputSink(outputSinkFactory).build();
+
+        driver.analyse(Collections.singletonList(classNode.name));
+        return outputSinkFactory.toString();
     }
 }
