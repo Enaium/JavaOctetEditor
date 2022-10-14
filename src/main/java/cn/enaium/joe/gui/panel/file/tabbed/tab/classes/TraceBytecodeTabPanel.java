@@ -34,6 +34,7 @@ public class TraceBytecodeTabPanel extends ClassNodeTabPanel {
         super(classNode);
         setLayout(new BorderLayout());
         CodeAreaPanel codeAreaPanel = new CodeAreaPanel();
+        codeAreaPanel.getTextArea().setEditable(false);
         codeAreaPanel.getTextArea().setSyntaxEditingStyle("text/custom");
         final StringWriter stringWriter = new StringWriter();
         ASyncUtil.execute(() -> {

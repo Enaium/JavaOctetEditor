@@ -17,13 +17,17 @@
 package cn.enaium.joe.gui.panel.file.tabbed.tab.classes;
 
 import cn.enaium.joe.JavaOctetEditor;
-import cn.enaium.joe.service.DecompileService;
+import cn.enaium.joe.compiler.Compiler;
 import cn.enaium.joe.gui.panel.CodeAreaPanel;
 import cn.enaium.joe.task.DecompileTask;
-import cn.enaium.joe.util.ASyncUtil;
+import cn.enaium.joe.util.*;
+import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
 /**
  * @author Enaium
@@ -32,7 +36,19 @@ public class DecompileTabPanel extends ClassNodeTabPanel {
     public DecompileTabPanel(ClassNode classNode) {
         super(classNode);
         setLayout(new BorderLayout());
-        CodeAreaPanel codeAreaPanel = new CodeAreaPanel();
+        CodeAreaPanel codeAreaPanel = new CodeAreaPanel() {{
+            KeyStrokeUtil.register(getTextArea(), KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK), () -> {
+                try {
+                    Compiler compiler = new Compiler();
+                    compiler.addSource(ASMUtil.getReferenceName(classNode), getTextArea().getText());
+                    compiler.compile();
+                    ReflectUtil.copyAllMember(classNode, ASMUtil.acceptClassNode(new ClassReader(compiler.getClasses().get(ASMUtil.getReferenceName(classNode)))));
+                    MessageUtil.info(LangUtil.i18n("success"));
+                } catch (Throwable e) {
+                    MessageUtil.error(e);
+                }
+            });
+        }};
         codeAreaPanel.getTextArea().setSyntaxEditingStyle("text/java");
         JavaOctetEditor.getInstance().task.submit(new DecompileTask(classNode)).thenAccept(it -> {
             codeAreaPanel.getTextArea().setText(it);

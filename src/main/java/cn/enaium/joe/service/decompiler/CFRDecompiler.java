@@ -56,6 +56,13 @@ public class CFRDecompiler implements IDecompiler {
                     ClassWriter classWriter = new ClassWriter(0);
                     classNode.accept(classWriter);
                     return Pair.make(classWriter.toByteArray(), name);
+                } else {
+                    ClassNode cn = JavaOctetEditor.getInstance().getJar().classes.get(path);
+                    if (cn != null) {
+                        ClassWriter classWriter = new ClassWriter(0);
+                        cn.accept(classWriter);
+                        return Pair.make(classWriter.toByteArray(), name);
+                    }
                 }
                 return null;
             }
