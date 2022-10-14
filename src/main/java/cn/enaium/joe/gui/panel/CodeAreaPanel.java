@@ -21,6 +21,7 @@ import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.StringUtil;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.Theme;
+import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import org.fife.ui.rtextarea.SearchContext;
 import org.fife.ui.rtextarea.SearchEngine;
@@ -38,13 +39,12 @@ import java.io.IOException;
  */
 public class CodeAreaPanel extends BorderPanel implements ActionListener {
 
-    private final RSyntaxTextArea textArea;
-    private final JTextField searchField;
-    private final JCheckBox regexCB;
-    private final JCheckBox matchCaseCB;
+    private final RSyntaxTextArea textArea = new RSyntaxTextArea();
+    private final JTextField searchField = new JTextField(30);
+    private final JCheckBox regexCB = new JCheckBox("Regex");
+    private final JCheckBox matchCaseCB = new JCheckBox("Match Case");
 
     public CodeAreaPanel() {
-        textArea = new RSyntaxTextArea();
         textArea.setCodeFoldingEnabled(true);
         Theme theme;
         try {
@@ -54,8 +54,14 @@ public class CodeAreaPanel extends BorderPanel implements ActionListener {
         }
         theme.apply(textArea);
 
+        Font defaultFont = RTextArea.getDefaultFont();
+        Font font = defaultFont.deriveFont((float) UIManager.getFont("defaultFont").getSize());
+        textArea.setFont(font);
+        textArea.setPaintMatchedBracketPair( true );
+        textArea.setAnimateBracketMatching( false );
+
+
         JToolBar toolBar = new JToolBar();
-        searchField = new JTextField(30);
         toolBar.add(searchField);
         final JButton nextButton = new JButton(LangUtil.i18n("button.findNext"));
         nextButton.setActionCommand("FindNext");
@@ -66,13 +72,12 @@ public class CodeAreaPanel extends BorderPanel implements ActionListener {
         prevButton.setActionCommand("FindPrev");
         prevButton.addActionListener(this);
         toolBar.add(prevButton);
-        regexCB = new JCheckBox("Regex");
         toolBar.add(regexCB);
-        matchCaseCB = new JCheckBox("Match Case");
         toolBar.add(matchCaseCB);
         toolBar.setVisible(false);
         setTop(toolBar);
         setCenter(new RTextScrollPane(textArea) {{
+            getGutter().setLineNumberFont(font);
             KeyStrokeUtil.register(textArea, KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK), () -> {
                 if (!StringUtil.isBlank(textArea.getSelectedText())) {
                     searchField.setText(textArea.getSelectedText());
