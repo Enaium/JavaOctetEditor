@@ -32,7 +32,7 @@ public class ValueEditPanel extends ConfirmPanel {
         JTextField jTextField = new JTextField(objectWrapper.getWrapper().toString());
         add(jTextField, BorderLayout.CENTER);
         setConfirm(() -> {
-            objectWrapper.setWrapper(ASMUtil.toType(objectWrapper.getWrapper().getClass(), jTextField.getText()));
+            objectWrapper.setWrapper(ASMUtil.valueOf(objectWrapper.getWrapper().getClass(), jTextField.getText()));
         });
     }
 }

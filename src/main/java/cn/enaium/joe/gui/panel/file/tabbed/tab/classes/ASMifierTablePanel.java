@@ -17,7 +17,6 @@
 package cn.enaium.joe.gui.panel.file.tabbed.tab.classes;
 
 import cn.enaium.joe.compiler.Compiler;
-import cn.enaium.joe.compiler.VirtualJavaFileObject;
 import cn.enaium.joe.gui.panel.CodeAreaPanel;
 import cn.enaium.joe.util.*;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
@@ -25,11 +24,8 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.util.ASMifier;
 import org.objectweb.asm.util.TraceClassVisitor;
-import org.pmw.tinylog.Logger;
 
 import javax.swing.*;
-import javax.tools.Diagnostic;
-import javax.tools.DiagnosticListener;
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -80,9 +76,7 @@ public class ASMifierTablePanel extends ClassNodeTabPanel {
                     };
 
                     byte[] dumps = (byte[]) loader.loadClass(ASMifier.class.getSimpleName()).getMethod("dump").invoke(null);
-                    ClassNode newClassNode = new ClassNode();
-                    new ClassReader(dumps).accept(newClassNode, ClassReader.EXPAND_FRAMES);
-                    ReflectUtil.setAll(classNode, newClassNode);
+                    ReflectUtil.copyAllMember(classNode, ASMUtil.acceptClassNode(new ClassReader(dumps)));
                     MessageUtil.info(LangUtil.i18n("success"));
                 } catch (Throwable e) {
                     MessageUtil.error(e);

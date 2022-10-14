@@ -30,7 +30,15 @@ import java.util.Set;
  * @since 1.2.0
  */
 public class ASMUtil {
-    public static <T> Object toType(Class<T> type, String text) {
+    /**
+     * converts a string value to a value of that type
+     *
+     * @param type value type
+     * @param text value text
+     * @param <T>  value type
+     * @return value of type
+     */
+    public static <T> Object valueOf(Class<T> type, String text) {
         try {
             Method valueOf = type.getMethod("valueOf", String.class);
             return valueOf.invoke(null, text);
@@ -43,6 +51,13 @@ public class ASMUtil {
         }
     }
 
+
+    /**
+     * accept as class node
+     *
+     * @param classReader class reader
+     * @return class node
+     */
     public static ClassNode acceptClassNode(ClassReader classReader) {
         ClassNode classNode = new ClassNode();
         try {
@@ -57,6 +72,12 @@ public class ASMUtil {
         return classNode;
     }
 
+    /**
+     * get all parents, include interfaces
+     *
+     * @param classNode class node
+     * @return all interfaces and superclasses
+     */
     public static Set<String> getParentClass(ClassNode classNode) {
         Set<String> parent = new HashSet<>();
         if (classNode.superName != null && !classNode.superName.equals(Object.class.getName().replace(".", "/"))) {
@@ -64,5 +85,15 @@ public class ASMUtil {
         }
         parent.addAll(classNode.interfaces);
         return parent;
+    }
+
+    /**
+     * replace all `/` to `.`
+     *
+     * @param classNode class node
+     * @return reference name
+     */
+    public static String getReferenceName(ClassNode classNode) {
+        return classNode.name.replace("/", ".");
     }
 }

@@ -32,6 +32,7 @@ import java.io.StringWriter;
 public class MessageUtil {
 
     public static void error(Throwable e) {
+        e.printStackTrace();
         new OptionDialog(LangUtil.i18n("error"), new JScrollPane(new JTextArea() {{
             StringWriter out = new StringWriter();
             e.printStackTrace(new PrintWriter(out));

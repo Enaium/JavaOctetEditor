@@ -46,7 +46,7 @@ public class ListValueEditPanel extends ConfirmPanel {
         setConfirm(() -> {
             objects.clear();
             for (String s : jTextArea.getText().replaceAll("^\\s+", "").split("\n")) {
-                objects.add(ASMUtil.toType(type, s));
+                objects.add(ASMUtil.valueOf(type, s));
             }
         });
     }

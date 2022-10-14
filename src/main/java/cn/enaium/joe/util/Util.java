@@ -49,7 +49,12 @@ public class Util {
     }
 
     public static Dimension screenSize(int width, int height) {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        return new Dimension((int) (width * screenSize.getWidth() / 1920), (int) (height * screenSize.getHeight() / 1080));
+        return screenSize(new Dimension(width, height));
     }
+
+    public static Dimension screenSize(Dimension dimension) {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        return new Dimension((int) (dimension.width * screenSize.getWidth() / 1920), (int) (dimension.height * screenSize.getHeight() / 1080));
+    }
+
 }

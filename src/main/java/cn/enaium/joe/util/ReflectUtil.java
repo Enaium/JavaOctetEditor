@@ -24,11 +24,20 @@ import java.lang.reflect.Method;
  * @since 1.0.0
  */
 public class ReflectUtil {
-    public static <T> void setAll(T old, T t) throws NoSuchFieldException, IllegalAccessException {
-        for (Field oldField : old.getClass().getDeclaredFields()) {
+    /**
+     * copy all class member from the old class object to the new class object
+     *
+     * @param oldObject old object
+     * @param newObject new object
+     * @param <T>       type of two classes
+     * @throws NoSuchFieldException   e
+     * @throws IllegalAccessException e
+     */
+    public static <T> void copyAllMember(T oldObject, T newObject) throws NoSuchFieldException, IllegalAccessException {
+        for (Field oldField : oldObject.getClass().getDeclaredFields()) {
             oldField.setAccessible(true);
-            Field declaredField = t.getClass().getDeclaredField(oldField.getName());
-            oldField.set(old, declaredField.get(t));
+            Field declaredField = newObject.getClass().getDeclaredField(oldField.getName());
+            oldField.set(oldObject, declaredField.get(newObject));
         }
     }
 
