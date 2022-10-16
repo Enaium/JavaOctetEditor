@@ -43,10 +43,7 @@ public class ClassTabPanel extends JPanel {
         jTabbedPane.addTab(LangUtil.i18n("class.tab.visitorEdit"), new ASMifierTablePanel(classNode));
         jTabbedPane.addTab(LangUtil.i18n("class.tab.infoEdit"), new ClassInfoTabPanel(classNode));
         jTabbedPane.setSelectedIndex(Instance.INSTANCE.classTabIndex);
-        jTabbedPane.addChangeListener(e -> {
-            Instance.INSTANCE.classTabIndex = jTabbedPane.getSelectedIndex();
-            JavaOctetEditor.getInstance().event.call(new Change(jTabbedPane.getSelectedIndex()));
-        });
+        jTabbedPane.addChangeListener(e -> JavaOctetEditor.getInstance().event.call(new Change(Instance.INSTANCE.classTabIndex = jTabbedPane.getSelectedIndex())));
         JavaOctetEditor.getInstance().event.register(Change.class, (Consumer<Change>) event -> jTabbedPane.setSelectedIndex(event.index));
         add(jTabbedPane);
     }
