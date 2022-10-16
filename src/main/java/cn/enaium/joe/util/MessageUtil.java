@@ -17,6 +17,7 @@
 package cn.enaium.joe.util;
 
 import cn.enaium.joe.dialog.OptionDialog;
+import cn.enaium.joe.gui.panel.BorderPanel;
 import cn.enaium.joe.gui.panel.confirm.ConfirmPanel;
 import org.pmw.tinylog.Logger;
 
@@ -33,12 +34,15 @@ public class MessageUtil {
 
     public static void error(Throwable e) {
         e.printStackTrace();
-        new OptionDialog(LangUtil.i18n("error"), new JScrollPane(new JTextArea() {{
-            StringWriter out = new StringWriter();
-            e.printStackTrace(new PrintWriter(out));
-            setText(out.toString());
-            setEditable(false);
-        }}), JOptionPane.ERROR_MESSAGE).setVisible(true);
+        new OptionDialog(LangUtil.i18n("error"), new BorderPanel() {{
+            setTop(new JLabel(e.getMessage()));
+            setCenter(new JScrollPane(new JTextArea() {{
+                StringWriter out = new StringWriter();
+                e.printStackTrace(new PrintWriter(out));
+                setText(out.toString());
+                setEditable(false);
+            }}));
+        }}, JOptionPane.ERROR_MESSAGE).setVisible(true);
     }
 
     public static void confirm(Object message, String title, Runnable yes, Runnable no) {

@@ -42,8 +42,12 @@ public class DecompileTabPanel extends ClassNodeTabPanel {
                     Compiler compiler = new Compiler();
                     compiler.addSource(ASMUtil.getReferenceName(classNode), getTextArea().getText());
                     compiler.compile();
-                    ReflectUtil.copyAllMember(classNode, ASMUtil.acceptClassNode(new ClassReader(compiler.getClasses().get(ASMUtil.getReferenceName(classNode)))));
-                    MessageUtil.info(LangUtil.i18n("success"));
+                    if (compiler.getClasses().get(ASMUtil.getReferenceName(classNode)).length != 0) {
+                        ReflectUtil.copyAllMember(classNode, ASMUtil.acceptClassNode(new ClassReader(compiler.getClasses().get(ASMUtil.getReferenceName(classNode)))));
+                        MessageUtil.info(LangUtil.i18n("success"));
+                    } else {
+                        MessageUtil.error(new RuntimeException("Compile failed,Please check console"));
+                    }
                 } catch (Throwable e) {
                     MessageUtil.error(e);
                 }
