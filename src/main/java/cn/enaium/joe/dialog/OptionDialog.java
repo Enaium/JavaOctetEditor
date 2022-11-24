@@ -68,16 +68,8 @@ public class OptionDialog extends Dialog {
             setBottom(bottom);
         }});
         setModal(true);
-        Dimension size = Util.screenSize(getPreferredSize());
-        if (size.width > getWidth()) {
-            size.width = getWidth();
-        }
-
-        if (size.height > getHeight()) {
-            size.height = getHeight();
-        }
-        setMinimumSize(size);
-        setSize(size);
+        pack();
+        setMinimumSize(getSize());
     }
 
     public OptionDialog(String title, Object message, int type) {
