@@ -16,6 +16,7 @@
 
 package cn.enaium.joe;
 
+import cn.enaium.joe.config.extend.ApplicationConfig;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.util.IOUtil;
 import cn.enaium.joe.util.MessageUtil;
@@ -80,8 +81,6 @@ public final class Main {
         System.setErr(new TinyLogPrintStream(System.err, STDERR));
 
         Logger.info("DIR:{}", System.getProperty("user.dir"));
-        FlatDarkLaf.setup();
-        UIManager.put("Tree.paintLines", true);
         new JavaOctetEditor().run();
     }
 

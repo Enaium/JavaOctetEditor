@@ -19,6 +19,7 @@ package cn.enaium.joe.config.extend;
 import cn.enaium.joe.annotation.NoUI;
 import cn.enaium.joe.config.Config;
 import cn.enaium.joe.config.value.EnableValue;
+import cn.enaium.joe.config.value.IntegerValue;
 import cn.enaium.joe.config.value.ModeValue;
 import cn.enaium.joe.config.value.StringSetValue;
 
@@ -37,6 +38,7 @@ public class ApplicationConfig extends Config {
     public EnableValue compactMiddlePackage = new EnableValue("Compact Middle Package", true, "Only Hierarchical Mode");
     @NoUI
     public final StringSetValue loadRecent = new StringSetValue("Load Recent", new HashSet<>(), "");
+    public IntegerValue scale = new IntegerValue("Scale", 0, "UI scale,it doesn't scale if value 0");
 
     public ApplicationConfig() {
         super("Application");

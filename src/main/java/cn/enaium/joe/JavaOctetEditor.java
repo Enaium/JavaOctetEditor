@@ -17,6 +17,7 @@
 package cn.enaium.joe;
 
 import cn.enaium.joe.config.ConfigManager;
+import cn.enaium.joe.config.extend.ApplicationConfig;
 import cn.enaium.joe.event.EventManager;
 import cn.enaium.joe.gui.panel.BorderPanel;
 import cn.enaium.joe.gui.panel.BottomPanel;
@@ -27,6 +28,7 @@ import cn.enaium.joe.gui.panel.menu.*;
 import cn.enaium.joe.jar.Jar;
 import cn.enaium.joe.task.TaskManager;
 import cn.enaium.joe.util.*;
+import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
@@ -43,7 +45,7 @@ public class JavaOctetEditor {
 
     public static final String TITLE = "JavaOctetEditor";
 
-    public JFrame window = new JFrame(TITLE);
+    public JFrame window;
 
     private Jar jar;
 
@@ -61,12 +63,22 @@ public class JavaOctetEditor {
 
 
     public JavaOctetEditor() {
-        instance = this;
         event = new EventManager();
         config = new ConfigManager();
         config.load();
         task = new TaskManager();
         Runtime.getRuntime().addShutdownHook(new Thread(config::save));
+
+        Integer value = config.getByClass(ApplicationConfig.class).scale.getValue();
+
+        if (value > 0) {
+            System.setProperty("sun.java2d.uiScale", value.toString());
+        }
+
+        FlatDarkLaf.setup();
+        UIManager.put("Tree.paintLines", true);
+
+        instance = this;
         fileTabbedPanel = new FileTabbedPanel();
         fileTree = new FileTree();
         bottomPanel = new BottomPanel();
@@ -75,10 +87,10 @@ public class JavaOctetEditor {
     public void run() {
 
         ToolTipManager.sharedInstance().setInitialDelay(0);
-
+        FlatDarkLaf.setup();
         AbstractTokenMakerFactory abstractTokenMakerFactory = (AbstractTokenMakerFactory) TokenMakerFactory.getDefaultInstance();
         abstractTokenMakerFactory.putMapping("text/custom", BytecodeTokenMaker.class.getName());
-
+        window = new JFrame(TITLE);
         window.setIconImage(new FlatSVGIcon("icons/logo.svg").getImage());
 
         window.setJMenuBar(new JMenuBar() {{
