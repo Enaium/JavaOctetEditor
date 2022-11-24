@@ -25,10 +25,8 @@ import cn.enaium.joe.util.MessageUtil;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.Field;
@@ -85,6 +83,7 @@ public class ConfigDialog extends Dialog {
                     } else if (o instanceof IntegerValue) {
                         IntegerValue integerValue = (IntegerValue) o;
                         add(new JSpinner() {{
+                            setValue(integerValue.getValue());
                             addChangeListener(e -> integerValue.setValue(Integer.parseInt(getValue().toString())));
                         }}, "wrap");
                     } else if (o instanceof EnableValue) {
