@@ -37,6 +37,7 @@ public class KeymapConfig extends Config {
     public KeyValue insertAfter = new KeyValue("InsertAfter", KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, InputEvent.CTRL_DOWN_MASK), "Insert method instruction after current");
     public KeyValue moveUp = new KeyValue("Move Up", KeyStroke.getKeyStroke(KeyEvent.VK_UP, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK), "Move method instruction up");
     public KeyValue moveDown = new KeyValue("Move Up", KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK), "Move method instruction down");
+    public KeyValue save = new KeyValue("Save", KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK), "Save something");
 
     public KeymapConfig() {
         super("Keymap");

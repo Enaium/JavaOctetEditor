@@ -16,7 +16,9 @@
 
 package cn.enaium.joe.gui.panel.file.tabbed.tab.classes;
 
+import cn.enaium.joe.JavaOctetEditor;
 import cn.enaium.joe.compiler.Compiler;
+import cn.enaium.joe.config.extend.KeymapConfig;
 import cn.enaium.joe.gui.panel.CodeAreaPanel;
 import cn.enaium.joe.util.*;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
@@ -40,7 +42,7 @@ public class ASMifierTablePanel extends ClassNodeTabPanel {
         super(classNode);
         setLayout(new BorderLayout());
         CodeAreaPanel codeAreaPanel = new CodeAreaPanel() {{
-            KeyStrokeUtil.register(getTextArea(), KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK), () -> {
+            KeyStrokeUtil.register(getTextArea(), JavaOctetEditor.getInstance().config.getByClass(KeymapConfig.class).save.getValue(), () -> {
                 try {
                     String stringBuilder = "import org.objectweb.asm.AnnotationVisitor;" +
                             "import org.objectweb.asm.Attribute;" +
