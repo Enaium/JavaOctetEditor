@@ -18,6 +18,7 @@ package cn.enaium.joe.gui.panel.instruction;
 
 import cn.enaium.joe.util.LangUtil;
 import cn.enaium.joe.util.OpcodeUtil;
+import net.miginfocom.swing.MigLayout;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.InsnList;
 
@@ -34,34 +35,21 @@ import java.util.concurrent.Callable;
  */
 public abstract class AbstractInstructionPanel extends JPanel {
     private final JComboBox<String> opcode = new JComboBox<>(new DefaultComboBoxModel<>());
-
-    private final JPanel names = new JPanel(new GridLayout(0, 1));
-    private final JPanel components = new JPanel(new GridLayout(0, 1));
-
     private Callable<Boolean> confirm = () -> false;
 
     public AbstractInstructionPanel(AbstractInsnNode instruction) {
-        setLayout(new BorderLayout());
+        setLayout(new MigLayout("fillx", "[fill][fill]"));
         if (instruction.getOpcode() != -1) {
             DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) opcode.getModel();
             getOpcodes().forEach(model::addElement);
             model.setSelectedItem(OpcodeUtil.OPCODE.get(instruction.getOpcode()));
             addComponent(new JLabel(LangUtil.i18n("instruction.opcode")), opcode);
         }
-
-        add(names, BorderLayout.WEST);
-        add(components, BorderLayout.CENTER);
     }
 
     public void addComponent(JComponent name, JComponent component) {
-        names.add(new JPanel(new BorderLayout()) {{
-            setBorder(new EmptyBorder(10, 10, 10, 10));
-            add(name, BorderLayout.CENTER);
-        }});
-        components.add(new JPanel(new BorderLayout()) {{
-            setBorder(new EmptyBorder(10, 10, 10, 10));
-            add(component, BorderLayout.CENTER);
-        }});
+        add(name);
+        add(component, "wrap");
     }
 
     public void setConfirm(Callable<Boolean> callable) {
