@@ -16,7 +16,9 @@
 
 package cn.enaium.joe.util;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -57,4 +59,12 @@ public class Util {
         return new Dimension((int) (dimension.width * screenSize.getWidth() / 1920), (int) (dimension.height * screenSize.getHeight() / 1080));
     }
 
+    public static AbstractAction ofAction(Runnable runnable) {
+        return new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                runnable.run();
+            }
+        };
+    }
 }

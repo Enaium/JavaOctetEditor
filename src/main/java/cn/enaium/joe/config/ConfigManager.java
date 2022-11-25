@@ -16,19 +16,16 @@
 
 package cn.enaium.joe.config;
 
-import cn.enaium.joe.config.extend.ApplicationConfig;
-import cn.enaium.joe.config.extend.CFRConfig;
-import cn.enaium.joe.config.extend.FernFlowerConfig;
-import cn.enaium.joe.config.extend.ProcyonConfig;
+import cn.enaium.joe.config.extend.*;
 import cn.enaium.joe.config.value.*;
 import cn.enaium.joe.util.MessageUtil;
-import cn.enaium.joe.util.ReflectUtil;
 import com.google.gson.*;
-import com.google.gson.annotations.Expose;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.*;
@@ -45,6 +42,7 @@ public class ConfigManager {
         setByClass(new CFRConfig());
         setByClass(new FernFlowerConfig());
         setByClass(new ProcyonConfig());
+        setByClass(new KeymapConfig());
     }
 
     @SuppressWarnings("unchecked")
@@ -83,8 +81,8 @@ public class ConfigManager {
         return map;
     }
 
-    private Gson gson() {
-        return new GsonBuilder().setPrettyPrinting().create();
+    private GsonBuilder gson() {
+        return new GsonBuilder().setPrettyPrinting().disableHtmlEscaping();
     }
 
     public void load() {
@@ -95,7 +93,7 @@ public class ConfigManager {
             try {
                 File file = new File(System.getProperty("."), config.getName() + ".json");
                 if (file.exists()) {
-                    JsonObject jsonObject = gson().fromJson(new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8), JsonObject.class);
+                    JsonObject jsonObject = gson().create().fromJson(new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8), JsonObject.class);
 
                     for (Field configField : klass.getDeclaredFields()) {
                         configField.setAccessible(true);
@@ -135,6 +133,8 @@ public class ConfigManager {
                                 ((StringSetValue) value).setValue(strings);
                             } else if (value instanceof StringValue) {
                                 ((StringValue) value).setValue(valueJsonElement.getAsString());
+                            } else if (value instanceof KeyValue) {
+                                ((KeyValue) value).setValue(KeyStroke.getKeyStroke(valueJsonElement.getAsString()));
                             }
                         }
                     }
@@ -148,7 +148,7 @@ public class ConfigManager {
     public void save() {
         for (Config value : configMap.values()) {
             try {
-                Files.write(new File(System.getProperty("."), value.getName() + ".json").toPath(), gson().toJson(value).getBytes(StandardCharsets.UTF_8));
+                Files.write(new File(System.getProperty("."), value.getName() + ".json").toPath(), gson().registerTypeAdapter(KeyStroke.class, (JsonSerializer<KeyStroke>) (src, typeOfSrc, context) -> new JsonPrimitive(src.toString())).create().toJson(value).getBytes(StandardCharsets.UTF_8));
             } catch (IOException e) {
                 MessageUtil.error(e);
             }
