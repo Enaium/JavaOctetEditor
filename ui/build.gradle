@@ -1,0 +1,57 @@
+import java.text.SimpleDateFormat
+
+plugins {
+    id 'java'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
+    id 'org.jetbrains.kotlin.jvm' version '1.7.21'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+dependencies {
+    implementation project(':core')
+    implementation 'com.miglayout:miglayout-javafx:11.0'
+    implementation 'com.github.hervegirod:fxsvgimage:1.0b2'
+    implementation 'org.fxmisc.richtext:richtextfx:0.11.0'
+}
+
+new File(System.getProperty("user.dir"), "run").mkdir()
+
+javafx {
+    version = '17.0.2'
+}
+
+jar {
+    manifest.attributes(
+            'Manifest-Version': 1.0,
+            'Main-Class': 'cn.enaium.joe.Main',
+            "Implementation-Title": "${project.name}",
+            "Implementation-Version": "${project.version}",
+            "Implementation-Vendor": "${project.group}",
+            "Implementation-Timestamp": new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()),
+            "Premain-Class": "cn.enaium.joe.Agent",
+            "Agent-Class": "cn.enaium.joe.Agent",
+            "Can-Redefine-Classes": true,
+            "Can-Retransform-Classes": true
+    )
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+[compileKotlin, compileTestKotlin].forEach {
+    it.kotlinOptions {
+        jvmTarget = '17'
+    }
+}
+
+shadowJar {
+    dependencies {
+        include(dependency('org.jfxtras:jmetro'))
+    }
+    archiveBaseName.set('JavaOctetEditor')
+    archiveClassifier.set('')
+    archiveVersion.set(project.version)
+}
+
+build.dependsOn shadowJar

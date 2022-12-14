@@ -1,2 +1,4 @@
 rootProject.name = 'JavaOctetEditor'
+include 'core'
+include 'ui'
 

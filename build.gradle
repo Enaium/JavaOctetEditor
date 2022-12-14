@@ -1,80 +1,30 @@
-import java.text.SimpleDateFormat
-import org.gradle.internal.jvm.Jvm
-
 plugins {
     id 'java'
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
     id 'idea'
 }
 
-group 'cn.enaium'
-version '1.4.0-beta.4'
-
-sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
-
-jar {
-    manifest.attributes(
-            'Manifest-Version': 1.0,
-            'Main-Class': 'cn.enaium.joe.Main',
-            "Implementation-Title": "${project.name}",
-            "Implementation-Version": "${project.version}",
-            "Implementation-Vendor": "${project.group}",
-            "Implementation-Timestamp": new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()),
-            "Premain-Class": "cn.enaium.joe.Agent",
-            "Agent-Class": "cn.enaium.joe.Agent",
-            "Can-Redefine-Classes": true,
-            "Can-Retransform-Classes": true
-    )
+allprojects {
+    group 'cn.enaium'
+    version '2.0.0'
 }
 
-new File(System.getProperty("user.dir"), "run").mkdir()
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
+    apply plugin: 'checkstyle'
 
-repositories {
-    mavenCentral()
-    maven { url 'https://jitpack.io' }
-    maven { url 'https://maven.quiltmc.org/repository/release' }
-}
 
-dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
-
-    implementation 'com.formdev:flatlaf:2.6'
-    implementation 'com.formdev:flatlaf-extras:2.6'
-    //noinspection GradlePackageUpdate
-    implementation 'com.miglayout:miglayout-swing:5.3'
-    implementation 'com.github.bobbylight:RSyntaxTextArea:3.2.0'
-    implementation 'org.ow2.asm:asm-tree:9.4'
-    implementation 'org.ow2.asm:asm-util:9.4'
-    implementation 'org.ow2.asm:asm-commons:9.4'
-    implementation 'org.benf:cfr:0.152'
-    implementation 'com.github.mstrobel.procyon:procyon-decompiler:v0.6.0'
-    implementation 'org.quiltmc:quiltflower:1.8.1'
-    implementation 'com.google.code.gson:gson:2.10'
-    implementation 'org.tinylog:tinylog:1.3.6'
-    implementation 'com.github.FabricMC:mapping-io:597f0722d6'
-
-    compileOnly files(Jvm.current().getToolsJar())//Must use jdk8
-}
-
-test {
-    useJUnitPlatform()
-}
-
-shadowJar {
-    dependencies {
-        include(dependency('com.formdev:.*'))
-        include(dependency('com.miglayout:.*'))
-        include(dependency('com.github.bobbylight:RSyntaxTextArea'))
-        include(dependency('org.ow2.asm:.*'))
-        include(dependency('org.benf:cfr'))
-        include(dependency('com.github.mstrobel.procyon:procyon-decompiler'))
-        include(dependency('com.google.code.gson:gson'))
-        include(dependency('org.tinylog:.*'))
-        include(dependency('org.quiltmc:quiltflower'))
-        include(dependency('com.github.FabricMC:mapping-io'))
+    //If you want to use your JDK, just takes to change the JDK version and vendor, otherwise Gradle will be download default JDK
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+            vendor = JvmVendorSpec.BELLSOFT
+        }
     }
-    archiveClassifier.set('')
-}
 
-build.dependsOn shadowJar
+    repositories {
+        mavenCentral()
+        maven { url 'https://maven.quiltmc.org/repository/release' }
+        maven { url 'https://jitpack.io' }
+    }
+}
