@@ -14,24 +14,20 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.ui.control.menu
+package cn.enaium.joe.ui.control.menu.search
 
-import cn.enaium.joe.ui.control.menu.search.FieldMenuItem
-import cn.enaium.joe.ui.control.menu.search.InstructionMenuItem
-import cn.enaium.joe.ui.control.menu.search.LDCMenuItem
-import cn.enaium.joe.ui.control.menu.search.MethodMenuItem
+import cn.enaium.joe.ui.dialog.SearchOpcodeDialog
 import cn.enaium.joe.ui.util.i18n
-import javafx.scene.control.Menu
+import javafx.scene.control.MenuItem
 
 /**
  * @author Enaium
  * @since 2.0.0
  */
-class SearchMenu : Menu(i18n("menu.search")) {
+class InstructionMenuItem : MenuItem(i18n("menu.search.opcode")) {
     init {
-        items.add(FieldMenuItem())
-        items.add(MethodMenuItem())
-        items.add(LDCMenuItem())
-        items.add(InstructionMenuItem())
+        setOnAction {
+            SearchOpcodeDialog().show()
+        }
     }
 }

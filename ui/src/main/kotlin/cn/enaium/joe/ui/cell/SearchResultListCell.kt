@@ -17,10 +17,12 @@
 package cn.enaium.joe.ui.cell
 
 import cn.enaium.joe.core.model.SearchResultModel
+import cn.enaium.joe.core.util.OpcodeUtil
 import cn.enaium.joe.ui.util.ColorUtil
 import javafx.scene.control.ListCell
 import javafx.scene.text.Text
 import javafx.scene.text.TextFlow
+import org.objectweb.asm.tree.AbstractInsnNode
 import org.objectweb.asm.tree.FieldInsnNode
 import org.objectweb.asm.tree.LdcInsnNode
 import org.objectweb.asm.tree.MethodInsnNode
@@ -76,6 +78,10 @@ class SearchResultListCell : ListCell<SearchResultModel>() {
                             }
                         }
                     }
+                }
+
+                is AbstractInsnNode -> {
+                    text = OpcodeUtil.OPCODE[result.opcode]
                 }
             }
         }

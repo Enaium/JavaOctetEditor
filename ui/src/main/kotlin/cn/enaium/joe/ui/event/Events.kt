@@ -19,6 +19,7 @@ package cn.enaium.joe.ui.event
 import cn.enaium.joe.core.model.JarModel
 import cn.enaium.joe.ui.control.tree.AnyTreeItem
 import javafx.scene.control.Tab
+import org.objectweb.asm.tree.ClassNode
 
 /**
  * @author Enaium
@@ -29,3 +30,5 @@ class LoadJar(val jar: JarModel) : Event
 class SelectTreeItem(val item: AnyTreeItem) : Event
 
 class ContentTabChange(val old: Tab?, val new: Tab?) : Event
+
+class ResultJump(val classNode: ClassNode) : Event
