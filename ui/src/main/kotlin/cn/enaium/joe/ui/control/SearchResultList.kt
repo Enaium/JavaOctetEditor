@@ -17,10 +17,15 @@
 package cn.enaium.joe.ui.control
 
 import cn.enaium.joe.core.model.SearchResultModel
+import cn.enaium.joe.ui.JavaOctetEditor.Companion.event
 import cn.enaium.joe.ui.cell.SearchResultListCell
+import cn.enaium.joe.ui.event.ResultJump
 import cn.enaium.joe.ui.util.ColorUtil
+import cn.enaium.joe.ui.util.i18n
+import javafx.scene.control.ContextMenu
 import javafx.scene.control.ListCell
 import javafx.scene.control.ListView
+import javafx.scene.control.MenuItem
 import javafx.scene.text.Text
 import javafx.scene.text.TextFlow
 import org.objectweb.asm.tree.FieldInsnNode
@@ -36,6 +41,15 @@ class SearchResultList : ListView<SearchResultModel>() {
     init {
         setCellFactory {
             SearchResultListCell()
+        }
+        contextMenu = ContextMenu().apply {
+            items.add(MenuItem(i18n("context.result.jump")).apply {
+                setOnAction {
+                    selectionModel.selectedItem?.let {
+                        event.call(ResultJump(selectionModel.selectedItem.classNode))
+                    }
+                }
+            })
         }
     }
 }

@@ -22,9 +22,15 @@ import cn.enaium.joe.ui.JavaOctetEditor.Companion.event
 import cn.enaium.joe.ui.cell.FileTreeCell
 import cn.enaium.joe.ui.control.tree.*
 import cn.enaium.joe.ui.event.LoadJar
+import cn.enaium.joe.ui.event.ResultJump
 import cn.enaium.joe.ui.event.SelectTreeItem
+import cn.enaium.joe.ui.util.expandAll
+import cn.enaium.joe.ui.util.i18n
+import javafx.scene.control.ContextMenu
+import javafx.scene.control.MenuItem
 import javafx.scene.control.TreeItem
 import javafx.scene.control.TreeView
+import org.objectweb.asm.tree.ClassNode
 
 
 /**
@@ -50,6 +56,21 @@ class FileTree : TreeView<Any>() {
                 }
             }
         }
+
+        event.register<ResultJump> {
+            selectClassNode(classesRoot, it.classNode)
+        }
+
+        contextMenu = ContextMenu().apply {
+            items.add(MenuItem(i18n("context.fileTree.expandAll")).apply {
+                setOnAction {
+                    selectionModel.selectedItem?.let {
+                        expandAll(selectionModel.selectedItem)
+                    }
+                }
+            })
+        }
+
 
         event.register<LoadJar> {
             classesRoot.children.clear()
@@ -122,30 +143,30 @@ class FileTree : TreeView<Any>() {
         }
     }
 
-    private fun compact(objectItem: TreeItem<Any>) {
+    private fun compact(anyTreeItem: TreeItem<Any>) {
         if (!JavaOctetEditor.config.getByClass(ApplicationConfig::class.java).compactMiddlePackage.value) {
             return
         }
-        if (!objectItem.isLeaf) {
-            val parent = objectItem.parent
-            if (parent.children.size === 1 && !(parent.equals(classesRoot) || parent.equals(resourceRoot))) {
-                parent.value = "${parent.value}.${objectItem.value}"
+        if (!anyTreeItem.isLeaf) {
+            val parent = anyTreeItem.parent
+            if (parent.children.size == 1 && !(parent.equals(classesRoot) || parent.equals(resourceRoot))) {
+                parent.value = "${parent.value}.${anyTreeItem.value}"
                 parent.children.clear()
-                for (child in objectItem.children) {
+                for (child in anyTreeItem.children) {
                     child.parent.value = parent
                     parent.children.add(child)
                 }
             }
 
-            for (i in 0 until objectItem.children.size) {
-                compact(objectItem.children[i])
+            for (i in 0 until anyTreeItem.children.size) {
+                compact(anyTreeItem.children[i])
             }
         }
     }
 
-    private fun sort(objectItem: TreeItem<Any>) {
-        if (!objectItem.isLeaf) {
-            objectItem.children.sortWith(Comparator { o1: TreeItem<Any>, o2: TreeItem<Any> ->
+    private fun sort(anyTreeItem: TreeItem<Any>) {
+        if (!anyTreeItem.isLeaf) {
+            anyTreeItem.children.sortWith(Comparator { o1: TreeItem<Any>, o2: TreeItem<Any> ->
                 val class1 = o1 is ClassTreeItem
                 val class2 = o2 is ClassTreeItem
                 val file1 = o1 is FileTreeItem
@@ -164,10 +185,22 @@ class FileTree : TreeView<Any>() {
                 }
                 o1.toString().compareTo(o2.toString())
             })
-            for (i in 0 until objectItem.children.size) {
-                val child = objectItem.children[i]
-                sort(child)
+            for (i in 0 until anyTreeItem.children.size) {
+                sort(anyTreeItem.children[i])
             }
+        }
+    }
+
+    private fun selectClassNode(anyTreeItem: TreeItem<Any>, classNode: ClassNode) {
+        if (anyTreeItem is ClassTreeItem) {
+            if (anyTreeItem.classNode == classNode) {
+                selectionModel.select(anyTreeItem)
+                event.call(SelectTreeItem(anyTreeItem as AnyTreeItem))
+            }
+        }
+
+        anyTreeItem.children.forEach {
+            selectClassNode(it, classNode)
         }
     }
 }
