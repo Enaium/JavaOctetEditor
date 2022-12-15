@@ -23,7 +23,7 @@ javafx {
 jar {
     manifest.attributes(
             'Manifest-Version': 1.0,
-            'Main-Class': 'cn.enaium.joe.Main',
+            'Main-Class': 'cn.enaium.joe.ui.MainKt',
             "Implementation-Title": "${project.name}",
             "Implementation-Version": "${project.version}",
             "Implementation-Vendor": "${project.group}",
@@ -46,12 +46,14 @@ tasks.withType(JavaCompile) {
 }
 
 shadowJar {
-    dependencies {
-        include(dependency('org.jfxtras:jmetro'))
-    }
     archiveBaseName.set('JavaOctetEditor')
     archiveClassifier.set('')
     archiveVersion.set(project.version)
+    minimize {
+        dependencies {
+            exclude(dependency('org.openjfx:.*'))
+        }
+    }
 }
 
 build.dependsOn shadowJar
