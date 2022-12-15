@@ -44,6 +44,7 @@ class ContentTabPane : TabPane() {
                 })
             }
         }
+
         selectionModel.selectedItemProperty()
             .addListener { _, oldValue, newValue -> event.call(ContentTabChange(oldValue, newValue)) }
     }

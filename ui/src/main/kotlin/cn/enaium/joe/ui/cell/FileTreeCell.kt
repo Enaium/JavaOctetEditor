@@ -22,8 +22,6 @@ import cn.enaium.joe.ui.control.tree.FolderTreeItem
 import cn.enaium.joe.ui.control.tree.PackageTreeItem
 import cn.enaium.joe.ui.util.loadSVG
 import javafx.scene.control.TreeCell
-import javafx.scene.control.TreeView
-import javafx.util.Callback
 import org.objectweb.asm.Opcodes
 
 /**
