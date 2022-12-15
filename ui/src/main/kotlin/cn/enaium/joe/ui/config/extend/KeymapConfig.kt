@@ -20,6 +20,7 @@ import cn.enaium.joe.core.config.Config
 import cn.enaium.joe.ui.config.value.KeyCodeValue
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyCodeCombination
+import javafx.scene.input.KeyCombination
 import javax.swing.KeyStroke
 
 
@@ -32,39 +33,39 @@ class KeymapConfig : Config("Keymap") {
     var clone: KeyCodeValue =
         KeyCodeValue(
             "Clone",
-            KeyCodeCombination(KeyCode.D, KeyCodeCombination.CONTROL_DOWN),
+            KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN),
             "Clone method instruction"
         )
     var remove: KeyCodeValue = KeyCodeValue(
         "Remove",
-        KeyCodeCombination(KeyCode.Y, KeyCodeCombination.CONTROL_DOWN),
+        KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN),
         "Remove method instruction"
     )
     var copy: KeyCodeValue = KeyCodeValue(
         "Copy",
-        KeyCodeCombination(KeyCode.C, KeyCodeCombination.CONTROL_DOWN),
+        KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN),
         "Copy method instruction text"
     )
     var insertBefore: KeyCodeValue = KeyCodeValue(
         "InsertBefore",
-        KeyCodeCombination(KeyCode.ENTER, KeyCodeCombination.CONTROL_DOWN, KeyCodeCombination.ALT_DOWN),
+        KeyCodeCombination(KeyCode.ENTER, KeyCombination.CONTROL_DOWN, KeyCombination.ALT_DOWN),
         "Insert method instruction before current"
     )
     var insertAfter: KeyCodeValue = KeyCodeValue(
         "InsertAfter",
-        KeyCodeCombination(KeyCode.ENTER, KeyCodeCombination.CONTROL_DOWN),
+        KeyCodeCombination(KeyCode.ENTER, KeyCombination.CONTROL_DOWN),
         "Insert method instruction after current"
     )
     var moveUp: KeyCodeValue = KeyCodeValue(
         "Move Up",
-        KeyCodeCombination(KeyCode.UP, KeyCodeCombination.CONTROL_DOWN, KeyCodeCombination.SHIFT_DOWN),
+        KeyCodeCombination(KeyCode.UP, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN),
         "Move method instruction up"
     )
     var moveDown: KeyCodeValue = KeyCodeValue(
         "Move Up",
-        KeyCodeCombination(KeyCode.DOWN, KeyCodeCombination.CONTROL_DOWN, KeyCodeCombination.SHIFT_DOWN),
+        KeyCodeCombination(KeyCode.DOWN, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN),
         "Move method instruction down"
     )
     var save: KeyCodeValue =
-        KeyCodeValue("Save", KeyCodeCombination(KeyCode.S, KeyCodeCombination.CONTROL_DOWN), "Save something")
+        KeyCodeValue("Save", KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN), "Save something")
 }

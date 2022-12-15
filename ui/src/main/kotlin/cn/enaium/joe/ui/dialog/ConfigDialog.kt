@@ -18,9 +18,12 @@ package cn.enaium.joe.ui.dialog
 
 import cn.enaium.joe.core.config.Config
 import cn.enaium.joe.core.config.value.*
+import cn.enaium.joe.ui.config.value.KeyCodeValue
 import cn.enaium.joe.ui.util.i18n
 import javafx.geometry.Pos
 import javafx.scene.control.*
+import javafx.scene.input.KeyCodeCombination
+import javafx.scene.input.KeyCombination
 import org.tbee.javafx.scene.layout.MigPane
 
 /**
@@ -74,6 +77,31 @@ class ConfigDialog(config: Config) : Dialog(i18n("menu.config")) {
                                 .addListener { _, _, newValue ->
                                     o.value = newValue
                                 }
+                        }, "wrap")
+                    }
+
+                    is KeyCodeValue -> {
+                        add(Button(o.value.name).apply {
+                            setOnKeyPressed {
+                                val modifiers = mutableListOf<KeyCombination.Modifier>()
+
+                                if (it.isAltDown) {
+                                    modifiers.add(KeyCombination.ALT_DOWN)
+                                }
+
+                                if (it.isControlDown) {
+                                    modifiers.add(KeyCombination.CONTROL_DOWN)
+                                }
+
+                                if (it.isShiftDown) {
+                                    modifiers.add(KeyCombination.SHIFT_DOWN)
+                                }
+
+                                if (!it.code.isModifierKey) {
+                                    o.value = KeyCodeCombination(it.code, *modifiers.toTypedArray())
+                                    text = o.value.name
+                                }
+                            }
                         }, "wrap")
                     }
                 }
