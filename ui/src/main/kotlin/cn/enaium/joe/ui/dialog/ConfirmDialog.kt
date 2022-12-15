@@ -27,6 +27,8 @@ import javafx.scene.layout.HBox
  * @since 2.0.0
  */
 class ConfirmDialog(confirmPane: ConfirmPane) : Dialog("Confirm") {
+    var confirm = {}
+    var cancel = {}
     init {
         content = BorderPane().apply {
             center = confirmPane
@@ -35,12 +37,15 @@ class ConfirmDialog(confirmPane: ConfirmPane) : Dialog("Confirm") {
                 children.add(Button("OK").apply {
                     setOnAction {
                         confirmPane.confirm.invoke()
+                        confirm.invoke()
                         close()
                     }
                 })
                 children.add(Button("Cancel").apply {
                     setOnAction {
                         confirmPane.cancel.invoke()
+                        cancel.invoke()
+                        close()
                     }
                 })
             }

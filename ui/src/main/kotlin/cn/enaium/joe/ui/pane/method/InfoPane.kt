@@ -16,6 +16,7 @@
 
 package cn.enaium.joe.ui.pane.method
 
+import cn.enaium.joe.ui.dialog.AnnotationDialog
 import cn.enaium.joe.ui.util.i18n
 import javafx.scene.control.Button
 import javafx.scene.control.Label
@@ -52,13 +53,17 @@ class InfoPane(methodNode: MethodNode) : MigPane("fillx", "[fill][fill]") {
         add(Label(i18n("class.info.visibleAnnotation")))
         add(Button(i18n("button.edit")).apply {
             setOnAction {
-                // TODO:
+                methodNode.visibleAnnotations?.let {
+                    AnnotationDialog(methodNode.visibleAnnotations).show()
+                }
             }
         }, "wrap")
         add(Label(i18n("class.info.invisibleAnnotation")))
         add(Button(i18n("button.edit")).apply {
             setOnAction {
-                // TODO:
+                methodNode.invisibleAnnotations?.let {
+                    AnnotationDialog(methodNode.invisibleAnnotations).show()
+                }
             }
         }, "wrap")
         add(Button("button.save").apply {

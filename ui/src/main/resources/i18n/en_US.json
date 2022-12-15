@@ -113,5 +113,8 @@
   "instruction.labels": "Labels:",
   "side.member": "Member",
   "side.inherit": "Inherit",
-  "side.call": "Call"
+  "annotation.title": "Annotation",
+  "annotation.description": "Description",
+  "annotation.hasValue": "Has Value",
+  "annotation.value": "Value"
 }

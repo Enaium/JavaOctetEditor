@@ -113,5 +113,8 @@
   "instruction.labels": "标签:",
   "side.member": "成员",
   "side.inherit": "继承",
-  "side.call": "调用"
+  "annotation.title": "注解",
+  "annotation.description": "描述",
+  "annotation.hasValue": "有值",
+  "annotation.value": "值"
 }
