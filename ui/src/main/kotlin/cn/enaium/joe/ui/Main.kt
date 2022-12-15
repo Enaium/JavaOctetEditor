@@ -16,13 +16,11 @@
 
 package cn.enaium.joe.ui
 
-import cn.enaium.joe.ui.JavaOctetEditor
 import javafx.application.Application
 
 /**
  * @author Enaium
  */
-
 fun main() {
     Application.launch(JavaOctetEditor::class.java)
 }
