@@ -111,6 +111,7 @@
   "instruction.min": "Min:",
   "instruction.max": "Max:",
   "instruction.labels": "Labels:",
+  "instruction.tag": "Tag:",
   "side.member": "Member",
   "side.inherit": "Inherit",
   "annotation.title": "Annotation",

@@ -16,7 +16,11 @@
 
 package cn.enaium.joe.ui.pane.instruction
 
+import cn.enaium.joe.core.wrapper.Wrapper
+import cn.enaium.joe.ui.dialog.ConfirmDialog
+import cn.enaium.joe.ui.pane.confirm.HandleEditPane
 import cn.enaium.joe.ui.util.i18n
+import javafx.scene.control.Button
 import javafx.scene.control.ComboBox
 import javafx.scene.control.Label
 import javafx.scene.control.TextField
@@ -34,6 +38,7 @@ class LdcInstructionPane(instruction: LdcInsnNode) : AbstractInstructionPane(ins
             items.addAll("String", "float", "double", "int", "long", "Class", "Handle")
         }
         add(Label(i18n("instruction.type")), type)
+        var handle: Handle? = null
         when (instruction.cst) {
             is String -> {
                 type.selectionModel.select("String")
@@ -60,42 +65,55 @@ class LdcInstructionPane(instruction: LdcInsnNode) : AbstractInstructionPane(ins
             }
 
             is Handle -> {
-                // TODO:
-//                type.selectionModel.select("Handle")
+                type.selectionModel.select("Handle")
+                handle = instruction.cst as Handle
             }
         }
 
-        val ldc = TextField(instruction.cst.toString())
-        add(Label("instruction.var", ldc))
-        confirm = {
-            type.selectionModel.selectedItem?.let {
-                when (type.selectionModel.selectedItem) {
-                    "String" -> {
-                        instruction.cst = ldc.text
-                    }
+        handle?.let {
+            add(Label(i18n("instruction.handle")), Button(i18n("button.edit")).apply {
+                setOnAction {
+                    val handleWrapper = Wrapper(handle)
+                    ConfirmDialog(HandleEditPane(handleWrapper)).apply {
+                        confirm = {
+                            instruction.cst = handleWrapper.wrapper
+                        }
+                    }.show()
+                }
+            })
+        } ?: let {
+            val ldc = TextField(instruction.cst.toString())
+            add(Label("instruction.var", ldc))
+            confirm = {
+                type.selectionModel.selectedItem?.let {
+                    when (type.selectionModel.selectedItem) {
+                        "String" -> {
+                            instruction.cst = ldc.text
+                        }
 
-                    "float" -> {
-                        instruction.cst = ldc.text.toFloat()
-                    }
+                        "float" -> {
+                            instruction.cst = ldc.text.toFloat()
+                        }
 
-                    "double" -> {
-                        instruction.cst = ldc.text.toDouble()
-                    }
+                        "double" -> {
+                            instruction.cst = ldc.text.toDouble()
+                        }
 
-                    "int" -> {
-                        instruction.cst = ldc.text.toInt()
-                    }
+                        "int" -> {
+                            instruction.cst = ldc.text.toInt()
+                        }
 
-                    "long" -> {
-                        instruction.cst = ldc.text.toLong()
-                    }
+                        "long" -> {
+                            instruction.cst = ldc.text.toLong()
+                        }
 
-                    "Class" -> {
-                        instruction.cst = Type.getType(ldc.text)
+                        "Class" -> {
+                            instruction.cst = Type.getType(ldc.text)
+                        }
                     }
                 }
+                true
             }
-            true
         }
     }
 

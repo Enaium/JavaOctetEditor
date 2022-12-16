@@ -111,6 +111,7 @@
   "instruction.min": "最小:",
   "instruction.max": "最大:",
   "instruction.labels": "标签:",
+  "instruction.tag": "标记:",
   "side.member": "成员",
   "side.inherit": "继承",
   "annotation.title": "注解",
