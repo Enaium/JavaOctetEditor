@@ -16,18 +16,12 @@
 
 package cn.enaium.joe.ui.control
 
-import cn.enaium.joe.core.util.OpcodeUtil
 import cn.enaium.joe.ui.cell.InstructionListCell
 import cn.enaium.joe.ui.dialog.ConfirmDialog
 import cn.enaium.joe.ui.pane.confirm.InstructionEditPane
-import cn.enaium.joe.ui.util.ColorUtil
-import javafx.scene.Node
-import javafx.scene.control.ListCell
 import javafx.scene.control.ListView
-import javafx.scene.text.Text
-import javafx.scene.text.TextFlow
-import org.objectweb.asm.Handle
-import org.objectweb.asm.tree.*
+import org.objectweb.asm.tree.AbstractInsnNode
+import org.objectweb.asm.tree.MethodNode
 
 
 /**

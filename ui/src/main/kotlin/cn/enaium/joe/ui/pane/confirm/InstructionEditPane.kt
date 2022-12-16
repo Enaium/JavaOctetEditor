@@ -54,7 +54,7 @@ class InstructionEditPane(instruction: AbstractInsnNode) : ConfirmPane() {
             is InvokeDynamicInsnNode -> abstractInstructionPane = InvokeDynamicInstructionPane(instruction)
             is JumpInsnNode -> abstractInstructionPane = JumpInstructionPane(instruction)
             is LabelNode -> {}
-            is LdcInsnNode -> abstractInstructionPane = LdcInstructionPane(instruction)
+            is LdcInsnNode -> abstractInstructionPane = LDCInstructionPane(instruction)
             is IincInsnNode -> abstractInstructionPane = IncrInstructionPane(instruction)
             is TableSwitchInsnNode -> abstractInstructionPane = TableSwitchInstructionPane(instruction)
             is LookupSwitchInsnNode -> abstractInstructionPane = LookupSwitchInstructionPane(instruction)
