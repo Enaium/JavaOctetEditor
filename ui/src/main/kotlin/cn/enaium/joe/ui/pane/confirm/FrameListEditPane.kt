@@ -41,7 +41,7 @@ class FrameListEditPane(frameNode: FrameNode) : ConfirmPane() {
             })
         }
         confirm = {
-
+            // TODO: optimize
         }
     }
 
@@ -58,7 +58,7 @@ class FrameListEditPane(frameNode: FrameNode) : ConfirmPane() {
             }
             center = list
             bottom = HBox().apply {
-                children.add(Button("Add String").apply {
+                children.add(Button("instruction.addString").apply {
                     setOnAction {
                         val string = TextInputDialog().showAndWait()
                         if (string.get().isNotBlank()) {
@@ -67,7 +67,7 @@ class FrameListEditPane(frameNode: FrameNode) : ConfirmPane() {
                         }
                     }
                 })
-                children.add(Button("Add Type").apply {
+                children.add(Button("instruction.addType").apply {
                     setOnAction {
                         ConfirmDialog(ConfirmPane().apply {
                             val type = ComboBox<String>().apply {

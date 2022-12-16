@@ -19,6 +19,7 @@ package cn.enaium.joe.ui.pane.confirm
 import cn.enaium.joe.core.util.OpcodeUtil
 import cn.enaium.joe.core.wrapper.Wrapper
 import cn.enaium.joe.ui.util.i18n
+import javafx.geometry.Pos
 import javafx.scene.control.CheckBox
 import javafx.scene.control.ComboBox
 import javafx.scene.control.Label
@@ -34,7 +35,11 @@ class HandleEditPane(handleWrapper: Wrapper<Handle>) : ConfirmPane() {
     init {
         center = MigPane("fillx,", "[fill][fill]").apply {
             add(Label(i18n("instruction.tag")))
-            val tag = ComboBox<String>()
+            val tag = ComboBox<String>().apply {
+                OpcodeUtil.HANDLE.values.forEach {
+                    items.add(it)
+                }
+            }
             add(tag, "wrap")
             add(Label(i18n("instruction.owner")))
             val owner = TextField(handleWrapper.wrapper.owner)
@@ -46,10 +51,12 @@ class HandleEditPane(handleWrapper: Wrapper<Handle>) : ConfirmPane() {
             val description = TextField(handleWrapper.wrapper.desc)
             add(description, "wrap")
             add(Label(i18n("instruction.interface")))
-            val isInterface = CheckBox()
+            val isInterface = CheckBox().apply {
+                alignment = Pos.CENTER_RIGHT
+            }
             add(isInterface, "wrap")
             confirm = {
-                tag.selectionModel.selectedItem?.let {
+                tag.value?.let {
                     handleWrapper.wrapper = Handle(
                         OpcodeUtil.reverse(OpcodeUtil.HANDLE)[tag.selectionModel.selectedItem]!!,
                         owner.text,
