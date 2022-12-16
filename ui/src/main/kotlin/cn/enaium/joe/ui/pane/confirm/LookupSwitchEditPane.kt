@@ -20,13 +20,11 @@ import cn.enaium.joe.core.wrapper.LabelNodeWrapper
 import cn.enaium.joe.ui.control.LabelNodeComboBox
 import cn.enaium.joe.ui.dialog.ConfirmDialog
 import cn.enaium.joe.ui.util.i18n
-import javafx.collections.FXCollections
 import javafx.scene.control.Button
 import javafx.scene.control.Spinner
 import javafx.scene.control.TableColumn
 import javafx.scene.control.TableView
 import javafx.scene.control.cell.PropertyValueFactory
-import javafx.scene.layout.BorderPane
 import javafx.scene.layout.HBox
 import org.objectweb.asm.tree.LabelNode
 import org.tbee.javafx.scene.layout.MigPane
@@ -36,60 +34,56 @@ import org.tbee.javafx.scene.layout.MigPane
  */
 class LookupSwitchEditPane(keys: MutableList<Int>, labels: MutableList<LabelNode>) : ConfirmPane() {
     init {
-        center = BorderPane().apply {
-            val tableView = TableView<Item>().apply {
-                isEditable = false
-                val key = TableColumn<Item, String>(i18n("instruction.lookSwitch.keys"))
-                key.isResizable = false
-                key.cellValueFactory = PropertyValueFactory("key")
-                key.prefWidthProperty().bind(widthProperty().multiply(.5))
+        val tableView = TableView<Item>().apply {
+            isEditable = false
+            val key = TableColumn<Item, String>(i18n("instruction.lookSwitch.keys"))
+            key.isResizable = false
+            key.cellValueFactory = PropertyValueFactory("key")
+            key.prefWidthProperty().bind(widthProperty().multiply(.5))
 
-                val label = TableColumn<Item, Boolean>(i18n("instruction.lookSwitch.labels"))
-                label.isResizable = false
-                label.cellValueFactory = PropertyValueFactory("labelNodeWrapper")
-                label.prefWidthProperty().bind(widthProperty().multiply(.5))
+            val label = TableColumn<Item, Boolean>(i18n("instruction.lookSwitch.labels"))
+            label.isResizable = false
+            label.cellValueFactory = PropertyValueFactory("labelNodeWrapper")
+            label.prefWidthProperty().bind(widthProperty().multiply(.5))
 
-                items = FXCollections.observableArrayList<Item>().apply {
-                    labels.indices.forEach {
-                        add(Item(keys[it], LabelNodeWrapper(labels[it])))
-                    }
-                }
-                columns.addAll(key, label)
+            labels.indices.forEach {
+                items.add(Item(keys[it], LabelNodeWrapper(labels[it])))
             }
-            center = tableView
-            bottom = HBox().apply {
-                children.add(Button(i18n("button.add")).apply {
-                    setOnAction {
-                        ConfirmDialog(ConfirmPane().apply {
-                            center = MigPane("fillx", "[fill][fill]").apply {
-                                val key = Spinner<Int>()
-                                val label = LabelNodeComboBox(labels[0])
-                                add(key)
-                                add(label)
-                                confirm = {
-                                    label.value?.let {
-                                        tableView.items.add(Item(key.value, label.value))
-                                    }
+            columns.addAll(key, label)
+        }
+        center = tableView
+        bottom = HBox().apply {
+            children.add(Button(i18n("button.add")).apply {
+                setOnAction {
+                    ConfirmDialog(ConfirmPane().apply {
+                        center = MigPane("fillx", "[fill][fill]").apply {
+                            val key = Spinner<Int>()
+                            val label = LabelNodeComboBox(labels[0])
+                            add(key)
+                            add(label)
+                            confirm = {
+                                label.value?.let {
+                                    tableView.items.add(Item(key.value, label.value))
                                 }
                             }
-                        }).show()
-                    }
-                })
-                children.add(Button(i18n("button.remove")).apply {
-                    setOnAction {
-                        tableView.selectionModel.selectedItem?.let {
-                            tableView.items.removeAt(tableView.selectionModel.selectedIndex)
                         }
-                    }
-                })
-            }
-            confirm = {
-                keys.clear()
-                labels.clear()
-                tableView.items.forEach {
-                    keys.add(it.key)
-                    labels.add(it.labelNodeWrapper.wrapper)
+                    }).show()
                 }
+            })
+            children.add(Button(i18n("button.remove")).apply {
+                setOnAction {
+                    tableView.selectionModel.selectedItem?.let {
+                        tableView.items.removeAt(tableView.selectionModel.selectedIndex)
+                    }
+                }
+            })
+        }
+        confirm = {
+            keys.clear()
+            labels.clear()
+            tableView.items.forEach {
+                keys.add(it.key)
+                labels.add(it.labelNodeWrapper.wrapper)
             }
         }
     }
