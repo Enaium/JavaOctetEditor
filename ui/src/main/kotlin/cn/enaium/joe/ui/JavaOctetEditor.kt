@@ -18,11 +18,15 @@ package cn.enaium.joe.ui
 import cn.enaium.joe.core.config.ConfigManager
 import cn.enaium.joe.core.task.TaskManager
 import cn.enaium.joe.ui.config.extend.KeymapConfig
+import cn.enaium.joe.ui.dialog.ConfirmDialog
 import cn.enaium.joe.ui.event.EventManager
 import cn.enaium.joe.ui.pane.MainPane
+import cn.enaium.joe.ui.pane.confirm.ConfirmPane
 import cn.enaium.joe.ui.util.addStyle
+import cn.enaium.joe.ui.util.i18n
 import javafx.application.Application
 import javafx.scene.Scene
+import javafx.scene.control.Label
 import javafx.stage.Stage
 import org.pmw.tinylog.Configurator
 import org.pmw.tinylog.writers.ConsoleWriter
@@ -55,7 +59,15 @@ class JavaOctetEditor : Application() {
         create(primaryStage)
 
         primaryStage.setOnCloseRequest {
-            exitProcess(0)
+            ConfirmDialog(ConfirmPane().apply {
+                center = Label(i18n("dialog.wantCloseWindow"))
+                confirm = {
+                    exitProcess(0)
+                }
+                cancel = {
+                    it.consume()
+                }
+            }).showAndWait()
         }
     }
 

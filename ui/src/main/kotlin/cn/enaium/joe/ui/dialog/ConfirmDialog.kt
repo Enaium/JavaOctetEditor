@@ -50,5 +50,9 @@ class ConfirmDialog(confirmPane: ConfirmPane) : Dialog("Confirm") {
                 })
             }
         }
+        setOnCloseRequest {
+            confirmPane.cancel.invoke()
+            cancel.invoke()
+        }
     }
 }
