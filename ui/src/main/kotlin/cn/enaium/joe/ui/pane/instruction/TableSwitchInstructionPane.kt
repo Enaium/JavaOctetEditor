@@ -16,7 +16,10 @@
 
 package cn.enaium.joe.ui.pane.instruction
 
+import cn.enaium.joe.core.util.OpcodeUtil
 import cn.enaium.joe.ui.control.LabelNodeComboBox
+import cn.enaium.joe.ui.dialog.ConfirmDialog
+import cn.enaium.joe.ui.pane.confirm.LabelListEditPane
 import cn.enaium.joe.ui.util.i18n
 import javafx.scene.control.Button
 import javafx.scene.control.Label
@@ -35,9 +38,9 @@ class TableSwitchInstructionPane(instruction: TableSwitchInsnNode) : AbstractIns
         add(Label(i18n("instruction.max")), max)
         val dflt = LabelNodeComboBox(instruction.dflt)
         add(Label(i18n("instruction.default")), dflt)
-        add(Label(i18n("instruction.keyOrLabel")), Button("button.edit").apply {
+        add(Label(i18n("instruction.keyOrLabel")), Button(i18n("button.edit")).apply {
             setOnAction {
-                // TODO:
+                ConfirmDialog(LabelListEditPane(instruction.labels, OpcodeUtil.getInstructionList(instruction))).show()
             }
         })
         confirm = {
