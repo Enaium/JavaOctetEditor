@@ -17,6 +17,9 @@
 package cn.enaium.joe.ui.pane.instruction
 
 import cn.enaium.joe.core.util.OpcodeUtil
+import cn.enaium.joe.ui.dialog.ConfirmDialog
+import cn.enaium.joe.ui.pane.confirm.ConfirmPane
+import cn.enaium.joe.ui.pane.confirm.FrameListEditPane
 import cn.enaium.joe.ui.util.i18n
 import javafx.scene.control.Button
 import javafx.scene.control.ComboBox
@@ -30,20 +33,22 @@ import org.objectweb.asm.tree.FrameNode
 class FrameInstructionPane(instruction: FrameNode) : AbstractInstructionPane(instruction) {
     init {
         val frame = ComboBox<String>()
+        frame.selectionModel.select(OpcodeUtil.FRAME[instruction.type])
         frame.items.addAll(OpcodeUtil.FRAME.values)
         add(Label(i18n("instruction.type")), frame)
         add(Label(i18n("instruction.localOrStack")), Button(i18n("button.edit")).apply {
             setOnAction {
-                // TODO:
+                ConfirmDialog(FrameListEditPane(instruction)).show()
             }
         })
 
         confirm = {
-            frame.selectionModel.selectedItem?.let {
-                instruction.type = OpcodeUtil.reverse(OpcodeUtil.FRAME)[frame.selectionModel.selectedItem]!!
+            if (frame.value != null) {
+                instruction.type = OpcodeUtil.reverse(OpcodeUtil.FRAME)[frame.value]!!
                 true
+            } else {
+                false
             }
-            false
         }
     }
 
