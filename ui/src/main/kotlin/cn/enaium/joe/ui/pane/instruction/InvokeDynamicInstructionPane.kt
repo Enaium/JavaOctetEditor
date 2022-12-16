@@ -16,7 +16,12 @@
 
 package cn.enaium.joe.ui.pane.instruction
 
+import cn.enaium.joe.core.wrapper.Wrapper
+import cn.enaium.joe.ui.dialog.ConfirmDialog
+import cn.enaium.joe.ui.pane.confirm.BootstrapMethodArgumentEditPane
+import cn.enaium.joe.ui.pane.confirm.HandleEditPane
 import cn.enaium.joe.ui.util.i18n
+import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.control.TextField
 import org.objectweb.asm.tree.InvokeDynamicInsnNode
@@ -29,7 +34,29 @@ class InvokeDynamicInstructionPane(instruction: InvokeDynamicInsnNode) : Abstrac
 
         add(Label(i18n("instruction.name")), name)
         add(Label(i18n("instruction.description")), description)
-        // TODO:
+        add(Label(i18n("instruction.bootstrapMethod")), Button(i18n("button.edit")).apply {
+            setOnAction {
+                val handleWrapper = Wrapper(instruction.bsm)
+                ConfirmDialog(HandleEditPane(handleWrapper)).apply {
+                    confirm = {
+                        instruction.bsm = handleWrapper.wrapper
+                    }
+                }.show()
+            }
+        })
+        add(Label(i18n("instruction.bootstrapMethodArgument")), Button(i18n("button.edit")).apply {
+            setOnAction {
+                val anyArrayWrapper = Wrapper(instruction.bsmArgs)
+                ConfirmDialog(BootstrapMethodArgumentEditPane(anyArrayWrapper)).apply {
+                    confirm = {
+                        instruction.bsmArgs = anyArrayWrapper.wrapper
+                    }
+                }.show()
+            }
+        })
+
+
+
 
         confirm = {
             instruction.name = name.text
