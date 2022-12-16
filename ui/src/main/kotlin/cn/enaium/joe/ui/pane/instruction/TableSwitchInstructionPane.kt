@@ -35,7 +35,7 @@ class TableSwitchInstructionPane(instruction: TableSwitchInsnNode) : AbstractIns
         add(Label(i18n("instruction.max")), max)
         val dflt = LabelNodeComboBox(instruction.dflt)
         add(Label(i18n("instruction.default")), dflt)
-        add(Label(i18n("instruction.labels")), Button("button.edit").apply {
+        add(Label(i18n("instruction.keyOrLabel")), Button("button.edit").apply {
             setOnAction {
                 // TODO:
             }

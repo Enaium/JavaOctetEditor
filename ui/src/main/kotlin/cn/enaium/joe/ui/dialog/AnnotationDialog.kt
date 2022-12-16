@@ -29,17 +29,17 @@ import org.objectweb.asm.tree.AnnotationNode
  * @author Enaium
  * @since 2.0.0
  */
-class AnnotationDialog(annotationList: List<AnnotationNode>) : Dialog(i18n("annotation.title")) {
+class AnnotationDialog(annotationList: List<AnnotationNode>) : Dialog(i18n("instruction.annotation.title")) {
     init {
         content = TableView<Item>().apply {
             isEditable = false
 
-            val description = TableColumn<Item, String>(i18n("annotation.description"))
+            val description = TableColumn<Item, String>(i18n("instruction.annotation.description"))
             description.isResizable = false
             description.cellValueFactory = PropertyValueFactory("description")
             description.prefWidthProperty().bind(widthProperty().multiply(.5))
 
-            val hasValue = TableColumn<Item, Boolean>(i18n("annotation.hasValue"))
+            val hasValue = TableColumn<Item, Boolean>(i18n("instruction.annotation.hasValue"))
             hasValue.isResizable = false
             hasValue.cellValueFactory = PropertyValueFactory("hasValue")
             hasValue.prefWidthProperty().bind(widthProperty().multiply(.5))

@@ -17,6 +17,8 @@
 package cn.enaium.joe.ui.pane.instruction
 
 import cn.enaium.joe.ui.control.LabelNodeComboBox
+import cn.enaium.joe.ui.dialog.ConfirmDialog
+import cn.enaium.joe.ui.pane.confirm.LookupSwitchEditPane
 import cn.enaium.joe.ui.util.i18n
 import javafx.scene.control.Button
 import javafx.scene.control.Label
@@ -30,9 +32,9 @@ class LookupSwitchInstructionPane(instruction: LookupSwitchInsnNode) : AbstractI
     init {
         val dflt = LabelNodeComboBox(instruction.dflt)
         add(Label(i18n("instruction.default")), dflt)
-        add(Label(i18n("instruction.keyOrLabel")), Button("button.edit").apply {
+        add(Label(i18n("instruction.keyOrLabel")), Button(i18n("button.edit")).apply {
             setOnAction {
-                // TODO:
+                ConfirmDialog(LookupSwitchEditPane(instruction.keys, instruction.labels)).show()
             }
         })
         confirm = {

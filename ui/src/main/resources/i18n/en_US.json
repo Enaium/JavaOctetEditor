@@ -115,10 +115,12 @@
   "instruction.addString": "Add String",
   "instruction.addType": "Add Type",
   "instruction.addHandle": "Add Handle",
+  "instruction.annotation.title": "Annotation",
+  "instruction.annotation.description": "Description",
+  "instruction.annotation.hasValue": "Has Value",
+  "instruction.annotation.value": "Value",
+  "instruction.lookSwitch.keys": "Keys",
+  "instruction.lookSwitch.labels": "Labels",
   "side.member": "Member",
-  "side.inherit": "Inherit",
-  "annotation.title": "Annotation",
-  "annotation.description": "Description",
-  "annotation.hasValue": "Has Value",
-  "annotation.value": "Value"
+  "side.inherit": "Inherit"
 }

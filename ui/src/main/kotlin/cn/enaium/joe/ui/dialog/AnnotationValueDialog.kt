@@ -34,18 +34,18 @@ import org.objectweb.asm.tree.AnnotationNode
  * @since 2.0.0
  */
 @Suppress("UNCHECKED_CAST")
-class AnnotationValueDialog(anyList: MutableList<Any>) : Dialog(i18n("annotation.title")) {
+class AnnotationValueDialog(anyList: MutableList<Any>) : Dialog(i18n("instruction.annotation.title")) {
     init {
         content = TableView<Item>().apply {
 
             isEditable = false
 
-            val description = TableColumn<Item, String>(i18n("annotation.description"))
+            val description = TableColumn<Item, String>(i18n("instruction.annotation.description"))
             description.isResizable = false
             description.cellValueFactory = PropertyValueFactory("description")
             description.prefWidthProperty().bind(widthProperty().multiply(.5))
 
-            val value = TableColumn<Item, Boolean>(i18n("annotation.value"))
+            val value = TableColumn<Item, Boolean>(i18n("instruction.annotation.value"))
             value.isResizable = false
             value.cellValueFactory = PropertyValueFactory("value")
             value.prefWidthProperty().bind(widthProperty().multiply(.5))
