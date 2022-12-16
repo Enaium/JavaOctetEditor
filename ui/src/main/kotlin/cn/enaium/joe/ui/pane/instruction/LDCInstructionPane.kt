@@ -32,7 +32,7 @@ import org.objectweb.asm.tree.LdcInsnNode
  * @author Enaium
  * @since 2.0.0
  */
-class LdcInstructionPane(instruction: LdcInsnNode) : AbstractInstructionPane(instruction) {
+class LDCInstructionPane(instruction: LdcInsnNode) : AbstractInstructionPane(instruction) {
     init {
         val type = ComboBox<String>().apply {
             items.addAll("String", "float", "double", "int", "long", "Class", "Handle")
@@ -83,7 +83,7 @@ class LdcInstructionPane(instruction: LdcInsnNode) : AbstractInstructionPane(ins
             })
         } ?: let {
             val ldc = TextField(instruction.cst.toString())
-            add(Label("instruction.var", ldc))
+            add(Label(i18n("instruction.var")), ldc)
             confirm = {
                 type.selectionModel.selectedItem?.let {
                     when (type.selectionModel.selectedItem) {
