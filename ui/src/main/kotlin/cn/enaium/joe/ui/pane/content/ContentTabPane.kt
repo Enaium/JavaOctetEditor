@@ -34,14 +34,26 @@ import javafx.scene.control.TabPane
 class ContentTabPane : TabPane() {
     init {
         event.register<SelectTreeItem> {
-            if (it.item is ClassTreeItem) {
-                tabs.add(Tab(it.item.toString()).apply {
-                    content = ClassTabPane(it.item)
-                })
-            } else if (it.item is FileTreeItem) {
-                tabs.add(Tab(it.item.toString()).apply {
-                    content = ResourceTabPane(it.item)
-                })
+            //Don't use 'if' because it will be stack overflow
+            when (it.item) {
+                is ClassTreeItem -> {
+                    Tab(it.item.toString()).apply {
+                        content = ClassTabPane(it.item)
+                    }
+                }
+
+                is FileTreeItem -> {
+                    Tab(it.item.toString()).apply {
+                        content = ResourceTabPane(it.item)
+                    }
+                }
+
+                else -> {
+                    null
+                }
+            }?.let { tab ->
+                tabs.add(tab)
+                selectionModel.select(tab)
             }
         }
 
