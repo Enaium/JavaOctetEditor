@@ -34,7 +34,6 @@ import javafx.scene.control.TabPane
 class ContentTabPane : TabPane() {
     init {
         event.register<SelectTreeItem> {
-            //Don't use 'if' because it will be stack overflow
             when (it.item) {
                 is ClassTreeItem -> {
                     Tab(it.item.toString()).apply {
