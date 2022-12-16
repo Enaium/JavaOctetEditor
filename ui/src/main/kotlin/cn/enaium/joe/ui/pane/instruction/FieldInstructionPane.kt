@@ -33,7 +33,7 @@ class FieldInstructionPane(instruction: FieldInsnNode) : AbstractInstructionPane
         val description = TextField(instruction.desc)
 
         add(Label(i18n("instruction.owner")), owner)
-        add(Label(i18n("instruction.name")), owner)
+        add(Label(i18n("instruction.name")), name)
         add(Label(i18n("instruction.description")), description)
 
         confirm = {
