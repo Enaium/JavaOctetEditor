@@ -17,9 +17,12 @@
 package cn.enaium.joe.ui.pane.content.resources
 
 import cn.enaium.joe.ui.control.tree.FileTreeItem
+import javafx.beans.property.SimpleStringProperty
 import javafx.scene.control.TableColumn
 import javafx.scene.control.TableView
+import javafx.scene.control.cell.PropertyValueFactory
 import javafx.scene.layout.BorderPane
+import kotlin.math.ceil
 
 /**
  * @author Enaium
@@ -27,12 +30,28 @@ import javafx.scene.layout.BorderPane
  */
 class HexPane(fileTreeItem: FileTreeItem) : BorderPane() {
     init {
-        val tableView = TableView<Any>()
+        val tableView = TableView<Int>()
         for (i in 0..15) {
-            tableView.columns.add(TableColumn<Any, String>("%X".format(i)))
+            val element = TableColumn<Int, String>("%X".format(i))
+            element.isReorderable = false
+            element.setCellValueFactory { cell ->
+                val x = i
+                val y = cell.value
+                try {
+                    SimpleStringProperty("%02X".format(fileTreeItem.data[x + y * 16]))
+                } catch (_: ArrayIndexOutOfBoundsException) {
+                    SimpleStringProperty("")
+                }
+            }
+            element.prefWidthProperty().bind(widthProperty().multiply(1.0 / 16.0))
+            tableView.columns.add(element)
         }
 
-        // TODO:
+        for (i in 0 until ceil(fileTreeItem.data.size / 16.0).toInt()) {
+            tableView.items.add(i)
+        }
+
+
         center = tableView
     }
 }
