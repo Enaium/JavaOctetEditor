@@ -33,7 +33,7 @@ class JumpInstructionPane(instruction: JumpInsnNode) : AbstractInstructionPane(i
         confirm = {
             labelComboBox.selectionModel.selectedItem?.let {
                 instruction.opcode = getOpcode()
-                instruction.label = labelComboBox.selectionModel.selectedItem
+                instruction.label = labelComboBox.selectionModel.selectedItem.wrapper
                 true
             }
             false

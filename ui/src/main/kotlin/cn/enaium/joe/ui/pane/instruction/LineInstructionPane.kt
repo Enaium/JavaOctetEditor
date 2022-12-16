@@ -34,12 +34,9 @@ class LineInstructionPane(instruction: LineNumberNode) : AbstractInstructionPane
         add(Label(i18n("instruction.start")), start)
 
         confirm = {
-            start.selectionModel.selectedItem?.let {
-                instruction.line = line.value
-                instruction.start = start.selectionModel.selectedItem
-                true
-            }
-            false
+            instruction.line = line.value
+            instruction.start = start.selectionModel.selectedItem.wrapper
+            true
         }
     }
 

@@ -14,25 +14,22 @@
  * limitations under the License.
  */
 
-package cn.enaium.joe.ui.cell
+package cn.enaium.joe.core.wrapper;
 
-import cn.enaium.joe.core.util.OpcodeUtil
-import javafx.scene.control.cell.ComboBoxListCell
-import org.objectweb.asm.tree.LabelNode
+import cn.enaium.joe.core.util.OpcodeUtil;
+import org.objectweb.asm.tree.LabelNode;
 
 /**
  * @author Enaium
  * @since 2.0.0
  */
-class LabelComboBoxListCell : ComboBoxListCell<LabelNode>() {
-    override fun updateItem(item: LabelNode?, empty: Boolean) {
-        super.updateItem(item, empty)
-        if (empty) {
-            graphic = null
-            text = null
-            contextMenu = null
-        } else {
-            text = "L ${OpcodeUtil.getLabelIndex(item)}"
-        }
+public class LabelNodeWrapper extends Wrapper<LabelNode> {
+    public LabelNodeWrapper(LabelNode wrapper) {
+        super(wrapper);
+    }
+
+    @Override
+    public String toString() {
+        return "L " + OpcodeUtil.getLabelIndex(getWrapper());
     }
 }

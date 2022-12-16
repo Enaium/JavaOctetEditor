@@ -36,11 +36,8 @@ class LookupSwitchInstructionPane(instruction: LookupSwitchInsnNode) : AbstractI
             }
         })
         confirm = {
-            dflt.selectionModel.selectedItem?.let {
-                instruction.dflt = dflt.selectionModel.selectedItem
-                true
-            }
-            false
+            instruction.dflt = dflt.selectionModel.selectedItem.wrapper
+            true
         }
     }
 

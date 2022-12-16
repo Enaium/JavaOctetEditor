@@ -17,7 +17,7 @@
 package cn.enaium.joe.ui.control
 
 import cn.enaium.joe.core.util.OpcodeUtil
-import cn.enaium.joe.ui.cell.LabelComboBoxListCell
+import cn.enaium.joe.core.wrapper.LabelNodeWrapper
 import javafx.scene.control.ComboBox
 import org.objectweb.asm.tree.LabelNode
 
@@ -29,17 +29,17 @@ import org.objectweb.asm.tree.LabelNode
  *
  * @param select selected label
  */
-class LabelNodeComboBox(select: LabelNode) : ComboBox<LabelNode>() {
+class LabelNodeComboBox(select: LabelNode) : ComboBox<LabelNodeWrapper>() {
     init {
-        setCellFactory {
-            LabelComboBoxListCell()
-        }
         OpcodeUtil.getInstructionList(select).forEach {
             if (it is LabelNode) {
-                if (it == select) {
-                    selectionModel.select(it)
-                }
-                items.add(it)
+                items.add(LabelNodeWrapper(it))
+            }
+        }
+
+        items.forEach {
+            if (it.wrapper == select) {
+                selectionModel.select(it)
             }
         }
     }

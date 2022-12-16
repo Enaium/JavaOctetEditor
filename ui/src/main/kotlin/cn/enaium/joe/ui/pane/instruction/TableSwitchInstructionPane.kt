@@ -41,13 +41,10 @@ class TableSwitchInstructionPane(instruction: TableSwitchInsnNode) : AbstractIns
             }
         })
         confirm = {
-            dflt.selectionModel.selectedItem?.let {
-                instruction.min = min.value
-                instruction.max = max.value
-                instruction.dflt = dflt.selectionModel.selectedItem
-                true
-            }
-            false
+            instruction.min = min.value
+            instruction.max = max.value
+            instruction.dflt = dflt.selectionModel.selectedItem.wrapper
+            true
         }
     }
 
