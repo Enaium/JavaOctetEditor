@@ -31,17 +31,20 @@ import org.objectweb.asm.tree.FrameNode
 class FrameListEditPane(frameNode: FrameNode) : ConfirmPane() {
     init {
         center = SplitPane().apply {
+            val tempLocal = frameNode.local.toMutableList()
             items.add(BorderPane().apply {
                 top = Label(i18n("instruction.local"))
-                center = AnyList(frameNode.local)
+                center = AnyList(tempLocal)
             })
+            val tempStack = frameNode.stack.toMutableList()
             items.add(BorderPane().apply {
                 top = Label(i18n("instruction.stack"))
-                center = AnyList(frameNode.stack)
+                center = AnyList(tempStack)
             })
-        }
-        confirm = {
-            // TODO: optimize
+            confirm = {
+                frameNode.local = tempLocal
+                frameNode.stack = tempStack
+            }
         }
     }
 
@@ -58,7 +61,7 @@ class FrameListEditPane(frameNode: FrameNode) : ConfirmPane() {
             }
             center = list
             bottom = HBox().apply {
-                children.add(Button("instruction.addString").apply {
+                children.add(Button(i18n("instruction.frame.addString")).apply {
                     setOnAction {
                         val string = TextInputDialog().showAndWait()
                         if (string.get().isNotBlank()) {
@@ -67,7 +70,7 @@ class FrameListEditPane(frameNode: FrameNode) : ConfirmPane() {
                         }
                     }
                 })
-                children.add(Button("instruction.addType").apply {
+                children.add(Button(i18n("instruction.frame.addType")).apply {
                     setOnAction {
                         ConfirmDialog(ConfirmPane().apply {
                             val type = ComboBox<String>().apply {
